@@ -1,6 +1,7 @@
 package airMap;
 
 import java.awt.Font;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javax.swing.BoxLayout;
@@ -17,7 +18,7 @@ public class WeatherBox extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		// FIXME center alignment not working
-		//FIXME conditions for some reason move over
+		// FIXME conditions for some reason move over
 		// setAlignmentX(CENTER_ALIGNMENT);
 		// setAlignmentY(CENTER_ALIGNMENT);
 		titleLabel = new JLabel(title);
@@ -25,19 +26,14 @@ public class WeatherBox extends JPanel {
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		add(titleLabel);
-		info = new WeatherInfo(lat, log);
+		info = new WeatherInfo(lat + "," + log);
 		add(info);
 	}
 
-	public void update(String lat, String log) throws MalformedURLException {
-		remove(info);
-		info = new WeatherInfo(lat, log);
-		add(info);
-	}
-
-	public void update(String address) throws MalformedURLException {
+	public void update(String address) throws IOException {
 		remove(info);
 		info = new WeatherInfo(address);
 		add(info);
 	}
+
 }

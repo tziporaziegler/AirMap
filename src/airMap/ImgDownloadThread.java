@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 public class ImgDownloadThread extends Thread {
 	private URL url;
 	private JLabel label;
-	
+
 	public ImgDownloadThread(URL url, JLabel currentWeather) {
 		this.url = url;
 		this.label = currentWeather;

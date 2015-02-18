@@ -21,27 +21,10 @@ public class WeatherInfo extends Container {
 	private Container minMaxCont;
 	private JLabel minLabel;
 	private JLabel maxLabel;
-	
-	public WeatherInfo(String lat, String log) throws MalformedURLException {
-		setLayout(new GridLayout(3, 1));
-		
-		currentCont = new Container();
-		minMaxCont = new Container();
-		conditionsCont = new Container();
-		minLabel = new JLabel();
-		maxLabel = new JLabel();
-		currentWeather = new JLabel();
 
-		// create thread that uses displayWeather
-		WeatherDownloadThread thread = new WeatherDownloadThread(this, lat, log);
-		thread.start();
-		
-		setVisible(true);
-	}
-	
 	public WeatherInfo(String address) throws MalformedURLException {
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+		setLayout(new GridLayout(3, 1));
+
 		currentCont = new Container();
 		minMaxCont = new Container();
 		conditionsCont = new Container();
@@ -50,10 +33,7 @@ public class WeatherInfo extends Container {
 		currentWeather = new JLabel();
 
 		// create thread that uses displayWeather
-		WeatherDownloadThread thread = new WeatherDownloadThread(this, address);
-		thread.start();
-		
-		setVisible(true);
+		new WeatherDownloadThread(this, address).start();
 	}
 
 	public void displayWeather(WeatherNow now) throws MalformedURLException {
@@ -91,7 +71,7 @@ public class WeatherInfo extends Container {
 		thread.start();
 
 		currentCont.add(currentWeather);
-		
+
 		add(currentCont);
 	}
 
@@ -133,7 +113,7 @@ public class WeatherInfo extends Container {
 		}
 
 		// add the weather condition container to the bottom of the main frame
-		//FIXME the conditions override high/low
+		// FIXME the conditions override high/low
 		add(conditionsCont);
 	}
 }

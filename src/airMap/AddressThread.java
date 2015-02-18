@@ -18,23 +18,14 @@ public class AddressThread extends Thread {
 	private String log;
 	private int zoom;
 	private String view;
-
 	private JLabel label;
 
 	public String getLat() {
 		return lat;
 	}
 
-	public void setLat(String lat) {
-		this.lat = lat;
-	}
-
 	public String getLog() {
 		return log;
-	}
-
-	public void setLog(String log) {
-		this.log = log;
 	}
 
 	public AddressThread(String address, int zoom, String view, JLabel label) {
@@ -45,8 +36,13 @@ public class AddressThread extends Thread {
 		this.view = view;
 	}
 
+	public AddressThread(String address) {
+		this.address = address;
+	}
+
 	public void run() {
 		try {
+			System.out.println("running");
 			Gson gson = new Gson();
 			URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address
 					+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
@@ -63,20 +59,16 @@ public class AddressThread extends Thread {
 			}
 
 			// TODO street view
-			// lat = "46.414382";
-			// log = "10.014";
-			// int heading = 90;// panaramo postion - use when turn plane
-			// int pitch = 10; // use when press up/down arrow
-			// String urls =
-			// "https://maps.googleapis.com/maps/api/streetview?size=500x700&location="+ lat + "," +
-			// log+ "&fov=90&heading=" + heading + "&pitch=" + pitch;
-
-			String half1 = "https://maps.googleapis.com/maps/api/staticmap?center=";
-			String half2 = "&size=" + 600 + "x" + 600 + "&maptype=" + view + "&zoom=" + zoom;
-
-			String urls = half1 + lat + "," + log + half2;
-			System.out.println("address url" + urls);
-			new ImgDownloadThread(new URL(urls), label).start();
+			/* lat = "46.414382"; log = "10.014"; int heading = 90;// panaramo postion - use when
+			 * turn plane int pitch = 10; // use when press up/down arrow String urls =
+			 * "https://maps.googleapis.com/maps/api/streetview?size=500x700&location=" + lat + ","
+			 * + log + "&fov=90&heading=" + heading + "&pitch=" + pitch;
+			 * 
+			 * String half1 = "https://maps.googleapis.com/maps/api/staticmap?center="; String half2
+			 * = "&size=" + 600 + "x" + 600 + "&maptype=" + view + "&zoom=" + zoom;
+			 * 
+			 * String urls = half1 + lat + "," + log + half2; System.out.println("address url" +
+			 * urls); new ImgDownloadThread(new URL(urls), label).start(); */
 		}
 		catch (IOException e) {
 			e.printStackTrace();

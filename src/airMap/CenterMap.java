@@ -36,7 +36,6 @@ public class CenterMap extends JPanel {
 	public CenterMap(String address) throws IOException {
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-
 		// create menu
 		menu = new JMenuBar();
 		viewOptions = new JMenu("View");
@@ -55,8 +54,8 @@ public class CenterMap extends JPanel {
 		super.paintComponent(g);
 		try {
 			g.drawImage(img, 0, 0, 600, 600, null);
-			//TODO change airMap to dashboard image
-			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), 150, 300, 100, 100, null);	
+			// TODO change airMap to dashboard image
+			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), 150, 300, 100, 100, null);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -88,10 +87,10 @@ public class CenterMap extends JPanel {
 	}
 
 	public void loadImg() throws MalformedURLException {
-		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + address + "&size=" + 600 + "x" + 600
+		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + address + "&size=1280x1280"
 				+ "&maptype=" + view + "&zoom=" + zoom;
 		System.out.println("Center Img: " + url);
-		//FIXME should load img in separtate thread that somehow returns and img
+		// FIXME should load img in separtate thread that somehow returns and img
 		img = new ImageIcon(new URL(url)).getImage();
 	}
 

@@ -54,6 +54,7 @@ public class World extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("AirMap");
 
 		// create menu bar
 		menu = new JMenuBar();
@@ -63,7 +64,7 @@ public class World extends JFrame {
 		destination = new JTextField("Destination");
 		go = new JButton("Go!");
 		setUpMenu();
-		//don't want setJMenuBar(menu); because by default it adds it to north
+		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
 
 		// create the three panels and set up their location on the screen
@@ -98,7 +99,7 @@ public class World extends JFrame {
 		setVisible(true);
 	}
 
-	//FIXME unused
+	// FIXME unused
 	public void setUpMenu() {
 		String[] viewNames = { "A", "B", "C", "D" };
 		String[] featuresNames = { "A", "B", "C", "D", "E" };
@@ -142,6 +143,7 @@ public class World extends JFrame {
 		if (address2.equals("Destination")) {
 			address2 = null;
 		}
+
 		this.address = URLEncoder.encode(address, "UTF-8");
 		this.address2 = URLEncoder.encode(address2, "UTF-8");
 	}
@@ -167,7 +169,7 @@ public class World extends JFrame {
 		}
 	};
 
-	//FIXME unused
+	// FIXME unused
 	ActionListener featuresView = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -177,7 +179,7 @@ public class World extends JFrame {
 		}
 	};
 
-	//FIXME unused
+	// FIXME unused
 	ActionListener mapView = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {

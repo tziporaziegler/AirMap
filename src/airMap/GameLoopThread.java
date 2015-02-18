@@ -20,8 +20,8 @@ public class GameLoopThread extends Thread {
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
