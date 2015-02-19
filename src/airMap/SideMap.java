@@ -39,6 +39,7 @@ public class SideMap extends JPanel {
 	private JButton zoomin;
 
 	public SideMap() throws IOException {
+
 		setSize(300, 600);
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -50,6 +51,7 @@ public class SideMap extends JPanel {
 		zoomin.addActionListener(zoominListen);
 
 		zoom = 2; // 0-21 disable + button is more
+		view = "terrain";
 		address = "USA";
 		updateMap(address, address);
 		// create menu bar
@@ -97,7 +99,6 @@ public class SideMap extends JPanel {
 		menu.add(featuresOptions);
 		// viewOptions.setSelectedIndex(2);
 		viewOptions.setToolTipText("Map View");
-		view = "Hybrid";
 		menu.add(viewOptions);
 		menu.add(zoomout);
 		menu.add(zoomin);
@@ -114,7 +115,6 @@ public class SideMap extends JPanel {
 				+ address;
 
 		// TODO add markers - view should only focus on red markers
-		@SuppressWarnings("unused")
 		String airports = "&markers=size:mid%7Ccolor:green%7C" + "atl+airport" + "%7C" + "anc+airport" + "%7C"
 				+ "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"

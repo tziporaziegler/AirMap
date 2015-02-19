@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -21,7 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
-public class World extends JFrame {
+public class World extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	// three panels
@@ -56,13 +57,9 @@ public class World extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
 
-		// create menu bar
-		menu = new JMenuBar();
-		featuresOptions = new JMenu("Options1");
-		viewOptions = new JMenu("Options2");
-		location = new JTextField("Departure");
-		destination = new JTextField("Destination");
-		go = new JButton("Go!");
+		addKeyListener(this);
+		setFocusable(true);
+		
 		setUpMenu();
 		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
@@ -99,8 +96,11 @@ public class World extends JFrame {
 		setVisible(true);
 	}
 
-	// FIXME unused
 	public void setUpMenu() {
+		menu = new JMenuBar();
+		featuresOptions = new JMenu("Options1");
+		viewOptions = new JMenu("Options2");
+		
 		String[] viewNames = { "A", "B", "C", "D" };
 		String[] featuresNames = { "A", "B", "C", "D", "E" };
 		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[5];
@@ -126,11 +126,16 @@ public class World extends JFrame {
 		viewOptions.setToolTipText("Map View");
 		menu.add(viewOptions);
 
+		location = new JTextField("Departure");
 		location.setColumns(20);
 		location.setSelectedTextColor(Color.BLUE);
+		destination = new JTextField("Destination");
 		destination.setSelectedTextColor(Color.BLUE);
 		destination.setColumns(20);
+		
+		go = new JButton("Go!");
 		go.addActionListener(click);
+		
 		menu.add(location);
 		menu.add(destination);
 		menu.add(go);
@@ -200,5 +205,42 @@ public class World extends JFrame {
 		// TODO send in instead lat, log / address of plane
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		switch (keyCode) {
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_2:
+				// world.setDirection(2);
+				break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_8:
+				// world.setDirection(8);
+				break;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_4:
+				// world.setDirection(4);
+				break;
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_6:
+				// world.setDirection(6);
+				break;
+			case KeyEvent.VK_P:
+				//loop.togglePause();
+				break;
+			case KeyEvent.VK_Q:
+				System.exit(0);
+				break;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }

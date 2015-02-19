@@ -44,7 +44,7 @@ public class CenterMap extends JPanel {
 		setUpMenu();
 		add(menu, BorderLayout.NORTH);
 
-		view = "hybrid";
+		view = "satellite";
 		this.address = address;
 		loadImg();
 	}
@@ -55,7 +55,7 @@ public class CenterMap extends JPanel {
 		try {
 			g.drawImage(img, 0, 0, 600, 600, null);
 			// TODO change airMap to dashboard image
-			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), 150, 300, 100, 100, null);
+			g.drawImage(ImageIO.read(getClass().getResource("pics/controlslong.png")), 0, 32, 472, 520, null);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
