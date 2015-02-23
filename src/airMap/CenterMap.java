@@ -2,10 +2,12 @@ package airMap;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,6 +34,12 @@ public class CenterMap extends JPanel {
 	private JButton zoomin;
 
 	private int zoom;
+	
+	private BufferedImage controlImg;
+	private Image gaugesImg;
+	private Image radarImg;
+	private Image gauges1Img;
+	private Image gauges2Img;
 
 	public CenterMap(String address) throws IOException {
 		setLayout(new BorderLayout());
@@ -47,19 +55,26 @@ public class CenterMap extends JPanel {
 		view = "satellite";
 		this.address = address;
 		loadImg();
+
+		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
+		radarImg = new ImageIcon(getClass().getResource("pics/radar.gif")).getImage();
+		gaugesImg = new ImageIcon(getClass().getResource("pics/gauges.gif")).getImage();
+		gauges1Img = new ImageIcon(getClass().getResource("pics/gauges1.gif")).getImage();
+		gauges2Img = new ImageIcon(getClass().getResource("pics/gauges2.gif")).getImage();
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		try {
-			g.drawImage(img, 0, 0, 600, 600, null);
-			// TODO change airMap to dashboard image
-			g.drawImage(ImageIO.read(getClass().getResource("pics/controlslong.png")), 0, 32, 472, 520, null);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		g.drawImage(img, 0, 0, 600, 600, null);
+		// TODO change airMap to dashboard image
+		g.drawImage(controlImg, 0, 32, 472, 520, null);
+		
+		Graphics2D g2 = (Graphics2D) g;
+		g2.drawImage(radarImg, 253, 45, 25, 25, null);
+		g2.drawImage(gaugesImg, 156, 492, 41, 35, null);
+		g2.drawImage(gauges1Img, 221, 492, 43, 36, null);
+		g2.drawImage(gauges2Img, 280, 492, 41, 35, null);
 	}
 
 	public void setUpMenu() {

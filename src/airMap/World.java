@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -57,9 +56,12 @@ public class World extends JFrame implements KeyListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
 
+		// create window icon (only visible on mac when minimize window)
+		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
+
 		addKeyListener(this);
 		setFocusable(true);
-		
+
 		setUpMenu();
 		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
@@ -89,10 +91,6 @@ public class World extends JFrame implements KeyListener {
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
 
-		// create window icon (only visible on mac when minimize window)
-		Image i = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
-		this.setIconImage(i);
-
 		setVisible(true);
 	}
 
@@ -100,7 +98,7 @@ public class World extends JFrame implements KeyListener {
 		menu = new JMenuBar();
 		featuresOptions = new JMenu("Options1");
 		viewOptions = new JMenu("Options2");
-		
+
 		String[] viewNames = { "A", "B", "C", "D" };
 		String[] featuresNames = { "A", "B", "C", "D", "E" };
 		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[5];
@@ -132,10 +130,10 @@ public class World extends JFrame implements KeyListener {
 		destination = new JTextField("Destination");
 		destination.setSelectedTextColor(Color.BLUE);
 		destination.setColumns(20);
-		
+
 		go = new JButton("Go!");
 		go.addActionListener(click);
-		
+
 		menu.add(location);
 		menu.add(destination);
 		menu.add(go);
@@ -217,26 +215,26 @@ public class World extends JFrame implements KeyListener {
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_2:
-				// world.setDirection(2);
-				break;
+			// world.setDirection(2);
+			break;
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_8:
-				// world.setDirection(8);
-				break;
+			// world.setDirection(8);
+			break;
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_4:
-				// world.setDirection(4);
-				break;
+			// world.setDirection(4);
+			break;
 			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_6:
-				// world.setDirection(6);
-				break;
+			// world.setDirection(6);
+			break;
 			case KeyEvent.VK_P:
-				//loop.togglePause();
-				break;
+			// loop.togglePause();
+			break;
 			case KeyEvent.VK_Q:
 				System.exit(0);
-				break;
+			break;
 		}
 	}
 
