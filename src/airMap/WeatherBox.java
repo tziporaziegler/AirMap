@@ -1,5 +1,6 @@
 package airMap;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,6 +26,7 @@ public class WeatherBox extends JPanel {
 		// titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
+
 		add(titleLabel);
 		info = new WeatherInfo(lat + "," + log);
 		add(info);

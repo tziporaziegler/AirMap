@@ -1,6 +1,7 @@
 package airMap;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -40,7 +41,7 @@ public class SideMap extends JPanel {
 
 	public SideMap() throws IOException {
 
-		setSize(300, 600);
+		setPreferredSize(new Dimension(300, 600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 

@@ -1,6 +1,7 @@
 package airMap;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -42,6 +43,7 @@ public class CenterMap extends JPanel {
 	private Image gauges2Img;
 
 	public CenterMap(String address) throws IOException {
+		setPreferredSize(new Dimension(600,600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		// create menu

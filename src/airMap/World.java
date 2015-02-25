@@ -50,7 +50,7 @@ public class World extends JFrame implements KeyListener {
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
-		setSize(1000, 600);
+		setSize(1000,600);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
