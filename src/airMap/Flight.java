@@ -4,7 +4,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 import java.net.URL;
 
-public class Music extends Thread {
+public class Flight extends Thread {
 
 	private AudioClip click;
 
@@ -18,7 +18,7 @@ public class Music extends Thread {
 	}
 
 	public static void main(String args[]) {
-		Music music = new Music();
+		Flight music = new Flight();
 		music.start();
 	}
 }

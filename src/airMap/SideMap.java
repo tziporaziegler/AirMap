@@ -24,6 +24,8 @@ import javax.swing.border.BevelBorder;
 public class SideMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image img;
+	private Plane plane;
+	private int direction;
 	private int zoom;
 	private String view;
 	private String address;
@@ -61,14 +63,20 @@ public class SideMap extends JPanel {
 		viewOptions = new JMenu("View");
 		setUpMenu();
 		add(menu, BorderLayout.NORTH);
+		plane=new Plane(200,200);
+		direction=2;
+		
 	}
 
+	public void setDirection(int direction){
+		this.direction=direction;
+	}
 	@Override
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		try {
 			g.drawImage(img, 0, 0, 300, 600, null);
-			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), 150, 300, 20, 20, null);
+			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), plane.getX(), plane.getY(), 20, 20, null);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

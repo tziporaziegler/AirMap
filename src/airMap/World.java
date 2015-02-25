@@ -47,6 +47,9 @@ public class World extends JFrame implements KeyListener {
 
 	// destination address
 	private String address2;
+	
+	//direction
+	private int direction;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -90,7 +93,7 @@ public class World extends JFrame implements KeyListener {
 		weather.add(currWeather);
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
-
+		direction=2;
 		setVisible(true);
 	}
 
@@ -203,6 +206,7 @@ public class World extends JFrame implements KeyListener {
 		// TODO send in instead lat, log / address of plane
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
+		
 	}
 
 	@Override
@@ -215,7 +219,7 @@ public class World extends JFrame implements KeyListener {
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_2:
-			// world.setDirection(2);
+			 setDirection(2);
 			break;
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_8:
@@ -236,6 +240,15 @@ public class World extends JFrame implements KeyListener {
 				System.exit(0);
 			break;
 		}
+	}
+
+	public void setDirection(int direction) {
+		this.direction=direction;
+		sideMap.setDirection(direction);
+		
+	}
+	public int getDirection(){
+		return direction;
 	}
 
 	@Override
