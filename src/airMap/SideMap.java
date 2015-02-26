@@ -30,6 +30,8 @@ public class SideMap extends JPanel {
 	private String view;
 	private String address;
 	private String address2;
+	
+	private PathMap pathMap;
 
 	// menu
 	// TODO make feature menu work
@@ -43,7 +45,7 @@ public class SideMap extends JPanel {
 
 	public SideMap() throws IOException {
 
-		setPreferredSize(new Dimension(300, 600));
+		setPreferredSize(new Dimension(250, 600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 
@@ -67,7 +69,26 @@ public class SideMap extends JPanel {
 		direction=2;
 		
 	}
-
+	public void movePlane(int directions, int speed){
+		switch(direction){
+		case 2:{
+			plane.setY(plane.getY()+(speed/100));
+			break;
+		}
+		case 4:{
+			plane.setX(plane.getX()-(speed/100));
+			break;
+		}
+		case 6:{
+			plane.setX(plane.getX()+(speed/100));
+			break;
+		}
+		case 8:{
+			plane.setY(plane.getY()-(speed/100));
+			break;
+		}
+		}
+	}
 	public void setDirection(int direction){
 		this.direction=direction;
 	}
@@ -142,6 +163,7 @@ public class SideMap extends JPanel {
 		// URL url = new URL(adrhalf + airports + zooms);
 		URL url = new URL(adrhalf + zooms);
 		// FIXME should be in separate thread
+		
 		img = new ImageIcon(url).getImage();
 		// new ImgDownloadThread(url, new JLabel()).start();
 	}

@@ -1,3 +1,4 @@
+
 package airMap;
 
 import java.awt.BorderLayout;
@@ -48,8 +49,9 @@ public class World extends JFrame implements KeyListener {
 	// destination address
 	private String address2;
 	
-	//direction
+	//plane controls
 	private int direction;
+	private int speed;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -94,6 +96,7 @@ public class World extends JFrame implements KeyListener {
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
 		direction=2;
+		speed=69;
 		setVisible(true);
 	}
 
@@ -206,7 +209,8 @@ public class World extends JFrame implements KeyListener {
 		// TODO send in instead lat, log / address of plane
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
-		
+		centerMap.updateMap(direction,speed);
+		sideMap.movePlane(direction, speed);
 	}
 
 	@Override
@@ -218,20 +222,20 @@ public class World extends JFrame implements KeyListener {
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
 			case KeyEvent.VK_UP:
-			case KeyEvent.VK_2:
-			 setDirection(2);
+			case KeyEvent.VK_8:
+			 setDirection(8);
 			break;
 			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_8:
-			// world.setDirection(8);
+			case KeyEvent.VK_2:
+			setDirection(2);
 			break;
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_4:
-			// world.setDirection(4);
+			setDirection(4);
 			break;
 			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_6:
-			// world.setDirection(6);
+			setDirection(6);
 			break;
 			case KeyEvent.VK_P:
 			// loop.togglePause();
