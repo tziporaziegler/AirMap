@@ -32,6 +32,7 @@ public class SideMap extends JPanel {
 	private String address2;
 	
 	private PathMap pathMap;
+	private NavigationMap navigationMap;
 
 	// menu
 	// TODO make feature menu work
@@ -65,6 +66,10 @@ public class SideMap extends JPanel {
 		viewOptions = new JMenu("View");
 		setUpMenu();
 		add(menu, BorderLayout.NORTH);
+		
+		//panels
+		navigationMap=new NavigationMap();
+		pathMap=new PathMap();
 		plane=new Plane(200,200);
 		direction=2;
 		
