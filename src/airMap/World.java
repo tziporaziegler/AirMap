@@ -209,7 +209,7 @@ public class World extends JFrame implements KeyListener {
 		// TODO send in instead lat, log / address of plane
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
-		centerMap.updateMap(direction,speed);
+		//centerMap.updateMap(direction,speed);
 		sideMap.movePlane(direction, speed);
 	}
 

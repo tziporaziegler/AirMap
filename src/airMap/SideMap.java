@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -31,6 +32,7 @@ public class SideMap extends JPanel {
 	private String address;
 	private String address2;
 	
+	private JPanel center;
 	private PathMap pathMap;
 	private NavigationMap navigationMap;
 
@@ -68,8 +70,12 @@ public class SideMap extends JPanel {
 		add(menu, BorderLayout.NORTH);
 		
 		//panels
+		center=new JPanel();
+	
+		add(center,BorderLayout.CENTER);
 		navigationMap=new NavigationMap();
 		pathMap=new PathMap();
+		center.add(pathMap);
 		plane=new Plane(200,200);
 		direction=2;
 		
@@ -100,13 +106,11 @@ public class SideMap extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		try {
-			g.drawImage(img, 0, 0, 300, 600, null);
-			g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), plane.getX(), plane.getY(), 20, 20, null);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+			g.drawRect(20,20,20,20);
+			pathMap.drawMap(g);
+			//g.drawImage(img, 0, 0, 300, 600, null);
+			//g.drawImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")), plane.getX(), plane.getY(), 20, 20, null);
+		
 	}
 
 	public void setUpMenu() {

@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 
@@ -26,12 +27,13 @@ public class PathMap extends JPanel{
 	private URL url;
 	private String view;
 	private Image img;
+	private JButton b;
 	
 	public PathMap() throws MalformedURLException{
 		setPreferredSize(new Dimension(300, 300));
 		setUpAirports();
 		view="roadmap";
-		
+		b=new JButton("hekki");
 		
 	}
 	public void updateMap(double startlat,double startlong,double endlat,double endlong) throws MalformedURLException{
@@ -42,6 +44,7 @@ public class PathMap extends JPanel{
 	url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=300x600&path=color:0x0000ff|weight:5|"
 				+ startlat+","+startlong + "|" + endlat+","+endlong + "&maptype=" + view + "&markers=size:mid%7Ccolor:red%7C" +startlat+","+startlong  + "%7C"
 				+ endlat+","+endlong);
+	 img = new ImageIcon(url).getImage();
 	}
 	public void setUpAirports() throws MalformedURLException{
 		
@@ -68,6 +71,7 @@ public class PathMap extends JPanel{
 		 img = new ImageIcon(url).getImage();
 	}
 	public void drawMap(Graphics g){
+		g.drawRect(2,2,45,45);
 		g.drawImage(img, 0, 0, 300, 300, null);
 	}
 }
