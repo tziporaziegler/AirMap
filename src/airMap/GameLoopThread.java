@@ -15,7 +15,7 @@ public class GameLoopThread extends Thread {
 			while (true) {
 				world.update();
 				world.repaint();
-				sleep(1000);
+				sleep(500);
 			}
 		}
 		catch (InterruptedException e) {

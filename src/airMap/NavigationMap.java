@@ -58,7 +58,7 @@ public class NavigationMap extends JPanel {
 		zoomin = new JButton("+");
 		zoomout.addActionListener(zoomoutListen);
 		zoomin.addActionListener(zoominListen);
-		zoom = 2; // 0-21 disable + button is more
+		zoom = 7; // 0-21 disable + button is more
 
 		featuresOptions = new JMenu("Features");
 		menu = new JMenuBar();
@@ -66,7 +66,7 @@ public class NavigationMap extends JPanel {
 		menu.add(zoomout);
 		menu.add(zoomin);
 		setUpMenu();
-		add(menu,BorderLayout.NORTH);
+		add(menu, BorderLayout.NORTH);
 		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
 		planeImg = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
@@ -126,12 +126,11 @@ public class NavigationMap extends JPanel {
 				plane.setY(plane.getY() - (speed / 69));
 				break;
 			}
-			
+
 		}
 	}
 
 	public void drawPlane(Graphics g) {
-
 		g.drawImage(planeImg, plane.getX(), plane.getY(), 20, 20, null);
 	}
 
@@ -139,10 +138,17 @@ public class NavigationMap extends JPanel {
 		g.drawImage(mapImg, 0, 0, width, height, null);
 	}
 
-	public void paintComponent(Graphics g){
+	public void newMap(double newLat, double newLog) throws MalformedURLException {
+		currentlat = newLat;
+		currentlong = newLog;
+		loadImg();
+	}
+
+	public void paintComponent(Graphics g) {
 		g.drawImage(mapImg, 0, 0, width, height, null);
 		g.drawImage(planeImg, plane.getX(), plane.getY(), 20, 20, null);
 	}
+
 	public void loadImg() throws MalformedURLException {
 		String zooms = "";
 		if (zoom != 0) {
@@ -151,7 +157,7 @@ public class NavigationMap extends JPanel {
 
 		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
 				+ "&size=" + width + "x" + height + "&maptype=" + view;
-		
+
 		String airports = "&markers=size:mid%7Ccolor:green%7C" + "atl+airport" + "%7C" + "anc+airport" + "%7C"
 				+ "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"
@@ -167,7 +173,7 @@ public class NavigationMap extends JPanel {
 				+ "sna+airport" + "%7C" + "sea+airport" + "%7C" + "stl+airport" + "%7C" + "tpa+airport" + "%7C"
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
-		//URL url = new URL(adrhalf + airports);
+		// URL url = new URL(adrhalf + airports);
 		URL url = new URL(adrhalf + airports + zooms);
 
 		mapImg = new ImageIcon(url).getImage();

@@ -19,15 +19,15 @@ public class SideMap extends JPanel {
 	private PathMap pathMap;
 	private NavigationMap navigationMap;
 
-	public SideMap() throws IOException {
+	public SideMap(double currentLat, double currentLong) throws IOException {
 		setPreferredSize(new Dimension(300, 600));
 		// TODO try out boxlayout
 		setLayout(new GridLayout(2, 1));
 		//setBorder(new BevelBorder(BevelBorder.LOWERED));
 		
 		//TODO change to center of map coordinates
-		startlat = 45.0;
-		startlong = 45.0;
+		startlat = currentLat;
+		startlong = currentLong;
 		address = "USA";
 
 		pathMap = new PathMap();
@@ -61,6 +61,7 @@ public class SideMap extends JPanel {
 
 	public void newTrip(double startlat, double startlong, double endlat, double endlong) throws MalformedURLException {
 		pathMap.updateMap(startlat, startlong, endlat, endlong);
+		navigationMap.newMap(startlat, startlong);
 	}
 	public void newTrip(String address,String address2) throws MalformedURLException {
 		pathMap.updateMap(address,address2);

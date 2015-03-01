@@ -16,11 +16,8 @@ public class WeatherDownloadThread extends Thread {
 
 	public WeatherDownloadThread(WeatherInfo box, String address) throws MalformedURLException {
 		this.box = box;
-		
 		url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + address + "&units=imperial");
-		// url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + lat + "," + log +
-		// "&units=imperial");
-		System.out.println("weather url:" + url);
+		System.out.println("NEW weather thread: " + url);
 	}
 
 	@Override
@@ -29,7 +26,7 @@ public class WeatherDownloadThread extends Thread {
 			// retrieve weather data from online
 			URLConnection connection = url.openConnection();
 			// TODO remove println
-			System.out.println("run url:" + url);
+			System.out.println("weather thread run: " + url);
 			InputStream in = connection.getInputStream();
 			String json = IOUtils.toString(in);
 			Gson gson = new Gson();

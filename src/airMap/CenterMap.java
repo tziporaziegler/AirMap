@@ -36,15 +36,19 @@ public class CenterMap extends JPanel {
 	private JButton zoomin;
 
 	private int zoom;
-	
+
 	private BufferedImage controlImg;
 	private Image gaugesImg;
 	private Image radarImg;
 	private Image gauges1Img;
 	private Image gauges2Img;
 
-	public CenterMap(double currentlat,double currentlong) throws IOException {
-		setPreferredSize(new Dimension(600,600));
+	// use so don't download new pic every time
+	private int movedHor; // can go from -85 to 85
+	private int movedVer; // can go from -75 to 75
+
+	public CenterMap(double currentlat, double currentlong) throws IOException {
+		setPreferredSize(new Dimension(600, 600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		// create menu
@@ -56,8 +60,10 @@ public class CenterMap extends JPanel {
 		add(menu, BorderLayout.NORTH);
 
 		view = "satellite";
-		this.currentlat=currentlat;
-		this.currentlong=currentlong;
+		this.currentlat = currentlat;
+		this.currentlong = currentlong;
+		movedHor = 0;
+		movedVer = 0;
 		loadImg();
 
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
@@ -70,10 +76,10 @@ public class CenterMap extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(img, -170, -150, 640, 640, null);
+		g.drawImage(img, -85 + movedHor, -75 + movedVer, 640, 640, null);
 		// TODO change airMap to dashboard image
 		g.drawImage(controlImg, 0, 32, 472, 520, null);
-		
+
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(radarImg, 253, 45, 25, 25, null);
 		g2.drawImage(gaugesImg, 156, 492, 41, 35, null);
@@ -106,11 +112,11 @@ public class CenterMap extends JPanel {
 	}
 
 	public void loadImg() throws MalformedURLException {
-		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat+","+currentlong + "&size=640x640"
-				+ "&maptype=" + view + "&zoom=" + zoom;
-		System.out.println("Center Img: " + url);
+		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
+				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoom;
+		System.out.println("NEW Center Img: " + url);
 		// FIXME should load img in separtate thread that somehow returns and img
-		//img = new ImageIcon(new URL(url)).getImage();
+		img = new ImageIcon(new URL(url)).getImage();
 	}
 
 	public void updateView(String view) throws MalformedURLException {
@@ -118,12 +124,17 @@ public class CenterMap extends JPanel {
 		loadImg();
 	}
 
-	public void updateMap(double currentlat,double currentlong) throws MalformedURLException {
-		this.currentlat=currentlat;
-		this.currentlong=currentlong;
-		loadImg();
+	public void updateMap(int moveHor, int moveVer, double currentlat, double currentlong) throws MalformedURLException {
+		this.currentlat = currentlat;
+		this.currentlong = currentlong;
+		movedHor += moveHor;
+		movedVer += moveVer;
+		if (movedHor > 85 || movedHor < -85 || movedVer > 75 || movedVer < -75) {
+			loadImg();
+			movedHor = 0;
+			movedVer = 0;
+		}
 	}
-
 
 	ActionListener zoominListen = new ActionListener() {
 		@Override

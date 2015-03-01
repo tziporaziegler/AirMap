@@ -3,7 +3,6 @@ package airMap;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -42,18 +41,20 @@ public class World extends JFrame implements KeyListener {
 
 	// current address
 	private String address;
+	private double currentLat;
+	private double currentLong;
 
 	// destination address
 	private String address2;
+	private double endLat;
+	private double endLong;
 
 	// plane controls
 	private int direction;
 	private int speed;
 
-	private double currentLat;
-	private double currentLong;
-	private double endLat;
-	private double endLong;
+	private int moveHor;
+	private int moveVer;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -62,8 +63,8 @@ public class World extends JFrame implements KeyListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
-		currentLat=40.633785;
-		currentLong=-73.779277;
+		currentLat = 40.633785;
+		currentLong = -73.779277;
 		// create window icon (only visible on mac when minimize window)
 		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
 
@@ -74,22 +75,19 @@ public class World extends JFrame implements KeyListener {
 		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
 
+		direction = 4;
+		speed = 69 * 5;
 
 		// create the three panels and set up their location on the screen
-
-	
-		centerMap = new CenterMap(currentLat,currentLong);
+		centerMap = new CenterMap(currentLat, currentLong);
 		centerMap.setSize(new Dimension((int) getWidth() / 2, getHeight()));
-
 		add(centerMap, BorderLayout.CENTER);
 
-		sideMap = new SideMap();
+		sideMap = new SideMap(currentLat, currentLong);
 		add(sideMap, BorderLayout.WEST);
 
 		weather = new WeatherCont();
 		add(weather, BorderLayout.EAST);
-		direction = 4;
-		speed = 69;
 
 		setVisible(true);
 	}
@@ -154,40 +152,37 @@ public class World extends JFrame implements KeyListener {
 		this.address2 = URLEncoder.encode(address2, "UTF-8");
 		new AddressThread(this, this.address2, 2).start();
 	}
-	
-	public void setCurrLatLog(double lat, double log) {
+
+	public void setCurrLatLog(double lat, double log) throws MalformedURLException {
 		currentLat = lat;
 		currentLong = log;
+		centerMap.updateMap(0, 0, currentLat, currentLong);
 	}
-	
-	public void setEndLatLog(double lat, double log) {
+
+	public void setEndLatLog(double lat, double log) throws IOException {
 		endLat = lat;
 		endLong = log;
+		// TODO change to lat and log instead of address
+		weather.updateAll(address, address2);
+		sideMap.newTrip(currentLat, currentLong, endLat, endLong);
+		centerMap.updateMap(0, 0, currentLat, currentLong);
 	}
 
-	public void gobutton() throws IOException{
-	
-			setAddress(location.getText(), destination.getText());
-			location.setText("Departure");
-			destination.setText("Destination");
-
-			weather.updateAll(address, address2);
-			centerMap.updateMap(currentLat,currentLong);
-			//sideMap.newTrip(currentLat, currentLong, endLat, endLong);
-			sideMap.newTrip(address,address2);
-		
-	
+	public void gobutton() throws IOException {
+		setAddress(location.getText(), destination.getText());
+		location.setText("Departure");
+		destination.setText("Destination");
 	}
+
 	ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
 				gobutton();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
-		
 
 		}
 	};
@@ -202,34 +197,30 @@ public class World extends JFrame implements KeyListener {
 		}
 	};
 
-	KeyListener enter=new KeyListener(){
-
+	KeyListener enter = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()== KeyEvent.VK_ENTER){
-			try {
-				gobutton();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				try {
+					gobutton();
+				}
+				catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
-		}
-			
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
-		
+
 	};
+	
 	// FIXME unused
 	ActionListener mapView = new ActionListener() {
 		@Override
@@ -240,52 +231,49 @@ public class World extends JFrame implements KeyListener {
 		}
 	};
 
-	public void paintComponent(Graphics g) {
-		super.paintComponents(g);
-		sideMap.paintComponent(g);
+	public void update() throws IOException {
+		moveVer = 0;
+		moveHor = 0;
+		double difference = speed / 69.0;
+		switch (direction) {
+			case 8: {
+				currentLat += difference;
+				// FIXME not sure how many pixels really want to add
+				moveVer = 10;
+				break;
+			}
+			case 2: {
+				currentLat -= difference;
+				moveVer = -10;
+				break;
+			}
+			case 4: {
+				currentLong -= difference;
+				moveHor = 10;
+				break;
+			}
+			case 6: {
+				currentLong += difference;
+				moveVer = -10;
+				break;
+			}
+		}
+		centerMap.updateMap(moveHor, moveVer, currentLat, currentLong);
+		// weather.updateCurrent(currentLat, currentLong);
+		sideMap.updateMap(speed, direction);
 	}
 
-	public void update() throws IOException {
-		// TODO dotn want to update unless the destination changes or zoom
-		// in/out
-		// sideMap.updateMap(address, address2);
-		// TODO send in instead lat, log / address of plane
-		// centerMap.updateMap(address);
-		// currWeather.update(address2);
-		// centerMap.updateMap(direction,speed);
+	public void setDirection(int direction) {
+		this.direction = direction;
+		sideMap.setDirection(direction);
+	}
 
-		//sideMap.updateMap(speed,direction);
-		
-		double difference=speed/69.0;
-		switch(direction){
-		case 8:{
-			currentLat+=difference;
-			break;
-		}
-		case 2:{
-			currentLat-=difference;
-			break;
-		}
-		case 4:{
-			currentLong-=difference;
-			break;
-		}
-		case 6:{
-			currentLong+=difference;
-			break;
-		}
-		}
-		centerMap.updateMap(currentLat,currentLong);
-		//weather.updateLoc(currentLat,currentLong);
-		weather.updateCurrent(currentLat, currentLong);
-		sideMap.updateMap(speed, direction);
+	public int getDirection() {
+		return direction;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-	
-
 	}
 
 	@Override
@@ -314,24 +302,12 @@ public class World extends JFrame implements KeyListener {
 			case KeyEvent.VK_Q:
 				System.exit(0);
 			break;
-			
+
 		}
 	}
 
-	
-
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
-
-	public void setDirection(int direction) {
-		this.direction = direction;
-		sideMap.setDirection(direction);
-
-	}
-
-	public int getDirection() {
-		return direction;
 	}
 
 	FocusListener focus = new FocusListener() {
@@ -345,6 +321,5 @@ public class World extends JFrame implements KeyListener {
 		public void focusLost(FocusEvent e) {
 
 		}
-
 	};
 }
