@@ -1,4 +1,3 @@
-
 package airMap;
 
 import java.awt.BorderLayout;
@@ -7,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -48,14 +49,14 @@ public class World extends JFrame implements KeyListener {
 
 	// destination address
 	private String address2;
-	
-	//plane controls
+
+	// plane controls
 	private int direction;
 	private int speed;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
-		setSize(1000,600);
+		setSize(1000, 600);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -95,8 +96,8 @@ public class World extends JFrame implements KeyListener {
 		weather.add(currWeather);
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
-		direction=2;
-		speed=69;
+		direction = 2;
+		speed = 69;
 		setVisible(true);
 	}
 
@@ -136,7 +137,8 @@ public class World extends JFrame implements KeyListener {
 		destination = new JTextField("Destination");
 		destination.setSelectedTextColor(Color.BLUE);
 		destination.setColumns(20);
-
+		location.addFocusListener(focus);
+		destination.addFocusListener(focus);
 		go = new JButton("Go!");
 		go.addActionListener(click);
 
@@ -145,7 +147,8 @@ public class World extends JFrame implements KeyListener {
 		menu.add(go);
 	}
 
-	public void setAddress(String address, String address2) throws UnsupportedEncodingException {
+	public void setAddress(String address, String address2)
+			throws UnsupportedEncodingException {
 		if (address.equals("Departure")) {
 			address = null;
 		}
@@ -162,7 +165,8 @@ public class World extends JFrame implements KeyListener {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				setAddress(location.getText(), destination.getText());
-				// Address2Thread thread = new Address2Thread(address, address2, view, sideMap);
+				// Address2Thread thread = new Address2Thread(address, address2,
+				// view, sideMap);
 				// thread.start();
 				location.setText("Departure");
 				destination.setText("Destination");
@@ -170,8 +174,7 @@ public class World extends JFrame implements KeyListener {
 				desWeather.update(address2);
 				centerMap.updateMap(address);
 				sideMap.updateMap(address, address2);
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
@@ -201,15 +204,17 @@ public class World extends JFrame implements KeyListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		sideMap.paintComponent(g);
+
 	}
 
 	public void update() throws IOException {
-		// TODO dotn want to update unless the destination changes or zoom in/out
+		// TODO dotn want to update unless the destination changes or zoom
+		// in/out
 		// sideMap.updateMap(address, address2);
 		// TODO send in instead lat, log / address of plane
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
-		//centerMap.updateMap(direction,speed);
+		// centerMap.updateMap(direction,speed);
 		sideMap.movePlane(direction, speed);
 	}
 
@@ -221,41 +226,58 @@ public class World extends JFrame implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_8:
-			 setDirection(8);
+		case KeyEvent.VK_UP:
+		case KeyEvent.VK_8:
+			setDirection(8);
 			break;
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_2:
+		case KeyEvent.VK_DOWN:
+		case KeyEvent.VK_2:
 			setDirection(2);
 			break;
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_4:
+		case KeyEvent.VK_LEFT:
+		case KeyEvent.VK_4:
 			setDirection(4);
 			break;
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_6:
+		case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_6:
 			setDirection(6);
 			break;
-			case KeyEvent.VK_P:
+		case KeyEvent.VK_P:
 			// loop.togglePause();
 			break;
-			case KeyEvent.VK_Q:
-				System.exit(0);
+		case KeyEvent.VK_Q:
+			System.exit(0);
 			break;
 		}
 	}
 
 	public void setDirection(int direction) {
-		this.direction=direction;
+		this.direction = direction;
 		sideMap.setDirection(direction);
-		
+
 	}
-	public int getDirection(){
+
+	public int getDirection() {
 		return direction;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
+
+	FocusListener focus = new FocusListener() {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			JTextField f = (JTextField) e.getSource();
+			f.selectAll();
+
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+
+		}
+
+	};
 }

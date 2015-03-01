@@ -30,9 +30,10 @@ public class PathMap extends JPanel{
 	private JButton b;
 	
 	public PathMap() throws MalformedURLException{
-		setPreferredSize(new Dimension(300, 300));
-		setUpAirports();
+		setPreferredSize(new Dimension(250, 300));
 		view="roadmap";
+		setUpAirports();
+		
 		b=new JButton("hekki");
 		
 	}
@@ -44,6 +45,7 @@ public class PathMap extends JPanel{
 	url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=300x600&path=color:0x0000ff|weight:5|"
 				+ startlat+","+startlong + "|" + endlat+","+endlong + "&maptype=" + view + "&markers=size:mid%7Ccolor:red%7C" +startlat+","+startlong  + "%7C"
 				+ endlat+","+endlong);
+	
 	 img = new ImageIcon(url).getImage();
 	}
 	public void setUpAirports() throws MalformedURLException{
@@ -68,10 +70,12 @@ public class PathMap extends JPanel{
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
 		  url = new URL(adrhalf + airports);
+	
 		 img = new ImageIcon(url).getImage();
 	}
 	public void drawMap(Graphics g){
+		  System.out.println("printing");
 		g.drawRect(2,2,45,45);
-		g.drawImage(img, 0, 0, 300, 300, null);
+		g.drawImage(img, 0, 0, 250, 300, null);
 	}
 }

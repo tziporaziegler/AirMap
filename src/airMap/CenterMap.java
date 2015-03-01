@@ -66,7 +66,7 @@ public class CenterMap extends JPanel {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(img, 0, 0, 600, 600, null);
 		// TODO change airMap to dashboard image

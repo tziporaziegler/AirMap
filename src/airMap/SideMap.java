@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -21,6 +19,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+
+
 
 public class SideMap extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -45,9 +45,10 @@ public class SideMap extends JPanel {
 	private JMenu featuresOptions;
 	private JButton zoomout;
 	private JButton zoomin;
+	private JPanel container;
 
 	public SideMap() throws IOException {
-
+	
 		setPreferredSize(new Dimension(250, 600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -57,7 +58,7 @@ public class SideMap extends JPanel {
 		zoomin = new JButton("+");
 		zoomout.addActionListener(zoomoutListen);
 		zoomin.addActionListener(zoominListen);
-
+		
 		zoom = 2; // 0-21 disable + button is more
 		view = "terrain";
 		address = "USA";
@@ -66,16 +67,23 @@ public class SideMap extends JPanel {
 		featuresOptions = new JMenu("Features");
 		menu = new JMenuBar();
 		viewOptions = new JMenu("View");
+		container=new JPanel();
+		add(container);
+		container.setLayout(new BorderLayout());
 		setUpMenu();
-		add(menu, BorderLayout.NORTH);
+		
+		container.add(menu, BorderLayout.NORTH);
 		
 		//panels
 		center=new JPanel();
-	
-		add(center,BorderLayout.CENTER);
-		navigationMap=new NavigationMap();
 		pathMap=new PathMap();
+		//container.add(pathMap,BorderLayout.CENTER);
+		
 		center.add(pathMap);
+		container.add(center,BorderLayout.CENTER);
+		navigationMap=new NavigationMap();
+		
+	
 		plane=new Plane(200,200);
 		direction=2;
 		
@@ -102,6 +110,9 @@ public class SideMap extends JPanel {
 	}
 	public void setDirection(int direction){
 		this.direction=direction;
+	}
+	public void drawMap(Graphics g){
+		pathMap.drawMap(g);
 	}
 	@Override
 	public void paintComponent(Graphics g) {
