@@ -19,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 
 public class NavigationMap extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -45,6 +46,7 @@ public class NavigationMap extends JPanel {
 		width = 250;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
+		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
 		currentlat = startlat;
 		currentlong = startlong;

@@ -8,6 +8,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 
 public class PathMap extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,7 @@ public class PathMap extends JPanel {
 		width = 250;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
+		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setUpAirports();
 	}
 
@@ -54,12 +56,13 @@ public class PathMap extends JPanel {
 				+ "," + endlong);
 		img = new ImageIcon(url).getImage();
 	}
-@Override
-	public void paintComponent(Graphics g){
-	g.drawImage(img, 0, 0, width, height, null);
+
+	@Override
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, width, height, null);
 	}
+
 	public void drawMap(Graphics g) {
-	
 		g.drawImage(img, 0, 0, width, height, null);
 	}
 
