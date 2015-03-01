@@ -1,5 +1,6 @@
 package airMap;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -44,7 +45,7 @@ public class NavigationMap extends JPanel {
 		width = 250;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
-
+		setLayout(new BorderLayout());
 		currentlat = startlat;
 		currentlong = startlong;
 
@@ -61,8 +62,9 @@ public class NavigationMap extends JPanel {
 		menu = new JMenuBar();
 		viewOptions = new JMenu("View");
 		menu.add(zoomout);
+		menu.add(zoomin);
 		setUpMenu();
-
+		add(menu,BorderLayout.NORTH);
 		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
 		planeImg = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
@@ -134,6 +136,10 @@ public class NavigationMap extends JPanel {
 		g.drawImage(mapImg, 0, 0, width, height, null);
 	}
 
+	public void paintComponent(Graphics g){
+		g.drawImage(mapImg, 0, 0, width, height, null);
+		g.drawImage(planeImg, plane.getX(), plane.getY(), 20, 20, null);
+	}
 	public void loadImg() throws MalformedURLException {
 		String zooms = "";
 		if (zoom != 0) {

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
 public class SideMap extends JPanel {
@@ -27,8 +29,8 @@ public class SideMap extends JPanel {
 		//setBorder(new BevelBorder(BevelBorder.LOWERED));
 		
 		//TODO change to center of map coordinates
-		startlat = 45;
-		startlong = 45;
+		startlat = 45.0;
+		startlong = 45.0;
 		address = "USA";
 
 		pathMap = new PathMap();
@@ -38,6 +40,7 @@ public class SideMap extends JPanel {
 		navigationMap = new NavigationMap(startlat, startlong);
 		// send in speed of 0 when initially create that map
 		updateMap(0, direction);
+	
 		add(navigationMap);
 		repaint();
 	}
@@ -48,6 +51,8 @@ public class SideMap extends JPanel {
 
 	public void drawMap(Graphics g) {
 		pathMap.drawMap(g);
+		navigationMap.drawMap(g);
+		
 	}
 
 	@Override
@@ -56,6 +61,7 @@ public class SideMap extends JPanel {
 		pathMap.drawMap(g);
 		navigationMap.drawMap(g);
 		navigationMap.drawPlane(g);
+	
 	}
 
 	public void newTrip(double startlat, double startlong, double endlat, double endlong) throws MalformedURLException {

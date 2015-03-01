@@ -54,8 +54,12 @@ public class PathMap extends JPanel {
 				+ "," + endlong);
 		img = new ImageIcon(url).getImage();
 	}
-
+@Override
+	public void paintComponent(Graphics g){
+	g.drawImage(img, 0, 0, width, height, null);
+	}
 	public void drawMap(Graphics g) {
+	
 		g.drawImage(img, 0, 0, width, height, null);
 	}
 
