@@ -74,8 +74,9 @@ public class PathMap extends JPanel{
 		 img = new ImageIcon(url).getImage();
 	}
 	public void drawMap(Graphics g){
-		  System.out.println("printing");
-		g.drawRect(2,2,45,45);
+		 // System.out.println("printing");
+		//g.drawRect(2,2,45,45);
 		g.drawImage(img, 0, 0, 250, 300, null);
 	}
+	
 }

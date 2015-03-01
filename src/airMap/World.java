@@ -53,6 +53,11 @@ public class World extends JFrame implements KeyListener {
 	// plane controls
 	private int direction;
 	private int speed;
+	
+	private double currentlat;
+	private double currentlong;
+	private double endlat;
+	private double endlong;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -173,7 +178,7 @@ public class World extends JFrame implements KeyListener {
 				depWeather.update(address);
 				desWeather.update(address2);
 				centerMap.updateMap(address);
-				sideMap.updateMap(address, address2);
+				sideMap.newTrip(currentlat, currentlong, endlat, endlong);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -215,7 +220,7 @@ public class World extends JFrame implements KeyListener {
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
 		// centerMap.updateMap(direction,speed);
-		sideMap.movePlane(direction, speed);
+		sideMap.updateMap(speed,direction);
 	}
 
 	@Override
