@@ -43,7 +43,7 @@ public class NavigationMap extends JPanel {
 	private JMenu featuresOptions;
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
-		width = 250;
+		width = 300;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -151,9 +151,7 @@ public class NavigationMap extends JPanel {
 
 		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
 				+ "&size=" + width + "x" + height + "&maptype=" + view;
-
-		// "&markers=size:mid%7Ccolor:red%7C" + address2 + "%7C" + address;
-
+		
 		String airports = "&markers=size:mid%7Ccolor:green%7C" + "atl+airport" + "%7C" + "anc+airport" + "%7C"
 				+ "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"
@@ -169,8 +167,8 @@ public class NavigationMap extends JPanel {
 				+ "sna+airport" + "%7C" + "sea+airport" + "%7C" + "stl+airport" + "%7C" + "tpa+airport" + "%7C"
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
-		URL url = new URL(adrhalf + zooms);
-		// URL url = new URL(adrhalf + airports + zooms);
+		//URL url = new URL(adrhalf + airports);
+		URL url = new URL(adrhalf + airports + zooms);
 
 		mapImg = new ImageIcon(url).getImage();
 		// new ImgDownloadThread(url, new JLabel()).start();

@@ -18,7 +18,7 @@ public class PathMap extends JPanel {
 	private int height;
 
 	public PathMap() throws MalformedURLException {
-		width = 250;
+		width = 300;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));

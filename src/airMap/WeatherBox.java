@@ -1,6 +1,5 @@
 package airMap;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.MalformedURLException;
