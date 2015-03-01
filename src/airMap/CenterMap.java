@@ -26,7 +26,8 @@ public class CenterMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image img;
 	private String view;
-	private String address;
+	private double currentlat;
+	private double currentlong;
 
 	// menu
 	private JMenu viewOptions;
@@ -42,7 +43,7 @@ public class CenterMap extends JPanel {
 	private Image gauges1Img;
 	private Image gauges2Img;
 
-	public CenterMap(String address) throws IOException {
+	public CenterMap(double currentlat,double currentlong) throws IOException {
 		setPreferredSize(new Dimension(600,600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -55,7 +56,8 @@ public class CenterMap extends JPanel {
 		add(menu, BorderLayout.NORTH);
 
 		view = "satellite";
-		this.address = address;
+		this.currentlat=currentlat;
+		this.currentlong=currentlong;
 		loadImg();
 
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
@@ -104,7 +106,7 @@ public class CenterMap extends JPanel {
 	}
 
 	public void loadImg() throws MalformedURLException {
-		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + address + "&size=640x640"
+		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat+","+currentlong + "&size=640x640"
 				+ "&maptype=" + view + "&zoom=" + zoom;
 		System.out.println("Center Img: " + url);
 		// FIXME should load img in separtate thread that somehow returns and img
@@ -116,14 +118,12 @@ public class CenterMap extends JPanel {
 		loadImg();
 	}
 
-	public void updateMap(String address) throws MalformedURLException {
-		this.address = address;
+	public void updateMap(double currentlat,double currentlong) throws MalformedURLException {
+		this.currentlat=currentlat;
+		this.currentlong=currentlong;
 		loadImg();
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
 
 	ActionListener zoominListen = new ActionListener() {
 		@Override

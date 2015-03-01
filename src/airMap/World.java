@@ -66,7 +66,8 @@ public class World extends JFrame implements KeyListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
-
+		currentlat=40.633785;
+		currentlong=-73.779277;
 		// create window icon (only visible on mac when minimize window)
 		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
 
@@ -78,8 +79,8 @@ public class World extends JFrame implements KeyListener {
 		add(menu, BorderLayout.SOUTH);
 
 		// create the three panels and set up their location on the screen
-		address = "USA";
-		centerMap = new CenterMap(address);
+	
+		centerMap = new CenterMap(currentlat,currentlong);
 		centerMap.setSize(new Dimension((int) getWidth() / 2, getHeight()));
 		add(centerMap, BorderLayout.CENTER);
 
@@ -101,7 +102,7 @@ public class World extends JFrame implements KeyListener {
 		weather.add(currWeather);
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
-		direction = 2;
+		direction = 4;
 		speed = 69;
 		setVisible(true);
 	}
@@ -177,7 +178,7 @@ public class World extends JFrame implements KeyListener {
 				destination.setText("Destination");
 				depWeather.update(address);
 				desWeather.update(address2);
-				centerMap.updateMap(address);
+				centerMap.updateMap(currentlat,currentlong);
 				sideMap.newTrip(currentlat, currentlong, endlat, endlong);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -220,7 +221,30 @@ public class World extends JFrame implements KeyListener {
 		// centerMap.updateMap(address);
 		// currWeather.update(address2);
 		// centerMap.updateMap(direction,speed);
-		sideMap.updateMap(speed,direction);
+		//sideMap.updateMap(speed,direction);
+		
+		double difference=speed/69.0;
+		switch(direction){
+		case 8:{
+			currentlat+=difference;
+			break;
+		}
+		case 2:{
+			currentlat-=difference;
+			break;
+		}
+		case 4:{
+			currentlong-=difference;
+			break;
+		}
+		case 6:{
+			currentlong+=difference;
+			break;
+		}
+		}
+		centerMap.updateMap(currentlat,currentlong);
+	//	weather.updateLoc(currentlat,currentlong);
+		sideMap.updateMap(speed, direction);
 	}
 
 	@Override

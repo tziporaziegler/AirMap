@@ -111,21 +111,22 @@ public class NavigationMap extends JPanel {
 	public void movePlane(int speed, int direction) {
 		switch (direction) {
 			case 2: {
-				plane.setY(plane.getY() + (speed / 100));
+				plane.setY(plane.getY() + (speed / 69));
 				break;
 			}
 			case 4: {
-				plane.setX(plane.getX() - (speed / 100));
+				plane.setX(plane.getX() - (speed / 69));
 				break;
 			}
 			case 6: {
-				plane.setX(plane.getX() + (speed / 100));
+				plane.setX(plane.getX() + (speed / 69));
 				break;
 			}
 			case 8: {
-				plane.setY(plane.getY() - (speed / 100));
+				plane.setY(plane.getY() - (speed / 69));
 				break;
 			}
+			
 		}
 	}
 
