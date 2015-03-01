@@ -9,13 +9,13 @@ public class AirMap {
 
 	public static void main(String[] args) {
 		try {
-			/*try {
+			try {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			}
 			catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 					| UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
-			}*/
+			}
 			new GameLoopThread(new World()).start();
 		}
 		catch (IOException e) {

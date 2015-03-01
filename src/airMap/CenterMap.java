@@ -68,7 +68,7 @@ public class CenterMap extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(img, 0, 0, 600, 600, null);
+		g.drawImage(img, -170, -150, 640, 640, null);
 		// TODO change airMap to dashboard image
 		g.drawImage(controlImg, 0, 32, 472, 520, null);
 		
@@ -104,7 +104,7 @@ public class CenterMap extends JPanel {
 	}
 
 	public void loadImg() throws MalformedURLException {
-		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + address + "&size=1280x1280"
+		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + address + "&size=640x640"
 				+ "&maptype=" + view + "&zoom=" + zoom;
 		System.out.println("Center Img: " + url);
 		// FIXME should load img in separtate thread that somehow returns and img
