@@ -110,7 +110,7 @@ public class CenterMap extends JPanel {
 				+ "&maptype=" + view + "&zoom=" + zoom;
 		System.out.println("Center Img: " + url);
 		// FIXME should load img in separtate thread that somehow returns and img
-		img = new ImageIcon(new URL(url)).getImage();
+		//img = new ImageIcon(new URL(url)).getImage();
 	}
 
 	public void updateView(String view) throws MalformedURLException {

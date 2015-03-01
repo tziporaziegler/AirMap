@@ -62,7 +62,9 @@ public class SideMap extends JPanel {
 	public void newTrip(double startlat, double startlong, double endlat, double endlong) throws MalformedURLException {
 		pathMap.updateMap(startlat, startlong, endlat, endlong);
 	}
-
+	public void newTrip(String address,String address2) throws MalformedURLException {
+		pathMap.updateMap(address,address2);
+	}
 	public void updateMap(int speed, int direction) throws IOException {
 		//FIXME repaint navigation map
 		navigationMap.update(speed, direction);

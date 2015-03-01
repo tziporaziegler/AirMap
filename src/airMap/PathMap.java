@@ -56,7 +56,15 @@ public class PathMap extends JPanel {
 				+ "," + endlong);
 		img = new ImageIcon(url).getImage();
 	}
-
+	
+	public void updateMap(String address,String address2)
+			throws MalformedURLException {
+		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
+				+ "&path=color:0x0000ff|weight:5|" + address + "|" + address2
+				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + address + "%7C" + address2);
+		img = new ImageIcon(url).getImage();
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, width, height, null);

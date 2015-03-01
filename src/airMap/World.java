@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import javax.imageio.ImageIO;
@@ -129,6 +130,7 @@ public class World extends JFrame implements KeyListener {
 		destination = new JTextField("Destination");
 		destination.setSelectedTextColor(Color.BLUE);
 		destination.setColumns(20);
+		destination.addKeyListener(enter);
 		location.addFocusListener(focus);
 		destination.addFocusListener(focus);
 		go = new JButton("Go!");
@@ -163,22 +165,29 @@ public class World extends JFrame implements KeyListener {
 		endLong = log;
 	}
 
+	public void gobutton() throws IOException{
+	
+			setAddress(location.getText(), destination.getText());
+			location.setText("Departure");
+			destination.setText("Destination");
+
+			weather.updateAll(address, address2);
+			centerMap.updateMap(currentLat,currentLong);
+			//sideMap.newTrip(currentLat, currentLong, endLat, endLong);
+			sideMap.newTrip(address,address2);
+		
+	
+	}
 	ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
-				setAddress(location.getText(), destination.getText());
-				location.setText("Departure");
-				destination.setText("Destination");
-
-				weather.updateAll(address, address2);
-				centerMap.updateMap(currentLat,currentLong);
-				sideMap.newTrip(currentLat, currentLong, endLat, endLong);
-			}
-			catch (IOException e) {
-
+				gobutton();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
 
 		}
 	};
@@ -193,6 +202,34 @@ public class World extends JFrame implements KeyListener {
 		}
 	};
 
+	KeyListener enter=new KeyListener(){
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()== KeyEvent.VK_ENTER){
+			try {
+				gobutton();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 	// FIXME unused
 	ActionListener mapView = new ActionListener() {
 		@Override
@@ -239,7 +276,8 @@ public class World extends JFrame implements KeyListener {
 		}
 		}
 		centerMap.updateMap(currentLat,currentLong);
-	//	weather.updateLoc(currentlat,currentlong);
+		//weather.updateLoc(currentLat,currentLong);
+		weather.updateCurrent(currentLat, currentLong);
 		sideMap.updateMap(speed, direction);
 	}
 
@@ -276,6 +314,7 @@ public class World extends JFrame implements KeyListener {
 			case KeyEvent.VK_Q:
 				System.exit(0);
 			break;
+			
 		}
 	}
 

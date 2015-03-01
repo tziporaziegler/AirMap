@@ -16,10 +16,11 @@ public class WeatherDownloadThread extends Thread {
 
 	public WeatherDownloadThread(WeatherInfo box, String address) throws MalformedURLException {
 		this.box = box;
-		System.out.println("weather url:" + url);
+		
 		url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + address + "&units=imperial");
 		// url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + lat + "," + log +
 		// "&units=imperial");
+		System.out.println("weather url:" + url);
 	}
 
 	@Override

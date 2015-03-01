@@ -30,7 +30,7 @@ public class WeatherCont extends Container {
 		currWeather.update(address);
 	}
 	
-	public void updateCurrent(int lat, int log) throws IOException{
+	public void updateCurrent(double lat, double log) throws IOException{
 		currWeather.update(lat + "," + log);
 	}
 }
