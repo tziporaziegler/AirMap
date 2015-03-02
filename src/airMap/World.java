@@ -232,33 +232,33 @@ public class World extends JFrame implements KeyListener {
 	};
 
 	public void update() throws IOException {
-		moveVer = 0;
-		moveHor = 0;
+	
 		double difference = speed / 69.0;
+	
 		switch (direction) {
 			case 8: {
 				currentLat += difference;
 				// FIXME not sure how many pixels really want to add
-				moveVer = 10;
+			
 				break;
 			}
 			case 2: {
 				currentLat -= difference;
-				moveVer = -10;
+			
 				break;
 			}
 			case 4: {
 				currentLong -= difference;
-				moveHor = 10;
+				
 				break;
 			}
 			case 6: {
 				currentLong += difference;
-				moveVer = -10;
+			
 				break;
 			}
 		}
-		centerMap.updateMap(moveHor, moveVer, currentLat, currentLong);
+		centerMap.updateMap(direction, difference, currentLat, currentLong);
 		// weather.updateCurrent(currentLat, currentLong);
 		sideMap.updateMap(speed, direction);
 	}

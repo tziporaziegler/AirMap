@@ -113,7 +113,7 @@ public class CenterMap extends JPanel {
 
 	public void loadImg() throws MalformedURLException {
 		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
-				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoom;
+				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoom+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE";
 		System.out.println("NEW Center Img: " + url);
 		// FIXME should load img in separtate thread that somehow returns and img
 		img = new ImageIcon(new URL(url)).getImage();
@@ -124,9 +124,35 @@ public class CenterMap extends JPanel {
 		loadImg();
 	}
 
-	public void updateMap(int moveHor, int moveVer, double currentlat, double currentlong) throws MalformedURLException {
+	public void updateMap(int direction,double difference, double currentlat, double currentlong) throws MalformedURLException {
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
+		double moveVer=0;
+		double moveHor=0;
+		double pixels=difference*.0137329*Math.pow( 2,zoom);
+		switch (direction) {
+		case 8: {
+			
+			// FIXME not sure how many pixels really want to add
+			moveVer = pixels;
+			break;
+		}
+		case 2: {
+			
+			moveVer = -pixels;
+			break;
+		}
+		case 4: {
+		
+			moveHor = pixels;
+			break;
+		}
+		case 6: {
+			
+			moveVer = -pixels;
+			break;
+		}
+	}
 		movedHor += moveHor;
 		movedVer += moveVer;
 		if (movedHor > 85 || movedHor < -85 || movedVer > 75 || movedVer < -75) {

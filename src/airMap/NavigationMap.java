@@ -174,7 +174,7 @@ public class NavigationMap extends JPanel {
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
 		// URL url = new URL(adrhalf + airports);
-		URL url = new URL(adrhalf + airports + zooms);
+		URL url = new URL(adrhalf + airports + zooms+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
 		mapImg = new ImageIcon(url).getImage();
 		// new ImgDownloadThread(url, new JLabel()).start();

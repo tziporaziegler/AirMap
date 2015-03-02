@@ -53,7 +53,7 @@ public class PathMap extends JPanel {
 		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
 				+ "&path=color:0x0000ff|weight:5|" + startlat + "," + startlong + "|" + endlat + "," + endlong
 				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + startlat + "," + startlong + "%7C" + endlat
-				+ "," + endlong);
+				+ "," + endlong+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 		img = new ImageIcon(url).getImage();
 	}
 	
@@ -61,7 +61,7 @@ public class PathMap extends JPanel {
 			throws MalformedURLException {
 		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
 				+ "&path=color:0x0000ff|weight:5|" + address + "|" + address2
-				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + address + "%7C" + address2);
+				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + address + "%7C" + address2+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 		img = new ImageIcon(url).getImage();
 	}
 	
