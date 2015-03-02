@@ -18,8 +18,8 @@ public class PathMap extends JPanel {
 	private int height;
 
 	public PathMap() throws MalformedURLException {
-		width = 250;
-		height = 300;
+		width = 300;
+		height = 290;
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setUpAirports();
@@ -69,9 +69,4 @@ public class PathMap extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, width, height, null);
 	}
-
-	public void drawMap(Graphics g) {
-		g.drawImage(img, 0, 0, width, height, null);
-	}
-
 }

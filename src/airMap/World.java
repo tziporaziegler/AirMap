@@ -53,9 +53,6 @@ public class World extends JFrame implements KeyListener {
 	private int direction;
 	private int speed;
 
-	private int moveHor;
-	private int moveVer;
-
 	public World() throws IOException {
 		setLayout(new BorderLayout());
 		setSize(1000, 600);
@@ -76,14 +73,14 @@ public class World extends JFrame implements KeyListener {
 		add(menu, BorderLayout.SOUTH);
 
 		direction = 4;
-		speed = 69 * 5;
+		speed = 69 * 50;
 
 		// create the three panels and set up their location on the screen
 		centerMap = new CenterMap(currentLat, currentLong);
 		centerMap.setSize(new Dimension((int) getWidth() / 2, getHeight()));
 		add(centerMap, BorderLayout.CENTER);
 
-		sideMap = new SideMap(currentLat, currentLong);
+		sideMap = new SideMap(currentLat, currentLong, direction);
 		add(sideMap, BorderLayout.WEST);
 
 		weather = new WeatherCont();
@@ -183,7 +180,6 @@ public class World extends JFrame implements KeyListener {
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-
 		}
 	};
 
@@ -238,23 +234,18 @@ public class World extends JFrame implements KeyListener {
 		switch (direction) {
 			case 8: {
 				currentLat += difference;
-				// FIXME not sure how many pixels really want to add
-			
 				break;
 			}
 			case 2: {
 				currentLat -= difference;
-			
 				break;
 			}
 			case 4: {
 				currentLong -= difference;
-				
 				break;
 			}
 			case 6: {
 				currentLong += difference;
-			
 				break;
 			}
 		}
@@ -265,16 +256,11 @@ public class World extends JFrame implements KeyListener {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
-		sideMap.setDirection(direction);
-		
+		sideMap.setDirection(direction);	
 	}
 
 	public int getDirection() {
 		return direction;
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 	}
 
 	@Override
@@ -303,13 +289,15 @@ public class World extends JFrame implements KeyListener {
 			case KeyEvent.VK_Q:
 				System.exit(0);
 			break;
-
-		}
-		
+		}	
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 
 	FocusListener focus = new FocusListener() {
@@ -321,7 +309,6 @@ public class World extends JFrame implements KeyListener {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-
 		}
 	};
 }

@@ -18,46 +18,45 @@ public class SideMap extends JPanel {
 	private PathMap pathMap;
 	private NavigationMap navigationMap;
 
-	public SideMap(double currentLat, double currentLong) throws IOException {
-		width=250;
-		height=300;
+	public SideMap(double currentLat, double currentLong, int direction) throws IOException {
+		width = 300;
+		height = 300;
 		setPreferredSize(new Dimension(width, height));
 		// TODO try out boxlayout
 		setLayout(new GridLayout(2, 1));
-		//setBorder(new BevelBorder(BevelBorder.LOWERED));
-		
-		//TODO change to center of map coordinates
+		// setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+		// TODO change to center of map coordinates
 		startlat = currentLat;
 		startlong = currentLong;
-	
 
 		pathMap = new PathMap();
 		add(pathMap);
-	
-		direction = 2;
+
+		this.direction = direction;
 		navigationMap = new NavigationMap(startlat, startlong);
 		// send in speed of 0 when initially create that map
 		updateMap(69, direction);
-	
+
 		add(navigationMap);
-		
+
 	}
 
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
 
-	
-
 	public void newTrip(double startlat, double startlong, double endlat, double endlong) throws MalformedURLException {
 		pathMap.updateMap(startlat, startlong, endlat, endlong);
 		navigationMap.newMap(startlat, startlong);
 	}
-	public void newTrip(String address,String address2) throws MalformedURLException {
-		pathMap.updateMap(address,address2);
+
+	public void newTrip(String address, String address2) throws MalformedURLException {
+		pathMap.updateMap(address, address2);
 	}
+
 	public void updateMap(int speed, int direction) throws IOException {
-		//FIXME repaint navigation map
+		// FIXME repaint navigation map
 		navigationMap.update(speed, this.direction);
 	}
 }
