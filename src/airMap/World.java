@@ -1,12 +1,9 @@
 package airMap;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -21,7 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JTextField;
 
 public class World extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -36,8 +32,8 @@ public class World extends JFrame implements KeyListener {
 	private JMenuBar menu;
 	private JMenu featuresOptions;
 	private JButton go;
-	private JTextField location;
-	private JTextField destination;
+	private TextField location;
+	private TextField destination;
 
 	// current address
 	private String address;
@@ -60,8 +56,10 @@ public class World extends JFrame implements KeyListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
+		
 		currentLat = 40.633785;
 		currentLong = -73.779277;
+		
 		// create window icon (only visible on mac when minimize window)
 		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
 
@@ -73,11 +71,10 @@ public class World extends JFrame implements KeyListener {
 		add(menu, BorderLayout.SOUTH);
 
 		direction = 4;
-		speed = 69 * 50;
+		speed = 69;
 
 		// create the three panels and set up their location on the screen
 		centerMap = new CenterMap(currentLat, currentLong);
-		centerMap.setSize(new Dimension((int) getWidth() / 2, getHeight()));
 		add(centerMap, BorderLayout.CENTER);
 
 		sideMap = new SideMap(currentLat, currentLong, direction);
@@ -119,18 +116,10 @@ public class World extends JFrame implements KeyListener {
 		viewOptions.setToolTipText("Map View");
 		menu.add(viewOptions);
 
-		location = new JTextField("Departure");
-		location.setColumns(20);
-		location.setSelectedTextColor(Color.BLUE);
-		destination = new JTextField("Destination");
-		destination.setSelectedTextColor(Color.BLUE);
-		destination.setColumns(20);
-		destination.addKeyListener(enter);
-		location.addFocusListener(focus);
-		destination.addFocusListener(focus);
 		go = new JButton("Go!");
 		go.addActionListener(click);
-
+		location = new TextField("Departure", this);
+		destination = new TextField("Destination", this);
 		menu.add(location);
 		menu.add(destination);
 		menu.add(go);
@@ -167,8 +156,8 @@ public class World extends JFrame implements KeyListener {
 
 	public void gobutton() throws IOException {
 		setAddress(location.getText(), destination.getText());
-		location.setText("Departure");
-		destination.setText("Destination");
+		location.reset();
+		destination.reset();
 	}
 
 	ActionListener click = new ActionListener() {
@@ -193,30 +182,6 @@ public class World extends JFrame implements KeyListener {
 		}
 	};
 
-	KeyListener enter = new KeyListener() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				try {
-					gobutton();
-				}
-				catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-
-	};
-	
 	// FIXME unused
 	ActionListener mapView = new ActionListener() {
 		@Override
@@ -228,9 +193,7 @@ public class World extends JFrame implements KeyListener {
 	};
 
 	public void update() throws IOException {
-	
 		double difference = speed / 69.0;
-	
 		switch (direction) {
 			case 8: {
 				currentLat += difference;
@@ -256,7 +219,7 @@ public class World extends JFrame implements KeyListener {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
-		sideMap.setDirection(direction);	
+		sideMap.setDirection(direction);
 	}
 
 	public int getDirection() {
@@ -289,26 +252,14 @@ public class World extends JFrame implements KeyListener {
 			case KeyEvent.VK_Q:
 				System.exit(0);
 			break;
-		}	
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-
-	FocusListener focus = new FocusListener() {
-		@Override
-		public void focusGained(FocusEvent e) {
-			JTextField f = (JTextField) e.getSource();
-			f.selectAll();
-		}
-
-		@Override
-		public void focusLost(FocusEvent e) {
-		}
-	};
 }

@@ -1,7 +1,6 @@
 package airMap;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -44,11 +43,14 @@ public class CenterMap extends JPanel {
 	private Image gauges2Img;
 
 	// use so don't download new pic every time
-	private int movedHor; // can go from -85 to 85
-	private int movedVer; // can go from -75 to 75
+	private double movedHor; // can go from -85 to 85
+	private double movedVer; // can go from -75 to 75
+
+	private double adjustlat;
+	private double adjustlog;
 
 	public CenterMap(double currentlat, double currentlong) throws IOException {
-		//setPreferredSize(new Dimension(600, 600));
+		// setPreferredSize(new Dimension(600, 600));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 
@@ -77,7 +79,11 @@ public class CenterMap extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(img, -85 + movedHor, -75 + movedVer, 640, 640, null);
+		// TODO take out print
+		int ho = (int) movedHor;
+		int ve = (int) movedVer;
+		System.out.println(currentlat + " , " + currentlong);
+		g.drawImage(img, (-85 + ho), (-75 + ve), 640, 640, null);
 		g.drawImage(controlImg, 0, 30, 472, 520, null);
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -106,7 +112,7 @@ public class CenterMap extends JPanel {
 		zoomout.addActionListener(zoomoutListen);
 		zoomin.addActionListener(zoominListen);
 		// initialize zoom value
-		zoom = 2; // 0-21 disable + button is more
+		zoom = 7; // 0-21 disable + button is more
 		menu.add(zoomout);
 		menu.add(zoomin);
 	}
@@ -116,7 +122,7 @@ public class CenterMap extends JPanel {
 				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoom
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE";
 		System.out.println("NEW Center Img: " + url);
-		// FIXME should load img in separtate thread that somehow returns and img
+		// FIXME should load img in separate thread that somehow returns and img
 		img = new ImageIcon(new URL(url)).getImage();
 	}
 
@@ -129,8 +135,10 @@ public class CenterMap extends JPanel {
 			throws MalformedURLException {
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
+
 		double moveVer = 0;
 		double moveHor = 0;
+
 		double pixels = difference * .0137329 * Math.pow(2, zoom);
 		switch (direction) {
 			case 8: {
@@ -154,9 +162,24 @@ public class CenterMap extends JPanel {
 		movedHor += moveHor;
 		movedVer += moveVer;
 		if (movedHor > 85 || movedHor < -85 || movedVer > 75 || movedVer < -75) {
-			loadImg();
+			double adjustPix;
+			if (direction == 6) {
+				adjustPix = 12;
+				adjustlog = adjustPix / (.0137329 * Math.pow(2, zoom));
+			}
+			else if (direction == 4) {
+				adjustPix = 12;
+				adjustlog = adjustPix / (.0137329 * Math.pow(2, zoom));
+			}
+			else if (direction == 8) {
+				//
+			}
+			else {
+				//
+			}
 			movedHor = 0;
 			movedVer = 0;
+			loadImg();
 		}
 	}
 
