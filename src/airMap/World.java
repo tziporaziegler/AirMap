@@ -266,6 +266,7 @@ public class World extends JFrame implements KeyListener {
 	public void setDirection(int direction) {
 		this.direction = direction;
 		sideMap.setDirection(direction);
+		
 	}
 
 	public int getDirection() {
@@ -304,6 +305,7 @@ public class World extends JFrame implements KeyListener {
 			break;
 
 		}
+		
 	}
 
 	@Override

@@ -130,13 +130,7 @@ public class NavigationMap extends JPanel {
 		}
 	}
 
-	public void drawPlane(Graphics g) {
-		g.drawImage(planeImg, plane.getX(), plane.getY(), 20, 20, null);
-	}
 
-	public void drawMap(Graphics g) {
-		g.drawImage(mapImg, 0, 0, width, height, null);
-	}
 
 	public void newMap(double newLat, double newLog) throws MalformedURLException {
 		currentlat = newLat;

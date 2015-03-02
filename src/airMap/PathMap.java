@@ -18,7 +18,7 @@ public class PathMap extends JPanel {
 	private int height;
 
 	public PathMap() throws MalformedURLException {
-		width = 300;
+		width = 250;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -44,7 +44,7 @@ public class PathMap extends JPanel {
 				+ "sna+airport" + "%7C" + "sea+airport" + "%7C" + "stl+airport" + "%7C" + "tpa+airport" + "%7C"
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
-		url = new URL(adrhalf + airports);
+		url = new URL(adrhalf + airports+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 		img = new ImageIcon(url).getImage();
 	}
 
