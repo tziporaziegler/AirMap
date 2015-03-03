@@ -13,7 +13,7 @@ public class TextField extends JTextField {
 	private static final long serialVersionUID = 1L;
 	private String name;
 
-	public TextField(String name, World world) {
+	public TextField(String name, final World world) {
 		setColumns(20);
 		setSelectedTextColor(Color.BLUE);
 		this.name = name;

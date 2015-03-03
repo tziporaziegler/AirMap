@@ -34,6 +34,8 @@ public class NavigationMap extends JPanel {
 	@SuppressWarnings("unused")
 	private String feature;
 	private MenuZoom zoomPanel;
+	private int count;
+	private double diffBuffer;
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
 		width = 300;
@@ -43,14 +45,14 @@ public class NavigationMap extends JPanel {
 		setLayout(new BorderLayout());
 		currentlat = startlat;
 		currentlong = startlong;
-
+		count=0;
 		// set up menu bar
 		menu = new JMenuBar();
 		view = "terrain";
 		menu.add(new MenuView(this, "navMap"));
 		feature = "transit.station.airports";
 		menu.add(new MenuFeatures(this));
-		zoomPanel = new MenuZoom(this, 7, "navMap");
+		zoomPanel = new MenuZoom(this, 4, "navMap");
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
@@ -58,6 +60,7 @@ public class NavigationMap extends JPanel {
 		plane = new Plane(width / 2, height / 2);
 		planeImg = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
 
+		diffBuffer=0;
 		// FIXME move to separate thread
 		loadImg();
 	}
@@ -88,21 +91,40 @@ public class NavigationMap extends JPanel {
 	}
 
 	public void movePlane(int speed, int direction) {
+		double pixelPerLong=(300*(Math.pow(2, (zoomPanel.getZoom()-1)))/360);
+		System.out.println("pixel "+pixelPerLong);
+		int difference;
+		System.out.println(count++);
+		double diff= ((speed/69.0)*pixelPerLong);
+		if(diffBuffer!=0){
+			diff+=diffBuffer;
+			diffBuffer=0;
+		}
+		if(diff%1!=0){
+			diffBuffer=diff%1;
+			difference=(int)diff;
+		}
+		else{
+			difference=(int)diff;
+		}
+		System.out.println("diff "+diff);
+		System.out.println("diffbuffer "+diffBuffer);
+		System.out.println("difference "+difference);
 		switch (direction) {
 			case 2: {
-				plane.setY(plane.getY() + (speed / 69));
+				plane.setY(plane.getY() + difference);
 				break;
 			}
 			case 4: {
-				plane.setX(plane.getX() - (speed / 69));
+				plane.setX(plane.getX() - difference);
 				break;
 			}
 			case 6: {
-				plane.setX(plane.getX() + (speed / 69));
+				plane.setX(plane.getX() + difference);
 				break;
 			}
 			case 8: {
-				plane.setY(plane.getY() - (speed / 69));
+				plane.setY(plane.getY() -difference);
 				break;
 			}
 		}

@@ -48,7 +48,7 @@ public class CenterMap extends JPanel {
 		menu = new JMenuBar();
 		view = "satellite";
 		menu.add(new MenuView(this, "cenMap"));
-		zoomPanel = new MenuZoom(this, 7, "cenMap");
+		zoomPanel = new MenuZoom(this, 4, "cenMap");
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
@@ -72,7 +72,8 @@ public class CenterMap extends JPanel {
 		int ho = (int) movedHor;
 		int ve = (int) movedVer;
 		System.out.println(currentlat + " , " + currentlong);
-		g.drawImage(img, (-85 + ho), (-75 + ve), 640, 640, null);
+	//	g.drawImage(img, (-85 + ho), (-75 + ve), 640, 640, null);
+		g.drawImage(img,0 ,0 , 442, 485, null);
 		g.drawImage(controlImg, 0, 30, 472, 520, null);
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -101,7 +102,7 @@ public class CenterMap extends JPanel {
 		int zoom = zoomPanel.getZoom();
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
-
+/*
 		double moveVer = 0;
 		double moveHor = 0;
 
@@ -146,7 +147,10 @@ public class CenterMap extends JPanel {
 			}
 			movedHor = 0;
 			movedVer = 0;
+			
 			loadImg();
 		}
+		*/
+		loadImg();
 	}
 }
