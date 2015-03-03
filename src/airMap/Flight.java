@@ -10,11 +10,9 @@ public class Flight extends Thread {
 
 	@Override
 	public void run() {
-
 		URL urlClick = getClass().getResource("flight.wav");
 		click = Applet.newAudioClip(urlClick);
 		click.play();
-
 	}
 
 	public static void main(String args[]) {
