@@ -1,6 +1,7 @@
 package airMap;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -9,12 +10,13 @@ import java.io.IOException;
 
 import javax.swing.JTextField;
 
-public class TextField extends JTextField {
+public class MenuTextField extends JTextField {
 	private static final long serialVersionUID = 1L;
 	private String name;
 
-	public TextField(String name, final World world) {
+	public MenuTextField(String name, final World world) {
 		setColumns(20);
+		setFont(new Font("Arial", Font.PLAIN, 18));
 		setSelectedTextColor(Color.BLUE);
 		this.name = name;
 		setText(name);
@@ -42,8 +44,8 @@ public class TextField extends JTextField {
 		});
 		setFocusable(true);
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		setText(name);
 	}
 }

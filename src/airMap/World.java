@@ -1,6 +1,7 @@
 package airMap;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,11 +13,8 @@ import java.net.URLEncoder;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 
 public class World extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -27,12 +25,10 @@ public class World extends JFrame implements KeyListener {
 	private CenterMap centerMap;
 
 	// menu
-	private JMenu viewOptions;
 	private JMenuBar menu;
-	private JMenu featuresOptions;
 	private JButton go;
-	private TextField location;
-	private TextField destination;
+	private MenuTextField location;
+	private MenuTextField destination;
 
 	// current address
 	private String address;
@@ -55,10 +51,10 @@ public class World extends JFrame implements KeyListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("AirMap");
-		
+
 		currentLat = 40.633785;
 		currentLong = -73.779277;
-		
+
 		// create window icon (only visible on mac when minimize window)
 		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
 
@@ -75,10 +71,8 @@ public class World extends JFrame implements KeyListener {
 		// create the three panels and set up their location on the screen
 		centerMap = new CenterMap(currentLat, currentLong);
 		add(centerMap, BorderLayout.CENTER);
-
 		sideMap = new SideMap(currentLat, currentLong, direction);
 		add(sideMap, BorderLayout.WEST);
-
 		weather = new WeatherCont();
 		add(weather, BorderLayout.EAST);
 
@@ -87,38 +81,11 @@ public class World extends JFrame implements KeyListener {
 
 	public void setUpMenu() {
 		menu = new JMenuBar();
-		featuresOptions = new JMenu("Options1");
-		viewOptions = new JMenu("Options2");
-
-		String[] viewNames = { "A", "B", "C", "D" };
-		String[] featuresNames = { "A", "B", "C", "D", "E" };
-		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[5];
-		JMenuItem[] views = new JMenuItem[4];
-		featuresOptions.setToolTipText("Features to display");
-
-		for (int i = 0; i < features.length; i++) {
-			features[i] = new JCheckBoxMenuItem(featuresNames[i]);
-			features[i].addActionListener(featuresView);
-			featuresOptions.add(features[i]);
-		}
-
-		for (int i = 0; i < views.length; i++) {
-			views[i] = new JMenuItem(viewNames[i]);
-			views[i].setMnemonic(KeyEvent.VK_S);
-			views[i].addActionListener(mapView);
-			viewOptions.add(views[i]);
-		}
-
-		menu.add(viewOptions);
-		menu.add(featuresOptions);
-		// viewOptions.setSelectedIndex(2);
-		viewOptions.setToolTipText("Map View");
-		menu.add(viewOptions);
-
+		menu.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 3));
 		go = new JButton("Go!");
 		go.addActionListener(click);
-		location = new TextField("Departure", this);
-		destination = new TextField("Destination", this);
+		location = new MenuTextField("Departure", this);
+		destination = new MenuTextField("Destination", this);
 		menu.add(location);
 		menu.add(destination);
 		menu.add(go);
@@ -168,26 +135,6 @@ public class World extends JFrame implements KeyListener {
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-	};
-
-	// FIXME unused
-	ActionListener featuresView = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			String feature = (String) item.getText();
-			feature.toLowerCase();
-		}
-	};
-
-	// FIXME unused
-	ActionListener mapView = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JMenuItem item = (JMenuItem) e.getSource();
-			String view = (String) item.getText();
-			view.toLowerCase();
 		}
 	};
 

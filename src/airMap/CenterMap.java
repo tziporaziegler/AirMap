@@ -83,6 +83,7 @@ public class CenterMap extends JPanel {
 		g2.drawImage(gauges2Img, 280, 492, 41, 35, null);
 	}
 
+	//FIXME instead of getZoom, MenuZoom should update zoom whenever actionListener called.
 	public void loadImg() throws MalformedURLException {
 		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
 				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoomPanel.getZoom()

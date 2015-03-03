@@ -131,7 +131,9 @@ public class NavigationMap extends JPanel {
 	}
 
 	public void newMap(double newLat, double newLog) throws MalformedURLException {
-		currentlat = newLat;
+		plane.setX(150);
+        plane.setY(150);
+        currentlat = newLat;
 		currentlong = newLog;
 		loadImg();
 	}
