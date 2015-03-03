@@ -22,7 +22,7 @@ public class WeatherInfo extends Container {
 	private JLabel minLabel;
 	private JLabel maxLabel;
 
-	public WeatherInfo(String address) throws MalformedURLException {
+	public WeatherInfo(double lat, double lon) throws MalformedURLException {
 		setLayout(new GridLayout(3, 1));
 
 		currentCont = new Container();
@@ -33,7 +33,7 @@ public class WeatherInfo extends Container {
 		currentWeather = new JLabel();
 
 		// create thread that uses displayWeather
-		new WeatherDownloadThread(this, address).start();
+		new WeatherDownloadThread(this, lat, lon).start();
 	}
 
 	public void displayWeather(WeatherNow now) throws MalformedURLException {

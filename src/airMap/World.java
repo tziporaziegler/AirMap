@@ -125,7 +125,8 @@ public class World extends JFrame implements KeyListener {
 		endLat = lat;
 		endLong = log;
 		// TODO change to lat and log instead of address
-		weather.updateAll(address, address2);
+		//TODO make sure sending right info
+		weather.updateAll(currentLat,currentLong, endLat,endLong);
 		sideMap.newTrip(currentLat, currentLong, endLat, endLong);
 		centerMap.updateMap(0, 0, currentLat, currentLong);
 	}
@@ -169,7 +170,7 @@ public class World extends JFrame implements KeyListener {
 			}
 		}
 		centerMap.updateMap(direction, difference, currentLat, currentLong);
-		// weather.updateCurrent(currentLat, currentLong);
+		 weather.updateCurrent(currentLat, currentLong);
 		sideMap.updateMap(speed, direction, currentLat, currentLong);
 	}
 

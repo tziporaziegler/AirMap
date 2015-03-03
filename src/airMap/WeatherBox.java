@@ -14,7 +14,7 @@ public class WeatherBox extends JPanel {
 	private JLabel titleLabel;
 	private WeatherInfo info;
 
-	public WeatherBox(String title, String lat, String log) throws MalformedURLException {
+	public WeatherBox(String title, double lat, double lon) throws MalformedURLException {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		// FIXME center alignment not working
@@ -27,13 +27,13 @@ public class WeatherBox extends JPanel {
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 
 		add(titleLabel);
-		info = new WeatherInfo(lat + "," + log);
+		info = new WeatherInfo(lat, lon);
 		add(info);
 	}
 
-	public void update(String address) throws IOException {
+	public void update(double lat, double lon) throws IOException {
 		remove(info);
-		info = new WeatherInfo(address);
+		info = new WeatherInfo(lat, lon);
 		add(info);
 	}
 
