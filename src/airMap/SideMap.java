@@ -35,6 +35,7 @@ public class SideMap extends JPanel {
 
 		this.direction = direction;
 		navigationMap = new NavigationMap(startlat, startlong);
+		navigationMap.setDegree(direction);
 		// send in speed of 0 when initially create that map
 		updateMap(69, direction);
 
@@ -44,6 +45,7 @@ public class SideMap extends JPanel {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+		navigationMap.setDegree(direction);
 	}
 
 	public void newTrip(double startlat, double startlong, double endlat, double endlong) throws MalformedURLException {

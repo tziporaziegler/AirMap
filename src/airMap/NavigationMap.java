@@ -4,20 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
@@ -25,22 +21,19 @@ public class NavigationMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private int width;
 	private int height;
-	private Image planeImg;
 	private Image mapImg;
-
-	private String view;
-	private JButton zoomout;
-	private JButton zoomin;
-	private int zoom;
 	private double currentlat;
 	private double currentlong;
+
 	private Plane plane;
+	private BufferedImage planeImg;
+	private int degrees;
 
 	private JMenuBar menu;
+	private String view;
 	@SuppressWarnings("unused")
 	private String feature;
-	private JMenu viewOptions;
-	private JMenu featuresOptions;
+	private MenuZoom zoomPanel;
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
 		width = 300;
@@ -51,22 +44,16 @@ public class NavigationMap extends JPanel {
 		currentlat = startlat;
 		currentlong = startlong;
 
-		view = "terrain";
-
-		// create and add zoom buttons
-		zoomout = new JButton("-");
-		zoomin = new JButton("+");
-		zoomout.addActionListener(zoomoutListen);
-		zoomin.addActionListener(zoominListen);
-		zoom = 7; // 0-21 disable + button is more
-
-		featuresOptions = new JMenu("Features");
+		// set up menu bar
 		menu = new JMenuBar();
-		viewOptions = new JMenu("View");
-		menu.add(zoomout);
-		menu.add(zoomin);
-		setUpMenu();
+		view = "terrain";
+		menu.add(new MenuView(this, "navMap"));
+		feature = "transit.station.airports";
+		menu.add(new MenuFeatures(this));
+		zoomPanel = new MenuZoom(this, 7, "navMap");
+		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
+
 		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
 		planeImg = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
@@ -75,37 +62,29 @@ public class NavigationMap extends JPanel {
 		loadImg();
 	}
 
-	public void setUpMenu() {
-		String[] viewNames = { "Satellite", "Roadmap", "Hybrid", "Terrain" };
-		String[] featuresNames = { "Roads", "Landscape", "Transit", "transit.station.airports", "pio.school" };
-		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[featuresNames.length];
-		JMenuItem[] views = new JMenuItem[viewNames.length];
-		featuresOptions.setToolTipText("Features to display");
-		feature = "transit.station.airports";
-
-		for (int i = 0; i < features.length; i++) {
-			features[i] = new JCheckBoxMenuItem(featuresNames[i]);
-			features[i].addActionListener(featuresView);
-			featuresOptions.add(features[i]);
-		}
-
-		for (int i = 0; i < views.length; i++) {
-			views[i] = new JMenuItem(viewNames[i]);
-			views[i].setMnemonic(KeyEvent.VK_S);
-			views[i].addActionListener(mapView);
-			viewOptions.add(views[i]);
-		}
-
-		menu.add(viewOptions);
-		menu.add(featuresOptions);
-		// viewOptions.setSelectedIndex(2);
-		viewOptions.setToolTipText("Map View");
-		menu.add(viewOptions);
-
-	}
-
 	public void update(int speed, int direction) {
 		movePlane(speed, direction);
+	}
+
+	public void setDegree(int direction) {
+		switch (direction) {
+			case 2: {
+				degrees = 135;
+				break;
+			}
+			case 4: {
+				degrees = -135;
+				break;
+			}
+			case 6: {
+				degrees = 45;
+				break;
+			}
+			case 8: {
+				degrees = -45;
+				break;
+			}
+		}
 	}
 
 	public void movePlane(int speed, int direction) {
@@ -126,7 +105,6 @@ public class NavigationMap extends JPanel {
 				plane.setY(plane.getY() - (speed / 69));
 				break;
 			}
-
 		}
 	}
 
@@ -138,11 +116,15 @@ public class NavigationMap extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(mapImg, 0, 0, width, height, null);
-		g.drawImage(planeImg, plane.getX(), plane.getY(), 20, 20, null);
+		AffineTransform tx = AffineTransform.getRotateInstance(Math.toRadians(degrees), planeImg.getWidth() / 2,
+				planeImg.getHeight() / 2);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		g.drawImage(op.filter(planeImg, null), plane.getX(), plane.getY(), 20, 20, null);
 	}
 
 	public void loadImg() throws MalformedURLException {
 		String zooms = "";
+		int zoom = zoomPanel.getZoom();
 		if (zoom != 0) {
 			zooms = "&zoom=" + zoom;
 		}
@@ -181,70 +163,4 @@ public class NavigationMap extends JPanel {
 		this.view = view.toLowerCase();
 		loadImg();
 	}
-
-	ActionListener zoominListen = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			zoom++;
-			if (zoom == 21) {
-				zoomin.setEnabled(false);
-			}
-			if (!zoomout.isEnabled()) {
-				zoomout.setEnabled(true);
-			}
-
-			try {
-				loadImg();
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-	ActionListener zoomoutListen = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			zoom--;
-			if (zoom == 1) {
-				zoomout.setEnabled(false);
-			}
-			if (!zoomin.isEnabled()) {
-				zoomin.setEnabled(true);
-			}
-			try {
-				loadImg();
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-	ActionListener featuresView = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			String feature = (String) item.getText();
-			try {
-				updateFeature(feature);
-
-			}
-			catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
-		}
-	};
-
-	ActionListener mapView = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JMenuItem item = (JMenuItem) e.getSource();
-			String view = (String) item.getText();
-			try {
-				updateView(view);
-			}
-			catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
-		}
-	};
 }

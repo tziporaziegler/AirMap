@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,27 +11,20 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 public class CenterMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image img;
-	private String view;
 	private double currentlat;
 	private double currentlong;
 
 	// menu
-	private JMenu viewOptions;
 	private JMenuBar menu;
-	private JButton zoomout;
-	private JButton zoomin;
-
-	private int zoom;
+	private String view;
+	private MenuZoom zoomPanel;
 
 	private BufferedImage controlImg;
 	private Image gaugesImg;
@@ -56,13 +46,12 @@ public class CenterMap extends JPanel {
 
 		// create menu
 		menu = new JMenuBar();
-		viewOptions = new JMenu("View");
-		zoomout = new JButton("-");
-		zoomin = new JButton("+");
-		setUpMenu();
+		view = "satellite";
+		menu.add(new MenuView(this, "cenMap"));
+		zoomPanel = new MenuZoom(this, 7, "cenMap");
+		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
-		view = "satellite";
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
 		movedHor = 0;
@@ -93,33 +82,9 @@ public class CenterMap extends JPanel {
 		g2.drawImage(gauges2Img, 280, 492, 41, 35, null);
 	}
 
-	public void setUpMenu() {
-		String[] viewNames = { "Satellite", "Roadmap", "Hybrid", "Terrain", "Street View" };
-		JMenuItem[] views = new JMenuItem[viewNames.length];
-
-		for (int i = 0; i < views.length; i++) {
-			views[i] = new JMenuItem(viewNames[i]);
-			views[i].setMnemonic(KeyEvent.VK_S);
-			views[i].addActionListener(mapView);
-			viewOptions.add(views[i]);
-		}
-
-		menu.add(viewOptions);
-		viewOptions.setToolTipText("Map View");
-		menu.add(viewOptions);
-
-		// add zoom buttons to menu after adding a zoomListen
-		zoomout.addActionListener(zoomoutListen);
-		zoomin.addActionListener(zoominListen);
-		// initialize zoom value
-		zoom = 7; // 0-21 disable + button is more
-		menu.add(zoomout);
-		menu.add(zoomin);
-	}
-
 	public void loadImg() throws MalformedURLException {
 		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
-				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoom
+				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoomPanel.getZoom()
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE";
 		System.out.println("NEW Center Img: " + url);
 		// FIXME should load img in separate thread that somehow returns and img
@@ -133,13 +98,15 @@ public class CenterMap extends JPanel {
 
 	public void updateMap(int direction, double difference, double currentlat, double currentlong)
 			throws MalformedURLException {
+		int zoom = zoomPanel.getZoom();
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
 
 		double moveVer = 0;
 		double moveHor = 0;
 
-		double pixels = difference * .0137329 * Math.pow(2, zoom);
+		// double pixels = difference * .0137329 * Math.pow(2, zoom);
+		double pixels = (640 * (Math.pow(2, (zoom - 1)))) / 360;
 		switch (direction) {
 			case 8: {
 				moveVer = pixels;
@@ -182,57 +149,4 @@ public class CenterMap extends JPanel {
 			loadImg();
 		}
 	}
-
-	ActionListener zoominListen = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			zoom++;
-			if (zoom == 21) {
-				zoomin.setEnabled(false);
-			}
-			if (!zoomout.isEnabled()) {
-				zoomout.setEnabled(true);
-			}
-
-			try {
-				loadImg();
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-
-	ActionListener zoomoutListen = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			zoom--;
-			if (zoom == 1) {
-				zoomout.setEnabled(false);
-			}
-			if (!zoomin.isEnabled()) {
-				zoomin.setEnabled(true);
-			}
-			try {
-				loadImg();
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-
-	ActionListener mapView = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JMenuItem item = (JMenuItem) e.getSource();
-			String view = (String) item.getText();
-			try {
-				updateView(view);
-			}
-			catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
-		}
-	};
 }
