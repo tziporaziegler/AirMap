@@ -48,7 +48,7 @@ public class CenterMap extends JPanel {
 		menu = new JMenuBar();
 		view = "satellite";
 		menu.add(new MenuView(this, "cenMap"));
-		zoomPanel = new MenuZoom(this, 4, "cenMap");
+		zoomPanel = new MenuZoom(this, 5, "cenMap");
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 

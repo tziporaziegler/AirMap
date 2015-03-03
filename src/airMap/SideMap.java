@@ -37,7 +37,7 @@ public class SideMap extends JPanel {
 		navigationMap = new NavigationMap(startlat, startlong);
 		navigationMap.setDegree(direction);
 		// send in speed of 0 when initially create that map
-		updateMap(69, direction);
+		updateMap(69, direction,currentLat,currentLong);
 
 		add(navigationMap);
 
@@ -57,8 +57,8 @@ public class SideMap extends JPanel {
 		pathMap.updateMap(address, address2);
 	}
 
-	public void updateMap(int speed, int direction) throws IOException {
+	public void updateMap(int speed, int direction,double currentLat,double currentLong) throws IOException {
 		// FIXME repaint navigation map
-		navigationMap.update(speed, this.direction);
+		navigationMap.update(speed, this.direction,currentLat,currentLong);
 	}
 }

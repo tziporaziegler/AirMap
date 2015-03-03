@@ -160,7 +160,7 @@ public class World extends JFrame implements KeyListener {
 		}
 		centerMap.updateMap(direction, difference, currentLat, currentLong);
 		// weather.updateCurrent(currentLat, currentLong);
-		sideMap.updateMap(speed, direction);
+		sideMap.updateMap(speed, direction,currentLat,currentLong);
 	}
 
 	public void setDirection(int direction) {

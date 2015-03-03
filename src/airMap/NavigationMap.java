@@ -52,7 +52,7 @@ public class NavigationMap extends JPanel {
 		menu.add(new MenuView(this, "navMap"));
 		feature = "transit.station.airports";
 		menu.add(new MenuFeatures(this));
-		zoomPanel = new MenuZoom(this, 4, "navMap");
+		zoomPanel = new MenuZoom(this, 5, "navMap");
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
@@ -65,8 +65,8 @@ public class NavigationMap extends JPanel {
 		loadImg();
 	}
 
-	public void update(int speed, int direction) {
-		movePlane(speed, direction);
+	public void update(int speed, int direction,double currentlat,double currentlong) throws MalformedURLException {
+		movePlane(speed, direction,currentlat,currentlong);
 	}
 
 	public void setDegree(int direction) {
@@ -90,7 +90,7 @@ public class NavigationMap extends JPanel {
 		}
 	}
 
-	public void movePlane(int speed, int direction) {
+	public void movePlane(int speed, int direction, double currentlat,double currentlong) throws MalformedURLException {
 		double pixelPerLong=(300*(Math.pow(2, (zoomPanel.getZoom()-1)))/360);
 		System.out.println("pixel "+pixelPerLong);
 		int difference;
@@ -128,6 +128,14 @@ public class NavigationMap extends JPanel {
 				break;
 			}
 		}
+		if(plane.getX()<=0||plane.getX()>=300||plane.getY()<=0||plane.getY()>=300){
+			this.currentlat=currentlat;
+			this.currentlong=currentlong;
+			plane.setX(150);
+			plane.setY(150);
+			loadImg();
+			
+		}
 	}
 
 	public void newMap(double newLat, double newLog) throws MalformedURLException {
@@ -135,6 +143,8 @@ public class NavigationMap extends JPanel {
         plane.setY(150);
         currentlat = newLat;
 		currentlong = newLog;
+		plane.setX(150);
+		plane.setY(150);
 		loadImg();
 	}
 
