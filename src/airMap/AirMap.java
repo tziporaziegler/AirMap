@@ -16,7 +16,7 @@ public class AirMap {
 					| UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
 			}
-			new GameLoopThread(new World()).start();
+			new World();
 		}
 		catch (IOException e) {
 			e.printStackTrace();

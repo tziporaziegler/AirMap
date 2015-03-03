@@ -12,23 +12,26 @@ import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
 public class World extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
+	private final GameLoopThread loop;
 
 	// three panels
-	private SideMap sideMap;
-	private WeatherCont weather;
-	private CenterMap centerMap;
+	private final SideMap sideMap;
+	private final WeatherCont weather;
+	private final CenterMap centerMap;
 
 	// menu
 	private JMenuBar menu;
-	private JButton go;
+	private MenuPlayButton play;
 	private MenuTextField location;
 	private MenuTextField destination;
+	private JButton go;
 
 	// current address
 	private String address;
@@ -61,9 +64,8 @@ public class World extends JFrame implements KeyListener {
 		addKeyListener(this);
 		setFocusable(true);
 
+		loop = new GameLoopThread(this);
 		setUpMenu();
-		// don't want setJMenuBar(menu); because by default it adds it to north
-		add(menu, BorderLayout.SOUTH);
 
 		direction = 4;
 		speed = 69;
@@ -75,20 +77,28 @@ public class World extends JFrame implements KeyListener {
 		add(sideMap, BorderLayout.WEST);
 		weather = new WeatherCont();
 		add(weather, BorderLayout.EAST);
-
 		setVisible(true);
 	}
 
 	public void setUpMenu() {
 		menu = new JMenuBar();
-		menu.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 3));
+		menu.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 3));
+
+		play = new MenuPlayButton(loop);
+		menu.add(play);
+		menu.add(Box.createHorizontalStrut(90));
+
+		location = new MenuTextField("Departure", this);
+		menu.add(location);
+		destination = new MenuTextField("Destination", this);
+		menu.add(destination);
+
 		go = new JButton("Go!");
 		go.addActionListener(click);
-		location = new MenuTextField("Departure", this);
-		destination = new MenuTextField("Destination", this);
-		menu.add(location);
-		menu.add(destination);
 		menu.add(go);
+
+		// don't want setJMenuBar(menu); because by default it adds it to north
+		add(menu, BorderLayout.SOUTH);
 	}
 
 	public void setAddress(String address, String address2) throws UnsupportedEncodingException {
@@ -160,7 +170,7 @@ public class World extends JFrame implements KeyListener {
 		}
 		centerMap.updateMap(direction, difference, currentLat, currentLong);
 		// weather.updateCurrent(currentLat, currentLong);
-		sideMap.updateMap(speed, direction,currentLat,currentLong);
+		sideMap.updateMap(speed, direction, currentLat, currentLong);
 	}
 
 	public void setDirection(int direction) {
@@ -193,7 +203,7 @@ public class World extends JFrame implements KeyListener {
 				setDirection(6);
 			break;
 			case KeyEvent.VK_P:
-			// loop.togglePause();
+				play.toggle();
 			break;
 			case KeyEvent.VK_Q:
 				System.exit(0);

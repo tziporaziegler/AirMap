@@ -10,13 +10,12 @@ import javax.swing.JPanel;
 public class SideMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private int direction;
-
-	private int width;
-	private int height;
-	private double startlat;
-	private double startlong;
-	private PathMap pathMap;
-	private NavigationMap navigationMap;
+	private final int width;
+	private final int height;
+	private final double startlat;
+	private final double startlong;
+	private final PathMap pathMap;
+	private final NavigationMap navigationMap;
 
 	public SideMap(double currentLat, double currentLong, int direction) throws IOException {
 		width = 300;
@@ -37,10 +36,9 @@ public class SideMap extends JPanel {
 		navigationMap = new NavigationMap(startlat, startlong);
 		navigationMap.setDegree(direction);
 		// send in speed of 0 when initially create that map
-		updateMap(69, direction,currentLat,currentLong);
+		updateMap(69, direction, currentLat, currentLong);
 
 		add(navigationMap);
-
 	}
 
 	public void setDirection(int direction) {
@@ -57,8 +55,8 @@ public class SideMap extends JPanel {
 		pathMap.updateMap(address, address2);
 	}
 
-	public void updateMap(int speed, int direction,double currentLat,double currentLong) throws IOException {
+	public void updateMap(int speed, int direction, double currentLat, double currentLong) throws IOException {
 		// FIXME repaint navigation map
-		navigationMap.update(speed, this.direction,currentLat,currentLong);
+		navigationMap.update(speed, this.direction, currentLat, currentLong);
 	}
 }
