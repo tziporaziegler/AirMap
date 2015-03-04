@@ -11,13 +11,12 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 
 public class WeatherDownloadThread extends Thread {
-	private WeatherInfo box;
+	private WeatherInfo info;
 	private URL url;
 
-	public WeatherDownloadThread(WeatherInfo box, double lat, double lon) throws MalformedURLException {
-		this.box = box;
-		url = new URL("http://api.openweathermap.org/data/2.5/weather?&lat=" + lat+"&lon="+lon + "&units=imperial");
-		System.out.println("NEW weather thread: " + url);
+	public WeatherDownloadThread(WeatherInfo info, double lat, double lon) throws MalformedURLException {
+		this.info = info;
+		url = new URL("http://api.openweathermap.org/data/2.5/weather?&lat=" + lat + "&lon=" + lon + "&units=imperial");
 	}
 
 	@Override
@@ -25,14 +24,10 @@ public class WeatherDownloadThread extends Thread {
 		try {
 			// retrieve weather data from online
 			URLConnection connection = url.openConnection();
-			// TODO remove println
-			System.out.println("weather thread run: " + url);
 			InputStream in = connection.getInputStream();
 			String json = IOUtils.toString(in);
-			Gson gson = new Gson();
-			WeatherNow now = gson.fromJson(json, WeatherNow.class);
-
-			box.displayWeather(now);
+			WeatherNow now = new Gson().fromJson(json, WeatherNow.class);
+			info.displayWeather(now);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

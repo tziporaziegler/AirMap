@@ -11,26 +11,26 @@ public class WeatherCont extends Container {
 	private WeatherBox depWeather;
 	private WeatherBox desWeather;
 	private WeatherBox currWeather;
-	
-	public WeatherCont() throws MalformedURLException {
-		setPreferredSize(new Dimension(250,600));
+
+	public WeatherCont(double currentLat, double currentLog) throws MalformedURLException {
+		setPreferredSize(new Dimension(250, 600));
 		setLayout(new GridLayout(3, 1));
-		
-		depWeather = new WeatherBox("Departure", 74.0059, 40.7127);
+
+		depWeather = new WeatherBox("Departure", currentLat, currentLog);
 		add(depWeather);
 		desWeather = new WeatherBox("Destination", 0.0, 0);
 		add(desWeather);
-		currWeather = new WeatherBox("Current", 40.7127, 74.0059);
+		currWeather = new WeatherBox("Current", currentLat, currentLog);
 		add(currWeather);
 	}
 
-	public void updateAll(double lat,double lon,double lat2,double lon2) throws IOException {
+	public void updateAll(double lat, double lon, double lat2, double lon2) throws IOException {
 		depWeather.update(lat, lon);
-		desWeather.update(lat2,lon2);
+		desWeather.update(lat2, lon2);
 		currWeather.update(lat, lon);
 	}
-	
-	public void updateCurrent(double currentLat, double currentLong) throws IOException{
-		currWeather.update(currentLat,currentLong);
+
+	public void updateCurrent(double currentLat, double currentLog) throws IOException {
+		currWeather.update(currentLat, currentLog);
 	}
 }

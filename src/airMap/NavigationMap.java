@@ -4,14 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -19,15 +15,13 @@ import javax.swing.border.BevelBorder;
 
 public class NavigationMap extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 	private Image mapImg;
 	private double currentlat;
 	private double currentlong;
 
 	private Plane plane;
-	private BufferedImage planeImg;
-	private int degrees;
 
 	private JMenuBar menu;
 	private String view;
@@ -43,9 +37,11 @@ public class NavigationMap extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
+		
 		currentlat = startlat;
 		currentlong = startlong;
-		count=0;
+		count = 0;
+		
 		// set up menu bar
 		menu = new JMenuBar();
 		view = "terrain";
@@ -58,107 +54,85 @@ public class NavigationMap extends JPanel {
 
 		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
-		planeImg = ImageIO.read(getClass().getResource("pics/airplane.jpg"));
 
-		diffBuffer=0;
-		// FIXME move to separate thread
+		diffBuffer = 0;
+		
 		loadImg();
 	}
 
-	public void update(int speed, int direction,double currentlat,double currentlong) throws MalformedURLException {
-		movePlane(speed, direction,currentlat,currentlong);
+	public void update(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
+		movePlane(speed, direction, currentlat, currentlong);
+	}
+
+	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
+		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
+		System.out.println("pixel " + pixelPerLong);
+		int difference;
+		System.out.println(count++);
+		double diff = ((speed / 69.0) * pixelPerLong);
+		if (diffBuffer != 0) {
+			diff += diffBuffer;
+			diffBuffer = 0;
+		}
+		if (diff % 1 != 0) {
+			diffBuffer = diff % 1;
+			difference = (int) diff;
+		}
+		else {
+			difference = (int) diff;
+		}
+		System.out.println("diff " + diff);
+		System.out.println("diffbuffer " + diffBuffer);
+		System.out.println("difference " + difference);
+		switch (direction) {
+			case 2: {
+				plane.changeY(difference);
+				break;
+			}
+			case 4: {
+				plane.changeX(-difference);
+				break;
+			}
+			case 6: {
+				plane.changeX(difference);
+				break;
+			}
+			case 8: {
+				plane.changeY(-difference);
+				break;
+			}
+		}
+
+		int x = plane.getX();
+		int y = plane.getY();
+
+		if (x <= 0 || x >= 300 || y <= 0 || y >= 300) {
+			this.currentlat = currentlat;
+			this.currentlong = currentlong;
+			plane.reset();
+			loadImg();
+		}
 	}
 
 	public void setDegree(int direction) {
-		switch (direction) {
-			case 2: {
-				degrees = 135;
-				break;
-			}
-			case 4: {
-				degrees = -135;
-				break;
-			}
-			case 6: {
-				degrees = 45;
-				break;
-			}
-			case 8: {
-				degrees = -45;
-				break;
-			}
-		}
-	}
-
-	public void movePlane(int speed, int direction, double currentlat,double currentlong) throws MalformedURLException {
-		double pixelPerLong=(300*(Math.pow(2, (zoomPanel.getZoom()-1)))/360);
-		System.out.println("pixel "+pixelPerLong);
-		int difference;
-		System.out.println(count++);
-		double diff= ((speed/69.0)*pixelPerLong);
-		if(diffBuffer!=0){
-			diff+=diffBuffer;
-			diffBuffer=0;
-		}
-		if(diff%1!=0){
-			diffBuffer=diff%1;
-			difference=(int)diff;
-		}
-		else{
-			difference=(int)diff;
-		}
-		System.out.println("diff "+diff);
-		System.out.println("diffbuffer "+diffBuffer);
-		System.out.println("difference "+difference);
-		switch (direction) {
-			case 2: {
-				plane.setY(plane.getY() + difference);
-				break;
-			}
-			case 4: {
-				plane.setX(plane.getX() - difference);
-				break;
-			}
-			case 6: {
-				plane.setX(plane.getX() + difference);
-				break;
-			}
-			case 8: {
-				plane.setY(plane.getY() -difference);
-				break;
-			}
-		}
-		if(plane.getX()<=0||plane.getX()>=300||plane.getY()<=0||plane.getY()>=300){
-			this.currentlat=currentlat;
-			this.currentlong=currentlong;
-			plane.setX(150);
-			plane.setY(150);
-			loadImg();
-			
-		}
+		plane.setDegree(direction);
 	}
 
 	public void newMap(double newLat, double newLog) throws MalformedURLException {
-		plane.setX(150);
-        plane.setY(150);
-        currentlat = newLat;
+		currentlat = newLat;
 		currentlong = newLog;
-		plane.setX(150);
-		plane.setY(150);
+		plane.reset();
 		loadImg();
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(mapImg, 0, 0, width, height, null);
-		AffineTransform tx = AffineTransform.getRotateInstance(Math.toRadians(degrees), planeImg.getWidth() / 2,
-				planeImg.getHeight() / 2);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-		g.drawImage(op.filter(planeImg, null), plane.getX(), plane.getY(), 20, 20, null);
+		plane.paintComponent(g);
 	}
 
 	public void loadImg() throws MalformedURLException {
 		String zooms = "";
-		int zoom = zoomPanel.getZoom();
+		int zoom = zoomPanel.zoom;
 		if (zoom != 0) {
 			zooms = "&zoom=" + zoom;
 		}
@@ -185,7 +159,7 @@ public class NavigationMap extends JPanel {
 		URL url = new URL(adrhalf + airports + zooms + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
 		mapImg = new ImageIcon(url).getImage();
-		// new ImgDownloadThread(url, new JLabel()).start();
+		// FIXME new ImgDownloadThread(url, this).start();
 	}
 
 	public void updateFeature(String feature) throws MalformedURLException {

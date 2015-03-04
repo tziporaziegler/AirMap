@@ -15,7 +15,7 @@ public class MenuZoom extends JPanel {
 	private JButton zoomin;
 	private String panelCode;
 	private JPanel parentPanel;
-	private int zoom;
+	protected int zoom;
 
 	public MenuZoom(JPanel parentPanel, int initialZoom, String panelCode) {
 		setBorder(new EmptyBorder(-5, -5, -5, -5));
@@ -30,10 +30,6 @@ public class MenuZoom extends JPanel {
 		zoomin.addActionListener(zoominListen);
 		add(zoomout);
 		add(zoomin);
-	}
-
-	public int getZoom() {
-		return zoom;
 	}
 
 	// FIXME don't want to always cast

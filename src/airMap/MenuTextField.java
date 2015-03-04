@@ -34,7 +34,7 @@ public class MenuTextField extends JTextField {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						world.gobutton();
+						world.menu.gobutton();
 					}
 					catch (IOException e1) {
 						e1.printStackTrace();

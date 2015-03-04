@@ -29,8 +29,8 @@ public class PathMap extends JPanel {
 		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
 				+ "&maptype=roadmap";
 
-		String airports = "&markers=size:mid%7Ccolor:green%7C" + "atl+airport" + "%7C" + "anc+airport" + "%7C"
-				+ "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
+		String airports = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C" + "atl+airport" + "%7C" + "anc+airport"
+				+ "%7C" + "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"
 				+ "cmh+airport" + "%7C" + "dfw+airport" + "%7C" + "den+airport" + "%7C" + "dtw+airport" + "%7C"
 				+ "fll+airport" + "%7C" + "rsw+airport" + "%7C" + "bdl+airport" + "%7C" + "hnl+airport" + "%7C"
@@ -44,27 +44,22 @@ public class PathMap extends JPanel {
 				+ "sna+airport" + "%7C" + "sea+airport" + "%7C" + "stl+airport" + "%7C" + "tpa+airport" + "%7C"
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
-		url = new URL(adrhalf + airports+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
+		url = new URL(adrhalf + airports + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 		img = new ImageIcon(url).getImage();
 	}
 
 	public void updateMap(double startlat, double startlong, double endlat, double endlong)
 			throws MalformedURLException {
+		String start = startlat + "," + startlong;
+		String end = endlat + "," + endlong;
 		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
-				+ "&path=color:0x0000ff|weight:5|" + startlat + "," + startlong + "|" + endlat + "," + endlong
-				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + startlat + "," + startlong + "%7C" + endlat
-				+ "," + endlong+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
+				+ "&path=color:0x0000ff|weight:5|" + start + "|" + end
+				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + start + "%7C" + end
+				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 		img = new ImageIcon(url).getImage();
+		repaint();
 	}
-	
-	public void updateMap(String address,String address2)
-			throws MalformedURLException {
-		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
-				+ "&path=color:0x0000ff|weight:5|" + address + "|" + address2
-				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + address + "%7C" + address2+"&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-		img = new ImageIcon(url).getImage();
-	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, width, height, null);

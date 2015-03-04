@@ -9,7 +9,6 @@ import java.awt.GridLayout;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
 public class WeatherInfo extends Container {
@@ -44,10 +43,6 @@ public class WeatherInfo extends Container {
 	}
 
 	public void setCurrentWeather(WeatherNow now) throws MalformedURLException {
-		// update size of main JFrame based on how many weather conditions exist at the moment
-		// FIXME really shouldn't change the size - should instead have a set size with scrollbar if
-		// needed
-
 		currentCont.setLayout(new GridBagLayout());
 
 		// retrieve the current temperature
@@ -76,9 +71,7 @@ public class WeatherInfo extends Container {
 	}
 
 	public void addMinMax(WeatherNow now) {
-		FlowLayout layout = new FlowLayout();
-		layout.setHgap(30);
-		minMaxCont.setLayout(layout);
+		minMaxCont.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
 		WeatherMain main = now.getMain();
 
@@ -95,25 +88,27 @@ public class WeatherInfo extends Container {
 	}
 
 	public void listAllCurrentConditions() throws MalformedURLException {
-		conditionsCont.setLayout(new BoxLayout(conditionsCont, BoxLayout.Y_AXIS));
+		// conditionsCont.setLayout(new BoxLayout(conditionsCont, BoxLayout.Y_AXIS));
 
 		// add all weather conditions and descriptions that currently exist,
 		// with corresponding pictures
-		for (Weather i : weathers) {
-			JLabel label = new JLabel();
-			label.setText(i.getMain() + ": " + i.getDescription());
-			label.setFont(new Font("Calibri", Font.PLAIN, 16));
-			label.setForeground(Color.DARK_GRAY);
+		// for (Weather i : weathers) {
+		Weather i = weathers[0];
+		
+		JLabel label = new JLabel();
+		label.setText(i.getMain() + ": " + i.getDescription());
+		label.setFont(new Font("Calibri", Font.PLAIN, 16));
+		label.setForeground(Color.DARK_GRAY);
 
-			String urlString = "http://openweathermap.org/img/w/" + i.getIcon() + ".png";
-			ImgDownloadThread thread = new ImgDownloadThread(new URL(urlString), label);
-			thread.start();
-
-			conditionsCont.add(label);
-		}
+		String urlString = "http://openweathermap.org/img/w/" + i.getIcon() + ".png";
+		ImgDownloadThread thread = new ImgDownloadThread(new URL(urlString), label);
+		thread.start();
+		
+		add(label);
+		// conditionsCont.add(label);
+		// }
 
 		// add the weather condition container to the bottom of the main frame
-		// FIXME the conditions override high/low
-		add(conditionsCont);
+		// add(conditionsCont);
 	}
 }

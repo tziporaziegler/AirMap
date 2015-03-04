@@ -16,5 +16,4 @@ public class WeatherMain {
 	public double getTemp_max() {
 		return temp_max;
 	}
-
 }
