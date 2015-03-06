@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class PathMap extends JPanel {
+public class PathMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private URL url;
 	private Image img;
@@ -45,7 +45,10 @@ public class PathMap extends JPanel {
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
 		url = new URL(adrhalf + airports + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-		img = new ImageIcon(url).getImage();
+		//img = new ImageIcon(url).getImage();
+		new ImgDownloadThread(url,this).start();
+		
+		
 	}
 
 	public void updateMap(double startlat, double startlong, double endlat, double endlong)
@@ -56,12 +59,15 @@ public class PathMap extends JPanel {
 				+ "&path=color:0x0000ff|weight:5|" + start + "|" + end
 				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + start + "%7C" + end
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-		img = new ImageIcon(url).getImage();
+		//img = new ImageIcon(url).getImage();
+		ImgDownloadThread thread=new ImgDownloadThread(url,this);
+		thread.start();
 		repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
+		img=getImage();
 		g.drawImage(img, 0, 0, width, height, null);
 	}
 }

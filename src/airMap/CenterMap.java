@@ -13,10 +13,9 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class CenterMap extends JPanel {
+public class CenterMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private Image img;
 	private double currentlat;
@@ -49,7 +48,7 @@ public class CenterMap extends JPanel {
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
 		loadImg();
-
+		
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
 		radarImg = new ImageIcon(getClass().getResource("pics/radar.gif")).getImage();
 		gaugesImg = new ImageIcon(getClass().getResource("pics/gauges.gif")).getImage();
@@ -60,6 +59,7 @@ public class CenterMap extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		img=getImage();
 		// TODO take out print
 		System.out.println(currentlat + " , " + currentlong);
 		g.drawImage(img, 0, 0, 442, 485, null);
@@ -76,7 +76,7 @@ public class CenterMap extends JPanel {
 		String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
 				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoomPanel.zoom
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE";
-		new ImgDownloadThread2(new URL(url), this).start();
+		new ImgDownloadThread(new URL(url), this).start();
 	}
 
 	public void setImage(Image image) {

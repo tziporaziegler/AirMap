@@ -3,20 +3,29 @@ package airMap;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 public class ImgDownloadThread extends Thread {
 	private URL url;
-	private JLabel label;
+	private JComponent component;
 
-	public ImgDownloadThread(URL url, JLabel currentWeather) {
+	public ImgDownloadThread(URL url, JComponent component) {
 		this.url = url;
-		this.label = currentWeather;
+		this.component = component;
 	}
 
 	@Override
 	public void run() {
 		ImageIcon icon = new ImageIcon(url);
-		label.setIcon(icon);
+		if(component instanceof JLabel){
+		((JLabel) component).setIcon(icon);
+		}
+		else if (component instanceof CenterMap){
+			((CenterMap) component).setImage(icon.getImage());
+		}
+		else if (component instanceof Map){
+			((Map) component).setImage(icon.getImage());
+		}
 	}
 }

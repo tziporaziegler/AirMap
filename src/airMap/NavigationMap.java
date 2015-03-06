@@ -13,7 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class NavigationMap extends JPanel {
+public class NavigationMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private final int width;
 	private final int height;
@@ -126,6 +126,7 @@ public class NavigationMap extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
+		mapImg=getImage();
 		g.drawImage(mapImg, 0, 0, width, height, null);
 		plane.paintComponent(g);
 	}
@@ -158,8 +159,10 @@ public class NavigationMap extends JPanel {
 		// URL url = new URL(adrhalf + airports);
 		URL url = new URL(adrhalf + airports + zooms + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
-		mapImg = new ImageIcon(url).getImage();
+		//mapImg = new ImageIcon(url).getImage();
 		// FIXME new ImgDownloadThread(url, this).start();
+		ImgDownloadThread thread=new ImgDownloadThread(url,this);
+		thread.start();
 	}
 
 	public void updateFeature(String feature) throws MalformedURLException {
