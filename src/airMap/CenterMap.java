@@ -47,7 +47,7 @@ public class CenterMap extends Map {
 
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
-		loadImg();
+		setImage(ImageIO.read(getClass().getResource("pics/centerMap.png")));
 		
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
 		radarImg = new ImageIcon(getClass().getResource("pics/radar.gif")).getImage();
@@ -59,10 +59,10 @@ public class CenterMap extends Map {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		img=getImage();
+	
 		// TODO take out print
 		System.out.println(currentlat + " , " + currentlong);
-		g.drawImage(img, 0, 0, 442, 485, null);
+		g.drawImage(getImage(), 0, 0, 442, 485, null);
 		g.drawImage(controlImg, 0, 30, 472, 520, null);
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -77,10 +77,6 @@ public class CenterMap extends Map {
 				+ "&size=640x640" + "&maptype=" + view + "&zoom=" + zoomPanel.zoom
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE";
 		new ImgDownloadThread(new URL(url), this).start();
-	}
-
-	public void setImage(Image image) {
-		img = image;
 	}
 
 	public void updateView(String view) throws MalformedURLException {

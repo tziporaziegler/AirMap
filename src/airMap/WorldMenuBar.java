@@ -8,21 +8,29 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JMenuBar;
 
 public class WorldMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
-	protected MenuPlayButton play;
+	//protected MenuPlayButton play;
+	private JButton play;
 	private MenuTextField location;
 	private MenuTextField destination;
 	private JButton go;
 	private World world;
+	private JCheckBox mute;
 
-	public WorldMenuBar(World world, GameLoopThread loop) {
+	public WorldMenuBar(World world) {
 		this.world = world;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 3));
-
-		play = new MenuPlayButton(loop);
+		mute=new JCheckBox("sound");
+		mute.addActionListener(muteButton);
+		add(mute);
+		//play = new MenuPlayButton();
+		play=new JButton();
+		play.setText(">");
+		play.addActionListener(pause);
 		add(play);
 
 		add(Box.createHorizontalStrut(90));
@@ -51,7 +59,14 @@ public class WorldMenuBar extends JMenuBar {
 			destination.reset();
 		}
 	}
-
+	public void togglePauseText(){
+		if(play.getText().equals(">")){
+			play.setText("||");
+		}
+		else{
+			play.setText(">");
+		}
+	}
 	ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -63,4 +78,19 @@ public class WorldMenuBar extends JMenuBar {
 			}
 		}
 	};
+	ActionListener pause = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			world.togglePlay();
+		}
+	};
+	ActionListener muteButton  = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			world.toggleMute();
+		}
+	};
+
 }

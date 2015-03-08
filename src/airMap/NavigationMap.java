@@ -3,21 +3,19 @@ package airMap;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 public class NavigationMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private final int width;
 	private final int height;
-	private Image mapImg;
+
 	private double currentlat;
 	private double currentlong;
 
@@ -37,7 +35,6 @@ public class NavigationMap extends Map {
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
-		
 		currentlat = startlat;
 		currentlong = startlong;
 		count = 0;
@@ -57,7 +54,7 @@ public class NavigationMap extends Map {
 
 		diffBuffer = 0;
 		
-		loadImg();
+		setImage(ImageIO.read(getClass().getResource("pics/navigationMap.png")));
 	}
 
 	public void update(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
@@ -126,8 +123,8 @@ public class NavigationMap extends Map {
 	}
 
 	public void paintComponent(Graphics g) {
-		mapImg=getImage();
-		g.drawImage(mapImg, 0, 0, width, height, null);
+
+		g.drawImage(getImage(), 0, 0, width, height, null);
 		plane.paintComponent(g);
 	}
 

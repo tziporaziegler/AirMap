@@ -1,18 +1,27 @@
 package airMap;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
-public class World extends JFrame implements KeyListener {
+public class World extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private final GameLoopThread loop;
+
 	protected WorldMenuBar menu;
 
+	private final static int UP = 8;
+	private final static int DOWN = 2;
+	private final static int RIGHT = 6;
+	private final static int LEFT = 4;
 	// three panels
 	private final SideMap sideMap;
 	private final WeatherCont weather;
@@ -25,6 +34,11 @@ public class World extends JFrame implements KeyListener {
 	// plane controls
 	private int direction;
 	private int speed;
+
+	private boolean sound;
+	private boolean paused;
+	private Cockpit cockpit;
+	private PlaneNoise noise;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -39,17 +53,17 @@ public class World extends JFrame implements KeyListener {
 
 		// create window icon (only visible on mac when minimize window)
 		setIconImage(ImageIO.read(getClass().getResource("pics/airplane.jpg")));
-
-		addKeyListener(this);
 		setFocusable(true);
 
-		loop = new GameLoopThread(this);
-		menu = new WorldMenuBar(this, loop);
+		menu = new WorldMenuBar(this);
 		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
 
-		direction = 4;
+		direction = LEFT;
 		speed = 69;
+		sound = true;
+
+		paused = true;
 
 		// create the three panels and set up their location on the screen
 		centerMap = new CenterMap(currentLat, currentLog);
@@ -58,10 +72,17 @@ public class World extends JFrame implements KeyListener {
 		add(sideMap, BorderLayout.WEST);
 		weather = new WeatherCont(currentLat, currentLog);
 		add(weather, BorderLayout.EAST);
+		setUpKeyBindings();
+
 		setVisible(true);
+		cockpit = new Cockpit();
+		cockpit.start();
+		noise = new PlaneNoise();
+		noise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat,
+			double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		weather.updateAll(currentLat, currentLog, endLat, endLog);
@@ -69,32 +90,74 @@ public class World extends JFrame implements KeyListener {
 		centerMap.updateMap(0, 0, currentLat, currentLog);
 	}
 
+	public void setUpKeyBindings() {
+		InputMap inputMap = getRootPane().getInputMap(
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = getRootPane().getActionMap();
+		inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
+		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
+		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
+		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
+				"directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
+				"directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
+				"directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
+				"directionRight");
+		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
+		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
+		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
+		inputMap.put(KeyStroke.getKeyStroke("LEFT"), "directionLeft");
+		actionMap.put("directionUp", new Direction(UP));
+		actionMap.put("directionDown", new Direction(DOWN));
+		actionMap.put("directionRight", new Direction(RIGHT));
+		actionMap.put("directionLeft", new Direction(LEFT));
+
+		actionMap.put("togglePause", new PauseAction());
+	}
+
+	public void togglePlay() {
+		if (paused) {
+			paused = false;
+			System.out.println("updating");
+
+		} else {
+			paused = true;
+		}
+		menu.togglePauseText();
+	}
+
 	public void update() throws IOException {
-		//FIXME want to instead refocus after other listener is called
-		requestFocus(true);
-		
-		double difference = speed / 69.0;
-		switch (direction) {
-			case 8: {
+
+		if (!paused) {
+
+			double difference = speed / 69.0;
+			switch (direction) {
+			case UP: {
 				currentLat += difference;
 				break;
 			}
-			case 2: {
+			case DOWN: {
 				currentLat -= difference;
 				break;
 			}
-			case 4: {
+			case LEFT: {
+
 				currentLog -= difference;
 				break;
 			}
-			case 6: {
+			case RIGHT: {
 				currentLog += difference;
 				break;
 			}
+			}
+			centerMap.updateMap(direction, difference, currentLat, currentLog);
+			weather.updateCurrent(currentLat, currentLog);
+			sideMap.updateMap(speed, direction, currentLat, currentLog);
 		}
-		centerMap.updateMap(direction, difference, currentLat, currentLog);
-		weather.updateCurrent(currentLat, currentLog);
-		sideMap.updateMap(speed, direction, currentLat, currentLog);
 	}
 
 	public void setDirection(int direction) {
@@ -106,40 +169,56 @@ public class World extends JFrame implements KeyListener {
 		return direction;
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		switch (keyCode) {
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_8:
-				setDirection(8);
-			break;
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_2:
-				setDirection(2);
-			break;
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_4:
-				setDirection(4);
-			break;
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_6:
-				setDirection(6);
-			break;
-			case KeyEvent.VK_P:
-				menu.play.toggle();
-			break;
-			case KeyEvent.VK_Q:
-				System.exit(0);
-			break;
+	public void toggleMute() {
+		System.out.println("mutemeho");
+		if (sound) {
+
+			cockpit.stopMusic();
+
+			// noise.stopMusic();
+			sound = false;
+		} else {
+			sound = true;
+			noise = new PlaneNoise();
+			//noise.start();
 		}
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
+	private class PauseAction extends AbstractAction {
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			System.out.println("p");
+			togglePlay();
+
+		}
+
+	};
+
+	private class Direction extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private int direction;
+
+		public Direction(int direction) {
+			this.direction = direction;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			setDirection(direction);
+
+		}
+
+	};
+
 }

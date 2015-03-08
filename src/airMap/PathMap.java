@@ -2,27 +2,26 @@ package airMap;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import javax.swing.border.BevelBorder;
 
 public class PathMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private URL url;
-	private Image img;
+	
 	private int width;
 	private int height;
 
-	public PathMap() throws MalformedURLException {
+	public PathMap() throws IOException {
 		width = 300;
 		height = 290;
 		setPreferredSize(new Dimension(width, height));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		setUpAirports();
+		setImage(ImageIO.read(getClass().getResource("pics/pathMap.png")));
 	}
 
 	public void setUpAirports() throws MalformedURLException {
@@ -45,10 +44,12 @@ public class PathMap extends Map {
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
 		url = new URL(adrhalf + airports + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-		//img = new ImageIcon(url).getImage();
+
+		
+		loadImg();		
+	}
+	public void loadImg(){
 		new ImgDownloadThread(url,this).start();
-		
-		
 	}
 
 	public void updateMap(double startlat, double startlong, double endlat, double endlong)
@@ -59,15 +60,13 @@ public class PathMap extends Map {
 				+ "&path=color:0x0000ff|weight:5|" + start + "|" + end
 				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + start + "%7C" + end
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-		//img = new ImageIcon(url).getImage();
-		ImgDownloadThread thread=new ImgDownloadThread(url,this);
-		thread.start();
+	loadImg();
 		repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		img=getImage();
-		g.drawImage(img, 0, 0, width, height, null);
+	
+		g.drawImage(getImage(), 0, 0, width, height, null);
 	}
 }
