@@ -9,16 +9,13 @@ public class PlaneNoise extends Thread {
 
 	@Override
 	public void run() {
-
 		URL urlClick = getClass().getResource("sound/flight.wav");
 		click = Applet.newAudioClip(urlClick);
-
 		click.loop();
-
 	}
 
 	public boolean running() {
-		return this.isAlive();
+		return isAlive();
 	}
 
 	public void stopMusic() {

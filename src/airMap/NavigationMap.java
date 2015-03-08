@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.JMenuBar;
 
 public class NavigationMap extends Map {
@@ -36,14 +37,14 @@ public class NavigationMap extends Map {
 		// set up menu bar
 		menu = new JMenuBar();
 		view = "terrain";
-		menu.add(new MenuView(this, "navMap"));
+		menu.add(new MenuView(this));
 		feature = "transit.station.airports";
 		menu.add(new MenuFeatures(this));
-		zoomPanel = new MenuZoom(this, 5, "navMap");
+		menu.add(Box.createHorizontalStrut(95));
+		zoomPanel = new MenuZoom(this, 5);
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
-		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
 
 		diffBuffer = 0;
@@ -57,7 +58,6 @@ public class NavigationMap extends Map {
 
 	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
 		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
-		System.out.println("pixel " + pixelPerLong);
 		int difference;
 		System.out.println(count++);
 		double diff = ((speed / 69.0) * pixelPerLong);
@@ -68,32 +68,28 @@ public class NavigationMap extends Map {
 		if (diff % 1 != 0) {
 			diffBuffer = diff % 1;
 			difference = (int) diff;
-		} else {
+		}
+		else {
 			difference = (int) diff;
 		}
 
-		// TODO remove println
-		// System.out.println("diff " + diff);
-		// System.out.println("diffbuffer " + diffBuffer);
-		// System.out.println("difference " + difference);
-
 		switch (direction) {
-		case 2: {
-			plane.changeY(difference);
-			break;
-		}
-		case 4: {
-			plane.changeX(-difference);
-			break;
-		}
-		case 6: {
-			plane.changeX(difference);
-			break;
-		}
-		case 8: {
-			plane.changeY(-difference);
-			break;
-		}
+			case 2: {
+				plane.changeY(difference);
+				break;
+			}
+			case 4: {
+				plane.changeX(-difference);
+				break;
+			}
+			case 6: {
+				plane.changeX(difference);
+				break;
+			}
+			case 8: {
+				plane.changeY(-difference);
+				break;
+			}
 		}
 
 		int x = plane.getX();
@@ -102,8 +98,8 @@ public class NavigationMap extends Map {
 		if (x <= 0 || x >= 300 || y <= 0 || y >= 300) {
 			this.currentlat = currentlat;
 			this.currentlong = currentlong;
-			plane.reset();
 			loadImg();
+			plane.reset();
 		}
 	}
 

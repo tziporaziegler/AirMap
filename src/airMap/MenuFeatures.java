@@ -1,5 +1,6 @@
 package airMap;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
@@ -14,6 +15,7 @@ public class MenuFeatures extends JMenu {
 	public MenuFeatures(NavigationMap map) {
 		setText("Features");
 		setToolTipText("Features to display");
+		setFont(new Font("Arial", Font.PLAIN, 14));
 
 		this.map = map;
 
@@ -22,6 +24,7 @@ public class MenuFeatures extends JMenu {
 		for (int i = 0; i < features.length; i++) {
 			features[i] = new JCheckBoxMenuItem(featuresNames[i]);
 			features[i].addActionListener(featuresView);
+			features[i].setFont(new Font("Arial", Font.PLAIN, 12));
 			add(features[i]);
 		}
 	}

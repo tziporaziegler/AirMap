@@ -12,7 +12,6 @@ public class Rain extends JFrame {
 		RainComponent rain = new RainComponent();
 
 		add(rain);
-
 	}
 
 	public static void main(String agrs[]) {
@@ -20,23 +19,19 @@ public class Rain extends JFrame {
 		rain.setVisible(true);
 
 		Thread t = new Thread() {
-
 			public void run() {
 				while (true) {
-
 					rain.repaint();
 					try {
 						Thread.sleep(10);
 					}
 					catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 		};
+		
 		t.start();
-
 	}
-
 }

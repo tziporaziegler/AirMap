@@ -7,9 +7,9 @@ import javax.swing.border.BevelBorder;
 
 public class Map extends JPanel {
 	private static final long serialVersionUID = 1L;
-	protected Image img;
 	protected int width;
 	protected int height;
+	protected Image img;
 	protected String view;
 
 	public Map() {

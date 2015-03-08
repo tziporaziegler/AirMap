@@ -1,10 +1,10 @@
 package airMap;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class SideMap extends JPanel {
@@ -21,11 +21,8 @@ public class SideMap extends JPanel {
 		width = 300;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
-		// TODO try out boxlayout
-		setLayout(new GridLayout(2, 1));
-		// setBorder(new BevelBorder(BevelBorder.LOWERED));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		// TODO change to center of map coordinates
 		startlat = currentLat;
 		startlong = currentLong;
 
@@ -35,7 +32,9 @@ public class SideMap extends JPanel {
 		this.direction = direction;
 		navigationMap = new NavigationMap(startlat, startlong);
 		navigationMap.setDegree(direction);
-		// send in speed of 0 when initially create that map
+
+		// 1 degree lat = 69 miles
+		// if speed = 69/hr - moving 1 degree lat/hr (or per second in simulation)
 		updateMap(69, direction, currentLat, currentLong);
 
 		add(navigationMap);
@@ -52,7 +51,6 @@ public class SideMap extends JPanel {
 	}
 
 	public void updateMap(int speed, int direction, double currentLat, double currentLong) throws IOException {
-		// FIXME repaint navigation map
 		navigationMap.update(speed, this.direction, currentLat, currentLong);
 	}
 }

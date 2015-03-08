@@ -62,7 +62,6 @@ public class PathMap extends Map {
 
 	@Override
 	public void paintComponent(Graphics g) {
-
 		g.drawImage(img, 0, 0, width, height, null);
 	}
 }

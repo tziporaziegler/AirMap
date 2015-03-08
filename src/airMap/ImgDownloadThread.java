@@ -17,8 +17,6 @@ public class ImgDownloadThread extends Thread {
 
 	@Override
 	public void run() {
-		//TODO remove print
-		System.out.println(url);
 		ImageIcon icon = new ImageIcon(url);
 		if (component instanceof JLabel) {
 			((JLabel) component).setIcon(icon);

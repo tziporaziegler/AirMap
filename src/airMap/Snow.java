@@ -10,9 +10,7 @@ public class Snow extends JFrame {
 	public Snow() {
 		setSize(200, 200);
 		setBackground(Color.GRAY);
-		SnowComponent snow = new SnowComponent();
-
-		add(snow);
+		add(new SnowComponent());
 	}
 
 	public static void main(String agrs[]) {
@@ -20,7 +18,6 @@ public class Snow extends JFrame {
 		snow.setVisible(true);
 
 		Thread t = new Thread() {
-
 			public void run() {
 				while (true) {
 
@@ -34,8 +31,7 @@ public class Snow extends JFrame {
 				}
 			}
 		};
+
 		t.start();
-
 	}
-
 }

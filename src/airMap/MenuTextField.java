@@ -18,6 +18,7 @@ public class MenuTextField extends JTextField {
 		setColumns(20);
 		setFont(new Font("Arial", Font.PLAIN, 18));
 		setSelectedTextColor(Color.BLUE);
+		setToolTipText("Enter the address of the " + name.toLowerCase() + " location");
 		this.name = name;
 		setText(name);
 
@@ -29,12 +30,14 @@ public class MenuTextField extends JTextField {
 			}
 		});
 
+		// allow user to submit input with enter key in addition to pressing the go button
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
 						world.menu.gobutton();
+						world.requestFocus();
 					}
 					catch (IOException e1) {
 						e1.printStackTrace();
