@@ -13,17 +13,14 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
-import javax.swing.border.BevelBorder;
 
 public class CenterMap extends Map {
 	private static final long serialVersionUID = 1L;
-	private Image img;
 	private double currentlat;
 	private double currentlong;
 
 	// menu
 	private final JMenuBar menu;
-	private String view;
 	private final MenuZoom zoomPanel;
 
 	private final BufferedImage controlImg;
@@ -33,9 +30,10 @@ public class CenterMap extends Map {
 	private final Image gauges2Img;
 
 	public CenterMap(double currentlat, double currentlong) throws IOException {
-		setPreferredSize(new Dimension(600, 600));
+		width = 600;
+		height = 600;
+		setPreferredSize(new Dimension(width, height));
 		setLayout(new BorderLayout());
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
 
 		// create menu
 		menu = new JMenuBar();
@@ -47,7 +45,7 @@ public class CenterMap extends Map {
 
 		this.currentlat = currentlat;
 		this.currentlong = currentlong;
-		setImage(ImageIO.read(getClass().getResource("pics/centerMap.png")));
+		img = ImageIO.read(getClass().getResource("pics/centerMap.png"));
 		
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
 		radarImg = new ImageIcon(getClass().getResource("pics/radar.gif")).getImage();
@@ -62,7 +60,7 @@ public class CenterMap extends Map {
 	
 		// TODO take out print
 		System.out.println(currentlat + " , " + currentlong);
-		g.drawImage(getImage(), 0, 0, 442, 485, null);
+		g.drawImage(img, 0, 0, 442, 485, null);
 		g.drawImage(controlImg, 0, 30, 472, 520, null);
 
 		Graphics2D g2 = (Graphics2D) g;

@@ -17,15 +17,16 @@ public class ImgDownloadThread extends Thread {
 
 	@Override
 	public void run() {
+		//TODO remove print
 		System.out.println(url);
 		ImageIcon icon = new ImageIcon(url);
-		if(component instanceof JLabel){
-		((JLabel) component).setIcon(icon);
+		if (component instanceof JLabel) {
+			((JLabel) component).setIcon(icon);
 		}
-		else if (component instanceof CenterMap){
+		else if (component instanceof CenterMap) {
 			((CenterMap) component).setImage(icon.getImage());
 		}
-		else if (component instanceof Map){
+		else if (component instanceof Map) {
 			((Map) component).setImage(icon.getImage());
 		}
 	}

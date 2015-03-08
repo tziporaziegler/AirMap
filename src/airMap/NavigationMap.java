@@ -9,20 +9,15 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenuBar;
-import javax.swing.border.BevelBorder;
 
 public class NavigationMap extends Map {
 	private static final long serialVersionUID = 1L;
-	private final int width;
-	private final int height;
-
 	private double currentlat;
 	private double currentlong;
 
 	private Plane plane;
 
 	private JMenuBar menu;
-	private String view;
 	@SuppressWarnings("unused")
 	private String feature;
 	private MenuZoom zoomPanel;
@@ -33,12 +28,11 @@ public class NavigationMap extends Map {
 		width = 300;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
 		currentlat = startlat;
 		currentlong = startlong;
 		count = 0;
-		
+
 		// set up menu bar
 		menu = new JMenuBar();
 		view = "terrain";
@@ -53,8 +47,8 @@ public class NavigationMap extends Map {
 		plane = new Plane(width / 2, height / 2);
 
 		diffBuffer = 0;
-		
-		setImage(ImageIO.read(getClass().getResource("pics/navigationMap.png")));
+
+		img = ImageIO.read(getClass().getResource("pics/navigationMap.png"));
 	}
 
 	public void update(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
@@ -74,30 +68,32 @@ public class NavigationMap extends Map {
 		if (diff % 1 != 0) {
 			diffBuffer = diff % 1;
 			difference = (int) diff;
-		}
-		else {
+		} else {
 			difference = (int) diff;
 		}
-		System.out.println("diff " + diff);
-		System.out.println("diffbuffer " + diffBuffer);
-		System.out.println("difference " + difference);
+
+		// TODO remove println
+		// System.out.println("diff " + diff);
+		// System.out.println("diffbuffer " + diffBuffer);
+		// System.out.println("difference " + difference);
+
 		switch (direction) {
-			case 2: {
-				plane.changeY(difference);
-				break;
-			}
-			case 4: {
-				plane.changeX(-difference);
-				break;
-			}
-			case 6: {
-				plane.changeX(difference);
-				break;
-			}
-			case 8: {
-				plane.changeY(-difference);
-				break;
-			}
+		case 2: {
+			plane.changeY(difference);
+			break;
+		}
+		case 4: {
+			plane.changeX(-difference);
+			break;
+		}
+		case 6: {
+			plane.changeX(difference);
+			break;
+		}
+		case 8: {
+			plane.changeY(-difference);
+			break;
+		}
 		}
 
 		int x = plane.getX();
@@ -123,8 +119,7 @@ public class NavigationMap extends Map {
 	}
 
 	public void paintComponent(Graphics g) {
-
-		g.drawImage(getImage(), 0, 0, width, height, null);
+		g.drawImage(img, 0, 0, width, height, null);
 		plane.paintComponent(g);
 	}
 
@@ -156,10 +151,7 @@ public class NavigationMap extends Map {
 		// URL url = new URL(adrhalf + airports);
 		URL url = new URL(adrhalf + airports + zooms + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
-		//mapImg = new ImageIcon(url).getImage();
-		// FIXME new ImgDownloadThread(url, this).start();
-		ImgDownloadThread thread=new ImgDownloadThread(url,this);
-		thread.start();
+		new ImgDownloadThread(url, this).start();
 	}
 
 	public void updateFeature(String feature) throws MalformedURLException {
