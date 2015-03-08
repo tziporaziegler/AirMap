@@ -40,7 +40,7 @@ public class WeatherInfo extends Container {
 		currentWeather = new JLabel();
 
 		// create thread that uses displayWeather
-		formatter = new DecimalFormat("#0.##");
+		formatter = new DecimalFormat("#0.###");
 		this.lat = lat;
 		this.log = log;
 		new WeatherDownloadThread(this, lat, log).start();
@@ -101,11 +101,12 @@ public class WeatherInfo extends Container {
 		int length = weathers.length;
 
 		// if there is only one weather condition, display the corresponding latitude and longitude
+		// and compass direction
 		if (length == 1) {
-			
-			//increase the length so GridLayout will create a row for the lat/log label
+
+			// increase the length so GridLayout will create a row for the lat/log label
 			length++;
-			
+
 			char latsym = 'N';
 			if (lat < 0) {
 				latsym = 'S';
@@ -114,9 +115,9 @@ public class WeatherInfo extends Container {
 			if (log < 0) {
 				logsym = 'W';
 			}
-			
-			JLabel label = new JLabel(formatter.format(lat) + "\u00b0" + latsym + " and " + formatter.format(log)
-					+ "\u00b0" + logsym);
+
+			JLabel label = new JLabel(formatter.format(Math.abs(lat)) + "\u00b0" + latsym + ", "
+					+ formatter.format(Math.abs(log)) + "\u00b0" + logsym);
 			label.setHorizontalAlignment(JLabel.CENTER);
 			label.setBorder(new EmptyBorder(9, 0, 0, 0));
 			conditionsCont.add(label);

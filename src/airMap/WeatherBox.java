@@ -1,5 +1,6 @@
 package airMap;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,6 +17,7 @@ public class WeatherBox extends JPanel {
 	public WeatherBox(String title, double lat, double lon) throws MalformedURLException {
 		titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+		titleLabel.setForeground(Color.decode("#0B0B61"));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 
 		add(titleLabel);
