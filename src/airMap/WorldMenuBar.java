@@ -4,7 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -13,7 +12,6 @@ import javax.swing.JMenuBar;
 
 public class WorldMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
-	//protected MenuPlayButton play;
 	private JButton play;
 	private MenuTextField location;
 	private MenuTextField destination;
@@ -24,11 +22,10 @@ public class WorldMenuBar extends JMenuBar {
 	public WorldMenuBar(World world) {
 		this.world = world;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 3));
-		mute=new JCheckBox("sound");
+		mute = new JCheckBox("sound");
 		mute.addActionListener(muteButton);
 		add(mute);
-		//play = new MenuPlayButton();
-		play=new JButton();
+		play = new JButton();
 		play.setText(">");
 		play.addActionListener(pause);
 		add(play);
@@ -46,10 +43,6 @@ public class WorldMenuBar extends JMenuBar {
 		add(go);
 	}
 
-	public void setAddress(String adr, String adr2) throws UnsupportedEncodingException {
-
-	}
-
 	public void gobutton() throws IOException {
 		String adr = location.getText();
 		String adr2 = destination.getText();
@@ -59,14 +52,16 @@ public class WorldMenuBar extends JMenuBar {
 			destination.reset();
 		}
 	}
-	public void togglePauseText(){
-		if(play.getText().equals(">")){
+
+	public void togglePauseText() {
+		if (play.getText().equals(">")) {
 			play.setText("||");
 		}
-		else{
+		else {
 			play.setText(">");
 		}
 	}
+
 	ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -78,19 +73,18 @@ public class WorldMenuBar extends JMenuBar {
 			}
 		}
 	};
+
 	ActionListener pause = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			
 			world.togglePlay();
 		}
 	};
-	ActionListener muteButton  = new ActionListener() {
+
+	ActionListener muteButton = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			
 			world.toggleMute();
 		}
 	};
-
 }

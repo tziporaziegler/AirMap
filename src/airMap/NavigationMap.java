@@ -8,53 +8,46 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.JMenuBar;
-import javax.swing.border.BevelBorder;
 
 public class NavigationMap extends Map {
 	private static final long serialVersionUID = 1L;
-	private final int width;
-	private final int height;
-
 	private double currentlat;
 	private double currentlong;
 
 	private Plane plane;
 
 	private JMenuBar menu;
-	private String view;
 	@SuppressWarnings("unused")
 	private String feature;
 	private MenuZoom zoomPanel;
-	private int count;
 	private double diffBuffer;
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
 		width = 300;
 		height = 300;
 		setPreferredSize(new Dimension(width, height));
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BorderLayout());
 		currentlat = startlat;
 		currentlong = startlong;
-		count = 0;
-		
+
 		// set up menu bar
 		menu = new JMenuBar();
 		view = "terrain";
-		menu.add(new MenuView(this, "navMap"));
+		menu.add(new MenuView(this));
 		feature = "transit.station.airports";
 		menu.add(new MenuFeatures(this));
-		zoomPanel = new MenuZoom(this, 5, "navMap");
+		menu.add(Box.createHorizontalStrut(95));
+		zoomPanel = new MenuZoom(this, 5);
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
-		// TODO set plane location to start
 		plane = new Plane(width / 2, height / 2);
 
 		diffBuffer = 0;
-		
-		setImage(ImageIO.read(getClass().getResource("pics/navigationMap.png")));
+
+		img = ImageIO.read(getClass().getResource("pics/navigationMap.png"));
 	}
 
 	public void update(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
@@ -63,7 +56,7 @@ public class NavigationMap extends Map {
 
 	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
 		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
-		//System.out.println("pixel " + pixelPerLong);
+
 		int difference;
 		//System.out.println(count++);
 		double diff = ((speed / 69.0) * pixelPerLong);
@@ -78,9 +71,7 @@ public class NavigationMap extends Map {
 		else {
 			difference = (int) diff;
 		}
-		//System.out.println("diff " + diff);
-		//System.out.println("diffbuffer " + diffBuffer);
-		//System.out.println("difference " + difference);
+
 		switch (direction) {
 			case 2: {
 				plane.changeY(difference);
@@ -106,8 +97,8 @@ public class NavigationMap extends Map {
 		if (x <= 0 || x >= 300 || y <= 0 || y >= 300) {
 			this.currentlat = currentlat;
 			this.currentlong = currentlong;
-			plane.reset();
 			loadImg();
+			plane.reset();
 		}
 	}
 
@@ -123,8 +114,7 @@ public class NavigationMap extends Map {
 	}
 
 	public void paintComponent(Graphics g) {
-
-		g.drawImage(getImage(), 0, 0, width, height, null);
+		g.drawImage(img, 0, 0, width, height, null);
 		plane.paintComponent(g);
 	}
 
@@ -156,10 +146,7 @@ public class NavigationMap extends Map {
 		// URL url = new URL(adrhalf + airports);
 		URL url = new URL(adrhalf + airports + zooms + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
-		//mapImg = new ImageIcon(url).getImage();
-		// FIXME new ImgDownloadThread(url, this).start();
-		ImgDownloadThread thread=new ImgDownloadThread(url,this);
-		thread.start();
+		new ImgDownloadThread(url, this).start();
 	}
 
 	public void updateFeature(String feature) throws MalformedURLException {

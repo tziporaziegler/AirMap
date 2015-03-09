@@ -7,26 +7,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.border.BevelBorder;
 
 public class PathMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private URL url;
-	
-	private int width;
-	private int height;
 
 	public PathMap() throws IOException {
 		width = 300;
 		height = 290;
+		view = "roadmap";
 		setPreferredSize(new Dimension(width, height));
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		setImage(ImageIO.read(getClass().getResource("pics/pathMap.png")));
+		img = ImageIO.read(getClass().getResource("pics/pathMap.png"));
 	}
 
 	public void setUpAirports() throws MalformedURLException {
-		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
-				+ "&maptype=roadmap";
+		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height + "&maptype="
+				+ view;
 
 		String airports = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C" + "atl+airport" + "%7C" + "anc+airport"
 				+ "%7C" + "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
@@ -45,11 +41,11 @@ public class PathMap extends Map {
 
 		url = new URL(adrhalf + airports + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
-		
-		loadImg();		
+		loadImg();
 	}
-	public void loadImg(){
-		new ImgDownloadThread(url,this).start();
+
+	public void loadImg() {
+		new ImgDownloadThread(url, this).start();
 	}
 
 	public void updateMap(double startlat, double startlong, double endlat, double endlong)
@@ -57,16 +53,15 @@ public class PathMap extends Map {
 		String start = startlat + "," + startlong;
 		String end = endlat + "," + endlong;
 		url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height
-				+ "&path=color:0x0000ff|weight:5|" + start + "|" + end
-				+ "&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + start + "%7C" + end
+				+ "&path=color:0x0000ff|weight:5|" + start + "|" + end + "&maptype=" + view
+				+ "&markers=size:mid%7Ccolor:red%7C" + start + "%7C" + end
 				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
-	loadImg();
+		loadImg();
 		repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-	
-		g.drawImage(getImage(), 0, 0, width, height, null);
+		g.drawImage(img, 0, 0, width, height, null);
 	}
 }

@@ -5,7 +5,6 @@ import java.applet.AudioClip;
 import java.net.URL;
 
 public class Flight extends Thread {
-
 	private AudioClip click;
 
 	@Override

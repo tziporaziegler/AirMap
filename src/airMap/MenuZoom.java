@@ -4,43 +4,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
-//TODO change to JMenuItem and adjust border spacing
-public class MenuZoom extends JPanel {
+public class MenuZoom extends JMenuItem {
 	private static final long serialVersionUID = 1L;
 	private JButton zoomout;
 	private JButton zoomin;
-	private String panelCode;
 	private JPanel parentPanel;
 	protected int zoom;
 
-	public MenuZoom(JPanel parentPanel, int initialZoom, String panelCode) {
-		setBorder(new EmptyBorder(-5, -5, -5, -5));
-		
-		this.panelCode = panelCode;
+	public MenuZoom(JPanel parentPanel, int initialZoom) {
+		setLayout(new BoxLayout(this, 2));
 		this.parentPanel = parentPanel;
 		zoom = initialZoom; // 0-21 disable + button is more
 
+		// create and add the zoomout button
 		zoomout = new JButton("-");
-		zoomin = new JButton("+");
+		zoomout.setToolTipText("zoom out");
 		zoomout.addActionListener(zoomoutListen);
-		zoomin.addActionListener(zoominListen);
 		add(zoomout);
+
+		// create and add the zoomin button
+		zoomin = new JButton("+");
+		zoomin.setToolTipText("zoom in");
+		zoomin.addActionListener(zoominListen);
 		add(zoomin);
 	}
 
-	// FIXME don't want to always cast
 	private void load() throws MalformedURLException {
-		switch (panelCode) {
-			case "navMap":
-				((NavigationMap) parentPanel).loadImg();
-			break;
-			case "cenMap":
-				((CenterMap) parentPanel).loadImg();
-			break;
+		// cast parentPanel so can call the correct loadImg()
+		if (parentPanel instanceof NavigationMap) {
+			((NavigationMap) parentPanel).loadImg();
+		}
+		else if (parentPanel instanceof CenterMap) {
+			((CenterMap) parentPanel).loadImg();
 		}
 	}
 
@@ -48,6 +48,8 @@ public class MenuZoom extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			zoom++;
+			// if reach maximum zoom (which is 21) then disable zoomin button
+			// until map is zoomed out again
 			if (zoom == 21) {
 				zoomin.setEnabled(false);
 			}
@@ -67,6 +69,8 @@ public class MenuZoom extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			zoom--;
+			// if reach minimum zoom (1) then disable zoomout button until map is zoomed in again
+			// zoom 0 shows whole world regardless to container size, so not used
 			if (zoom == 1) {
 				zoomout.setEnabled(false);
 			}

@@ -56,7 +56,7 @@ public class Plane {
 	public void changeY(int difference) {
 		y += difference;
 	}
-	
+
 	public void changeX(int difference) {
 		x += difference;
 	}

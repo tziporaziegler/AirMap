@@ -6,5 +6,4 @@ public class AdrResult {
 	public AdrGeometry getGeometry() {
 		return geometry;
 	}
-
 }

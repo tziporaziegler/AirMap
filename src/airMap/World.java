@@ -23,6 +23,7 @@ public class World extends JFrame {
 	private final static int DOWN = 2;
 	private final static int RIGHT = 6;
 	private final static int LEFT = 4;
+
 	// three panels
 	private final SideMap sideMap;
 	private final WeatherCont weather;
@@ -85,8 +86,7 @@ public class World extends JFrame {
 		noise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat,
-			double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		destinationLat = endLat;
@@ -97,22 +97,17 @@ public class World extends JFrame {
 	}
 
 	public void setUpKeyBindings() {
-		InputMap inputMap = getRootPane().getInputMap(
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
-		inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
+		// inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
 		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
 		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
-				"directionUp");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
-				"directionDown");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
-				"directionLeft");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
-				"directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
@@ -121,16 +116,14 @@ public class World extends JFrame {
 		actionMap.put("directionDown", new Direction(DOWN));
 		actionMap.put("directionRight", new Direction(RIGHT));
 		actionMap.put("directionLeft", new Direction(LEFT));
-
-		actionMap.put("togglePause", new PauseAction());
+		// actionMap.put("togglePause", new PauseAction());
 	}
 
 	public void togglePlay() {
 		if (paused) {
 			paused = false;
-			System.out.println("updating");
-
-		} else {
+		}
+		else {
 			paused = true;
 		}
 		menu.togglePauseText();
@@ -138,27 +131,27 @@ public class World extends JFrame {
 
 	public void update() throws IOException {
 
+
 		if (!paused & !landing) {
-			//reachDestination();
+
 			double difference = speed / 69.0;
 			switch (direction) {
-			case UP: {
-				currentLat += difference;
-				break;
-			}
-			case DOWN: {
-				currentLat -= difference;
-				break;
-			}
-			case LEFT: {
-
-				currentLog -= difference;
-				break;
-			}
-			case RIGHT: {
-				currentLog += difference;
-				break;
-			}
+				case UP: {
+					currentLat += difference;
+					break;
+				}
+				case DOWN: {
+					currentLat -= difference;
+					break;
+				}
+				case LEFT: {
+					currentLog -= difference;
+					break;
+				}
+				case RIGHT: {
+					currentLog += difference;
+					break;
+				}
 			}
 			centerMap.updateMap(direction, difference, currentLat, currentLog);
 			weather.updateCurrent(currentLat, currentLog);
@@ -166,12 +159,15 @@ public class World extends JFrame {
 		} else if (landing) {
 			//landingMode();
 		}
+
+		repaint();
 	}
 
 	public void setDirection(int direction) {
 		this.direction = direction;
 		sideMap.setDirection(direction);
 	}
+
 
 	public int getDirection() {
 		return direction;
@@ -224,15 +220,14 @@ System.out
 
 	}
 
+
 	public void toggleMute() {
-		System.out.println("mutemeho");
 		if (sound) {
-
 			cockpit.stopMusic();
-
 			// noise.stopMusic();
 			sound = false;
-		} else {
+		}
+		else {
 			sound = true;
 			noise = new PlaneNoise();
 			// noise.start();
@@ -240,28 +235,16 @@ System.out
 	}
 
 	private class PauseAction extends AbstractAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("p");
 			togglePlay();
-
 		}
-
 	};
 
 	private class Direction extends AbstractAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
 		private int direction;
 
 		public Direction(int direction) {
@@ -271,9 +254,6 @@ System.out
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			setDirection(direction);
-
 		}
-
 	};
-
 }

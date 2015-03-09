@@ -13,7 +13,7 @@ public class WeatherCont extends Container {
 	private WeatherBox currWeather;
 
 	public WeatherCont(double currentLat, double currentLog) throws MalformedURLException {
-		setPreferredSize(new Dimension(250, 600));
+		setPreferredSize(new Dimension(260, 600));
 		setLayout(new GridLayout(3, 1));
 
 		depWeather = new WeatherBox("Departure", currentLat, currentLog);

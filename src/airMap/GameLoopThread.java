@@ -7,22 +7,18 @@ public class GameLoopThread extends Thread {
 
 	public GameLoopThread(World world) {
 		this.world = world;
-
 	}
 
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				
 				world.update();
-				world.repaint();
 				sleep(1000);
-
 			}
-		} catch (InterruptedException | IOException e) {
+		}
+		catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
