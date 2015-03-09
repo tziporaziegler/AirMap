@@ -85,7 +85,7 @@ public class World extends JFrame {
 		setVisible(true);
 		cockpit = new Cockpit();
 		cockpit.start();
-		noise = new PlaneNoise();
+		noise = new PlaneNoise(true);
 		noise.start();
 	}
 
@@ -130,7 +130,15 @@ public class World extends JFrame {
 	public void togglePlay() {
 		if (paused) {
 			paused = false;
+			if(landing=true){
 			landing = false;
+			if(sound){
+				cockpit=new Cockpit();
+				cockpit.start();
+				noise=new PlaneNoise(true);
+				noise.start();
+			}
+			}
 		}
 		else {
 			paused = true;
@@ -217,7 +225,12 @@ public class World extends JFrame {
 
 		togglePlay();
 		if (sound) {
+			if(noise!=null){
+				
+				
+			}
 			noise.stopMusic();
+			
 			System.out.println("land");
 			landingNoise.join();
 			System.out.println("new noise");
@@ -270,7 +283,7 @@ public class World extends JFrame {
 		}
 		else {
 			sound = true;
-			noise = new PlaneNoise();
+			noise = new PlaneNoise(false);
 			noise.start();
 		}
 	}
