@@ -42,13 +42,13 @@ public class World extends JFrame {
 
 	private boolean sound;
 	private boolean paused;
-	private Cockpit cockpit;
-	private PlaneNoise noise;
-	private LandingNoise landingNoise;
-	private LandedNoise landed;
+	private Sound cockpit;
+	private Sound planeNoise;
+	private Sound landingNoise;
+	private Sound landed;
 	private boolean landing;
 
-	public World() throws IOException {
+	public World() throws IOException, InterruptedException {
 		setLayout(new BorderLayout());
 		setSize(1000, 600);
 		setResizable(false);
@@ -68,7 +68,7 @@ public class World extends JFrame {
 		add(menu, BorderLayout.SOUTH);
 
 		direction = LEFT;
-		speed = 50;
+		speed = 0;
 		sound = true;
 		landing = false;
 		paused = true;
@@ -83,13 +83,15 @@ public class World extends JFrame {
 		setUpKeyBindings();
 
 		setVisible(true);
-		cockpit = new Cockpit();
+		cockpit = new Sound(0, "sound/seat.wav", false);
 		cockpit.start();
-		noise = new PlaneNoise(true);
-		noise.start();
+		System.out.println("new");
+		planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
+		planeNoise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat,
+			double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		destinationLat = endLat;
@@ -100,17 +102,22 @@ public class World extends JFrame {
 	}
 
 	public void setUpKeyBindings() {
-		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getRootPane().getInputMap(
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
 		// inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
 		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
 		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "directionUp");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "directionDown");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "directionLeft");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
+				"directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
+				"directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
+				"directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
+				"directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
@@ -130,17 +137,17 @@ public class World extends JFrame {
 	public void togglePlay() {
 		if (paused) {
 			paused = false;
-			if(landing=true){
-			landing = false;
-			if(sound){
-				cockpit=new Cockpit();
-				cockpit.start();
-				noise=new PlaneNoise(true);
-				noise.start();
+			if (landing) {
+				landing = false;
+				if (sound) {
+					System.out.println("toggleplay");
+					cockpit = new Sound(0, "sound/seat.wav", false);
+					cockpit.start();
+					planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
+					planeNoise.start();
+				}
 			}
-			}
-		}
-		else {
+		} else {
 			paused = true;
 		}
 		menu.togglePauseText();
@@ -152,8 +159,7 @@ public class World extends JFrame {
 		speed += adjust;
 		if (speed < 0) {
 			speed = 0;
-		}
-		else if (speed > 69) {
+		} else if (speed > 69) {
 			speed = 69;
 		}
 		System.out.println(speed);
@@ -161,34 +167,35 @@ public class World extends JFrame {
 
 	public void update() throws IOException, InterruptedException {
 
-		if (!paused & !landing) {
+		if (!paused & !landing& speed>0) {
 
 			double difference = speed / 69.0;
 			switch (direction) {
-				case UP: {
-					currentLat += difference;
-					break;
-				}
-				case DOWN: {
-					currentLat -= difference;
-					break;
-				}
-				case LEFT: {
-					currentLog -= difference;
-					break;
-				}
-				case RIGHT: {
-					currentLog += difference;
-					break;
-				}
+			case UP: {
+				currentLat += difference;
+				break;
 			}
-			centerMap.updateMap(speed, direction, difference, currentLat, currentLog);
+			case DOWN: {
+				currentLat -= difference;
+				break;
+			}
+			case LEFT: {
+				currentLog -= difference;
+				break;
+			}
+			case RIGHT: {
+				currentLog += difference;
+				break;
+			}
+			}
+			centerMap.updateMap(speed, direction, difference, currentLat,
+					currentLog);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
 			reachDestination();
-		}
-		else if (landing) {
-			centerMap.updateMap(0, direction, 0, destinationLat, destinationLog);
+		} else if (landing) {
+			centerMap
+					.updateMap(0, direction, 0, destinationLat, destinationLog);
 			weather.updateCurrent(destinationLat, destinationLog);
 			sideMap.landPlane(destinationLat, destinationLog);
 		}
@@ -206,85 +213,63 @@ public class World extends JFrame {
 	}
 
 	public void reachDestination() throws IOException, InterruptedException {
-		System.out.println("lat diff: " + Math.abs(currentLat - destinationLat));
-		System.out.println("log diff: " + Math.abs(currentLog - destinationLog));
+		System.out
+				.println("lat diff: " + Math.abs(currentLat - destinationLat));
+		System.out
+				.println("log diff: " + Math.abs(currentLog - destinationLog));
 
-		if (sound && (Math.abs(currentLat - destinationLat) <= .15 && Math.abs(currentLog - destinationLog) <= .15)) {
+		if (Math.abs(currentLat - destinationLat) <= .15
+				&& Math.abs(currentLog - destinationLog) <= .15) {
+			if (sound) {
+				System.out.println(planeNoise.getState());
+				
+				planeNoise.stopMusic();
+				
+				Sound ding = new Sound(0, "sound/ding.wav", false);
+				ding.start();
 
-			// landingMode();
-			DingNoise ding = new DingNoise();
-			ding.start();
-			landing = true;
-			landingNoise = new LandingNoise();
-			landingNoise.start();
+				landingNoise = new Sound(2000, "sound/landing.wav", false);
+				landingNoise.start();
+			}
+			
 			landPlane();
 		}
+
 	}
 
 	public void landPlane() throws IOException, InterruptedException {
 
 		togglePlay();
+		landing = true;
 		if (sound) {
-			if(noise!=null){
-				
-				
-			}
-			noise.stopMusic();
-			
 			System.out.println("land");
 			landingNoise.join();
 			System.out.println("new noise");
-			landed = new LandedNoise();
+			landed = new Sound(7000, "sound/landed.wav", false);
 			landed.start();
 
 		}
-
-	}
-
-	public void landingMode() throws IOException {
-		System.out.println("landing mode");
-		System.out.println("lat diff: " + Math.abs(currentLat - destinationLat));
-		System.out.println("log diff: " + Math.abs(currentLog - destinationLog));
-		landing = true;
-		double difference = LANDINGSPEED / 69.0;
-		if (Math.abs(destinationLat - currentLat) < .009 && Math.abs(destinationLog - currentLog) > .009) {
-			togglePlay();
-			landing = false;
-
-		}
-		else if (destinationLat > currentLat) {
-
-			currentLat += difference;
-			sideMap.updateMap(LANDINGSPEED, UP, currentLat, currentLog);
-		}
-		else if (destinationLat < currentLat) {
-
-			currentLat -= difference;
-			sideMap.updateMap(LANDINGSPEED, DOWN, currentLat, currentLog);
-		}
-		else if (destinationLog < currentLog) {
-			currentLog -= difference;
-			sideMap.updateMap(LANDINGSPEED, LEFT, currentLat, currentLog);
-		}
-		else if (destinationLog > currentLog) {
-			currentLog += difference;
-			sideMap.updateMap(LANDINGSPEED, RIGHT, currentLat, currentLog);
-		}
+		speed=0;
 
 	}
 
 	public void toggleMute() {
 		if (sound) {
+			if(planeNoise.isAlive()){
 			cockpit.stopMusic();
-			noise.stopMusic();
+			planeNoise.stopMusic();
+			}
+			else if( landed.isAlive()){
 			landed.stopMusic();
+			}
+			else if(landingNoise.isAlive()){
 			landingNoise.stopMusic();
+			}
 			sound = false;
-		}
-		else {
+		} else {
 			sound = true;
-			noise = new PlaneNoise(false);
-			noise.start();
+			planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
+			planeNoise.start();
 		}
 	}
 
