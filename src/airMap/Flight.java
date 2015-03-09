@@ -15,7 +15,6 @@ public class Flight extends Thread {
 	}
 
 	public static void main(String args[]) {
-		Flight music = new Flight();
-		music.start();
+		new Flight().start();
 	}
 }

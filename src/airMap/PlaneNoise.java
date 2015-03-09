@@ -11,8 +11,8 @@ public class PlaneNoise extends Thread {
 	public void run() {
 		try {
 			sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		URL urlClick = getClass().getResource("sound/airTraffic.wav");
@@ -29,7 +29,6 @@ public class PlaneNoise extends Thread {
 	}
 
 	public static void main(String args[]) {
-		PlaneNoise music = new PlaneNoise();
-		music.start();
+		new PlaneNoise().start();
 	}
 }

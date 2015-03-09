@@ -15,7 +15,6 @@ public class EngineStart extends Thread {
 	}
 
 	public static void main(String args[]) {
-		EngineStart engine = new EngineStart();
-		engine.start();
+		new EngineStart().start();
 	}
 }

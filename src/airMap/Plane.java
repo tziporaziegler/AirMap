@@ -50,7 +50,7 @@ public class Plane {
 
 	public void reset() {
 		x = 150;
-		y = 272/2-10;
+		y = 272 / 2 - 10;
 	}
 
 	public void changeY(int difference) {
@@ -68,5 +68,4 @@ public class Plane {
 	public int getY() {
 		return y;
 	}
-
 }

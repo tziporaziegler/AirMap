@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -90,8 +89,7 @@ public class World extends JFrame {
 		noise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat,
-			double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		destinationLat = endLat;
@@ -102,22 +100,17 @@ public class World extends JFrame {
 	}
 
 	public void setUpKeyBindings() {
-		InputMap inputMap = getRootPane().getInputMap(
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
 		// inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
 		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
 		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
-				"directionUp");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
-				"directionDown");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
-				"directionLeft");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
-				"directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
@@ -138,7 +131,8 @@ public class World extends JFrame {
 		if (paused) {
 			paused = false;
 			landing = false;
-		} else {
+		}
+		else {
 			paused = true;
 		}
 		menu.togglePauseText();
@@ -150,7 +144,8 @@ public class World extends JFrame {
 		speed += adjust;
 		if (speed < 0) {
 			speed = 0;
-		} else if (speed > 69) {
+		}
+		else if (speed > 69) {
 			speed = 69;
 		}
 		System.out.println(speed);
@@ -162,31 +157,30 @@ public class World extends JFrame {
 
 			double difference = speed / 69.0;
 			switch (direction) {
-			case UP: {
-				currentLat += difference;
-				break;
+				case UP: {
+					currentLat += difference;
+					break;
+				}
+				case DOWN: {
+					currentLat -= difference;
+					break;
+				}
+				case LEFT: {
+					currentLog -= difference;
+					break;
+				}
+				case RIGHT: {
+					currentLog += difference;
+					break;
+				}
 			}
-			case DOWN: {
-				currentLat -= difference;
-				break;
-			}
-			case LEFT: {
-				currentLog -= difference;
-				break;
-			}
-			case RIGHT: {
-				currentLog += difference;
-				break;
-			}
-			}
-			centerMap.updateMap(speed, direction, difference, currentLat,
-					currentLog);
+			centerMap.updateMap(speed, direction, difference, currentLat, currentLog);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
 			reachDestination();
-		} else if (landing) {
-			centerMap
-					.updateMap(0, direction, 0, destinationLat, destinationLog);
+		}
+		else if (landing) {
+			centerMap.updateMap(0, direction, 0, destinationLat, destinationLog);
 			weather.updateCurrent(destinationLat, destinationLog);
 			sideMap.landPlane(destinationLat, destinationLog);
 		}
@@ -204,14 +198,10 @@ public class World extends JFrame {
 	}
 
 	public void reachDestination() throws IOException, InterruptedException {
-		System.out
-				.println("lat diff: " + Math.abs(currentLat - destinationLat));
-		System.out
-				.println("log diff: " + Math.abs(currentLog - destinationLog));
+		System.out.println("lat diff: " + Math.abs(currentLat - destinationLat));
+		System.out.println("log diff: " + Math.abs(currentLog - destinationLog));
 
-		if (sound
-				&& (Math.abs(currentLat - destinationLat) <= .15 && Math
-						.abs(currentLog - destinationLog) <= .15)) {
+		if (sound && (Math.abs(currentLat - destinationLat) <= .15 && Math.abs(currentLog - destinationLog) <= .15)) {
 
 			// landingMode();
 			DingNoise ding = new DingNoise();
@@ -240,29 +230,30 @@ public class World extends JFrame {
 
 	public void landingMode() throws IOException {
 		System.out.println("landing mode");
-		System.out
-				.println("lat diff: " + Math.abs(currentLat - destinationLat));
-		System.out
-				.println("log diff: " + Math.abs(currentLog - destinationLog));
+		System.out.println("lat diff: " + Math.abs(currentLat - destinationLat));
+		System.out.println("log diff: " + Math.abs(currentLog - destinationLog));
 		landing = true;
 		double difference = LANDINGSPEED / 69.0;
-		if (Math.abs(destinationLat - currentLat) < .009
-				&& Math.abs(destinationLog - currentLog) > .009) {
+		if (Math.abs(destinationLat - currentLat) < .009 && Math.abs(destinationLog - currentLog) > .009) {
 			togglePlay();
 			landing = false;
 
-		} else if (destinationLat > currentLat) {
+		}
+		else if (destinationLat > currentLat) {
 
 			currentLat += difference;
 			sideMap.updateMap(LANDINGSPEED, UP, currentLat, currentLog);
-		} else if (destinationLat < currentLat) {
+		}
+		else if (destinationLat < currentLat) {
 
 			currentLat -= difference;
 			sideMap.updateMap(LANDINGSPEED, DOWN, currentLat, currentLog);
-		} else if (destinationLog < currentLog) {
+		}
+		else if (destinationLog < currentLog) {
 			currentLog -= difference;
 			sideMap.updateMap(LANDINGSPEED, LEFT, currentLat, currentLog);
-		} else if (destinationLog > currentLog) {
+		}
+		else if (destinationLog > currentLog) {
 			currentLog += difference;
 			sideMap.updateMap(LANDINGSPEED, RIGHT, currentLat, currentLog);
 		}
@@ -276,7 +267,8 @@ public class World extends JFrame {
 			landed.stopMusic();
 			landingNoise.stopMusic();
 			sound = false;
-		} else {
+		}
+		else {
 			sound = true;
 			noise = new PlaneNoise();
 			noise.start();

@@ -23,7 +23,6 @@ public class Cockpit extends Thread {
 	}
 
 	public static void main(String args[]) {
-		Cockpit music = new Cockpit();
-		music.start();
+		new Cockpit().start();
 	}
 }

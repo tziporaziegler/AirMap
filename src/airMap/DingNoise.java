@@ -4,23 +4,20 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 import java.net.URL;
 
-public class DingNoise extends Thread{
+public class DingNoise extends Thread {
 	private AudioClip click;
 
 	@Override
 	public void run() {
-
 		URL urlClick = getClass().getResource("sound/ding.wav");
 		click = Applet.newAudioClip(urlClick);
-
 		click.play();
 		try {
 			sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public boolean running() {
@@ -32,7 +29,6 @@ public class DingNoise extends Thread{
 	}
 
 	public static void main(String args[]) {
-		DingNoise music = new DingNoise();
-		music.start();
+		new DingNoise().start();
 	}
 }

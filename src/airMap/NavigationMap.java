@@ -43,7 +43,7 @@ public class NavigationMap extends Map {
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
-		plane = new Plane(width / 2, height/ 2-10);
+		plane = new Plane(width / 2, height / 2 - 10);
 
 		diffBuffer = 0;
 
@@ -58,7 +58,7 @@ public class NavigationMap extends Map {
 		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
 
 		int difference;
-		//System.out.println(count++);
+		// System.out.println(count++);
 		double diff = ((speed / 69.0) * pixelPerLong);
 		if (diffBuffer != 0) {
 			diff += diffBuffer;
@@ -97,7 +97,7 @@ public class NavigationMap extends Map {
 		if (x <= 0 || x >= width || y <= 0 || y >= height) {
 			this.currentlat = currentlat;
 			this.currentlong = currentlong;
-			
+
 			plane.reset();
 			loadImg();
 		}
@@ -145,7 +145,10 @@ public class NavigationMap extends Map {
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
 		// URL url = new URL(adrhalf + airports);
-		URL url = new URL(adrhalf + airports + zooms + "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
+		URL url = new URL(adrhalf + airports + zooms
+		// + "&style=feature:road.local%7Celement:geometry"
+		// + "&style=feature:administrative%7Celement:labels"
+				+ "&key=AIzaSyAirHEsA08agmW9uizDvXagTjWS3mRctPE");
 
 		new ImgDownloadThread(url, this).start();
 	}
