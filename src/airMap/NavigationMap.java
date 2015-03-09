@@ -26,7 +26,7 @@ public class NavigationMap extends Map {
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
 		width = 300;
-		height = 300;
+		height = 272;
 		setPreferredSize(new Dimension(width, height));
 		setLayout(new BorderLayout());
 		currentlat = startlat;
@@ -43,7 +43,7 @@ public class NavigationMap extends Map {
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
 
-		plane = new Plane(width / 2, height / 2);
+		plane = new Plane(width / 2, height/ 2-10);
 
 		diffBuffer = 0;
 
@@ -94,7 +94,7 @@ public class NavigationMap extends Map {
 		int x = plane.getX();
 		int y = plane.getY();
 
-		if (x <= 0 || x >= 300 || y <= 0 || y >= 300) {
+		if (x <= 0 || x >= width || y <= 0 || y >= height) {
 			this.currentlat = currentlat;
 			this.currentlong = currentlong;
 			loadImg();

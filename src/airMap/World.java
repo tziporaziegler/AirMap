@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -23,6 +24,8 @@ public class World extends JFrame {
 	private final static int DOWN = 2;
 	private final static int RIGHT = 6;
 	private final static int LEFT = 4;
+	private static final int INCREASE = 3;
+	private static final int DECREASE = -3;
 
 	// three panels
 	private final SideMap sideMap;
@@ -42,6 +45,7 @@ public class World extends JFrame {
 	private boolean paused;
 	private Cockpit cockpit;
 	private PlaneNoise noise;
+	private LandingNoise landingNoise;
 	private LandedNoise landed;
 	private boolean landing;
 
@@ -65,7 +69,7 @@ public class World extends JFrame {
 		add(menu, BorderLayout.SOUTH);
 
 		direction = LEFT;
-		speed = 10;
+		speed = 50;
 		sound = true;
 		landing = false;
 		paused = true;
@@ -86,32 +90,43 @@ public class World extends JFrame {
 		noise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat,
+			double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		destinationLat = endLat;
 		destinationLog = endLog;
 		weather.updateAll(currentLat, currentLog, endLat, endLog);
 		sideMap.newTrip(currentLat, currentLog, endLat, endLog);
-		centerMap.updateMap(0, 0, currentLat, currentLog);
+		centerMap.updateMap(speed, 0, 0, currentLat, currentLog);
 	}
 
 	public void setUpKeyBindings() {
-		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getRootPane().getInputMap(
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
 		// inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
 		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
 		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "directionUp");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "directionDown");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "directionLeft");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
+				"directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
+				"directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
+				"directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
+				"directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("LEFT"), "directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "speedPlus");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0), "speedPlus");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "speedMinus");
+		actionMap.put("speedPlus", new Speed(INCREASE));
+		actionMap.put("speedMinus", new Speed(DECREASE));
 		actionMap.put("directionUp", new Direction(UP));
 		actionMap.put("directionDown", new Direction(DOWN));
 		actionMap.put("directionRight", new Direction(RIGHT));
@@ -122,42 +137,58 @@ public class World extends JFrame {
 	public void togglePlay() {
 		if (paused) {
 			paused = false;
-		}
-		else {
+			landing = false;
+		} else {
 			paused = true;
 		}
 		menu.togglePauseText();
+
 	}
 
-	public void update() throws IOException {
+	public void adjustSpeed(int adjust) {
 
+		speed += adjust;
+		if (speed < 0) {
+			speed = 0;
+		} else if (speed > 69) {
+			speed = 69;
+		}
+		System.out.println(speed);
+	}
+
+	public void update() throws IOException, InterruptedException {
 
 		if (!paused & !landing) {
 
 			double difference = speed / 69.0;
 			switch (direction) {
-				case UP: {
-					currentLat += difference;
-					break;
-				}
-				case DOWN: {
-					currentLat -= difference;
-					break;
-				}
-				case LEFT: {
-					currentLog -= difference;
-					break;
-				}
-				case RIGHT: {
-					currentLog += difference;
-					break;
-				}
+			case UP: {
+				currentLat += difference;
+				break;
 			}
-			centerMap.updateMap(direction, difference, currentLat, currentLog);
+			case DOWN: {
+				currentLat -= difference;
+				break;
+			}
+			case LEFT: {
+				currentLog -= difference;
+				break;
+			}
+			case RIGHT: {
+				currentLog += difference;
+				break;
+			}
+			}
+			centerMap.updateMap(speed, direction, difference, currentLat,
+					currentLog);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
+			reachDestination();
 		} else if (landing) {
-			//landingMode();
+			centerMap
+					.updateMap(0, direction, 0, destinationLat, destinationLog);
+			weather.updateCurrent(destinationLat, destinationLog);
+			sideMap.landPlane(destinationLat, destinationLog);
 		}
 
 		repaint();
@@ -168,47 +199,64 @@ public class World extends JFrame {
 		sideMap.setDirection(direction);
 	}
 
-
 	public int getDirection() {
 		return direction;
 	}
 
-	public void reachDestination() throws IOException {
+	public void reachDestination() throws IOException, InterruptedException {
 		System.out
 				.println("lat diff: " + Math.abs(currentLat - destinationLat));
 		System.out
 				.println("log diff: " + Math.abs(currentLog - destinationLog));
+
 		if (sound
-				&& (Math.abs(currentLat - destinationLat) <= 1.1 && Math
-						.abs(currentLog - destinationLog) <= 1.1)) {
-			togglePlay();
-			landingMode();
+				&& (Math.abs(currentLat - destinationLat) <= .1 && Math
+						.abs(currentLog - destinationLog) <= .1)) {
+
+			// landingMode();
+			DingNoise ding = new DingNoise();
+			ding.start();
 			landing = true;
+			landingNoise = new LandingNoise();
+			landingNoise.start();
+			landPlane();
+		}
+	}
+
+	public void landPlane() throws IOException, InterruptedException {
+
+		togglePlay();
+		if (sound) {
+			System.out.println("land");
+			landingNoise.join();
+			System.out.println("new noise");
 			landed = new LandedNoise();
 			landed.start();
+
 		}
+
 	}
 
 	public void landingMode() throws IOException {
 		System.out.println("landing mode");
 		System.out
-		.println("lat diff: " + Math.abs(currentLat - destinationLat));
-System.out
-		.println("log diff: " + Math.abs(currentLog - destinationLog));
+				.println("lat diff: " + Math.abs(currentLat - destinationLat));
+		System.out
+				.println("log diff: " + Math.abs(currentLog - destinationLog));
 		landing = true;
 		double difference = LANDINGSPEED / 69.0;
 		if (Math.abs(destinationLat - currentLat) < .009
 				&& Math.abs(destinationLog - currentLog) > .009) {
 			togglePlay();
-			landing=false;
-			
+			landing = false;
+
 		} else if (destinationLat > currentLat) {
-	
-			currentLat+=difference;
+
+			currentLat += difference;
 			sideMap.updateMap(LANDINGSPEED, UP, currentLat, currentLog);
 		} else if (destinationLat < currentLat) {
-		
-			currentLat-=difference;
+
+			currentLat -= difference;
 			sideMap.updateMap(LANDINGSPEED, DOWN, currentLat, currentLog);
 		} else if (destinationLog < currentLog) {
 			currentLog -= difference;
@@ -220,17 +268,17 @@ System.out
 
 	}
 
-
 	public void toggleMute() {
 		if (sound) {
 			cockpit.stopMusic();
-			// noise.stopMusic();
+			noise.stopMusic();
+			landed.stopMusic();
+			landingNoise.stopMusic();
 			sound = false;
-		}
-		else {
+		} else {
 			sound = true;
 			noise = new PlaneNoise();
-			// noise.start();
+			noise.start();
 		}
 	}
 
@@ -254,6 +302,20 @@ System.out
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			setDirection(direction);
+		}
+	};
+
+	private class Speed extends AbstractAction {
+		private static final long serialVersionUID = 1L;
+		private int speed;
+
+		public Speed(int speed) {
+			this.speed = speed;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			adjustSpeed(speed);
 		}
 	};
 }

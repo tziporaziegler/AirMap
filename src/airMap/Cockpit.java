@@ -9,7 +9,7 @@ public class Cockpit extends Thread {
 
 	@Override
 	public void run() {
-		URL urlClick = getClass().getResource("sound/seatbelt.wav");
+		URL urlClick = getClass().getResource("sound/seat.wav");
 		click = Applet.newAudioClip(urlClick);
 		click.play();
 	}

@@ -32,6 +32,7 @@ public class CenterMap extends Map {
 	private final Image gauges1Img;
 	private final Image gauges2Img;
 	private final Image alien;
+	private int speed;
 
 	public CenterMap(double currentlat, double currentlong) throws IOException {
 		width = 600;
@@ -69,12 +70,15 @@ public class CenterMap extends Map {
 		System.out.println(currentLat + " , " + currentLog);
 		g.drawImage(img, 0, 0, 442, 485, null);
 		g.drawImage(controlImg, 0, 22, 472, 520, null);
-
+		g.setColor(Color.RED);
+		g.setFont(new Font("Arial",Font.BOLD,34));
+		g.drawString(String.valueOf(speed*10), 350, 480);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(radarImg, 253, 37, 25, 25, null);
 		g2.drawImage(gaugesImg, 156, 484, 41, 35, null);
 		g2.drawImage(gauges1Img, 221, 484, 43, 36, null);
 		g2.drawImage(gauges2Img, 280, 484, 41, 35, null);
+		
 
 		if (currentLat < -90 || currentLat > 90) {
 			g2.drawImage(alien, 55, height / 2, 63, 101, null);
@@ -103,10 +107,11 @@ public class CenterMap extends Map {
 		loadImg();
 	}
 
-	public void updateMap(int direction, double difference, double currentlat, double currentlong)
+	public void updateMap(int speed,int direction, double difference, double currentlat, double currentlong)
 			throws MalformedURLException {
 		this.currentLat = currentlat;
 		this.currentLog = currentlong;
+		this.speed=speed;
 		loadImg();
 	}
 }
