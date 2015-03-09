@@ -63,9 +63,9 @@ public class NavigationMap extends Map {
 
 	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
 		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
-		System.out.println("pixel " + pixelPerLong);
+		//System.out.println("pixel " + pixelPerLong);
 		int difference;
-		System.out.println(count++);
+		//System.out.println(count++);
 		double diff = ((speed / 69.0) * pixelPerLong);
 		if (diffBuffer != 0) {
 			diff += diffBuffer;
@@ -78,9 +78,9 @@ public class NavigationMap extends Map {
 		else {
 			difference = (int) diff;
 		}
-		System.out.println("diff " + diff);
-		System.out.println("diffbuffer " + diffBuffer);
-		System.out.println("difference " + difference);
+		//System.out.println("diff " + diff);
+		//System.out.println("diffbuffer " + diffBuffer);
+		//System.out.println("difference " + difference);
 		switch (direction) {
 			case 2: {
 				plane.changeY(difference);

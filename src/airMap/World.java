@@ -18,6 +18,7 @@ public class World extends JFrame {
 
 	protected WorldMenuBar menu;
 
+	private final static int LANDINGSPEED = 1;
 	private final static int UP = 8;
 	private final static int DOWN = 2;
 	private final static int RIGHT = 6;
@@ -30,7 +31,8 @@ public class World extends JFrame {
 	// current address
 	private double currentLat;
 	private double currentLog;
-
+	private double destinationLat;
+	private double destinationLog;
 	// plane controls
 	private int direction;
 	private int speed;
@@ -39,6 +41,8 @@ public class World extends JFrame {
 	private boolean paused;
 	private Cockpit cockpit;
 	private PlaneNoise noise;
+	private LandedNoise landed;
+	private boolean landing;
 
 	public World() throws IOException {
 		setLayout(new BorderLayout());
@@ -60,9 +64,9 @@ public class World extends JFrame {
 		add(menu, BorderLayout.SOUTH);
 
 		direction = LEFT;
-		speed = 69;
+		speed = 10;
 		sound = true;
-
+		landing = false;
 		paused = true;
 
 		// create the three panels and set up their location on the screen
@@ -85,6 +89,8 @@ public class World extends JFrame {
 			double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
+		destinationLat = endLat;
+		destinationLog = endLog;
 		weather.updateAll(currentLat, currentLog, endLat, endLog);
 		sideMap.newTrip(currentLat, currentLog, endLat, endLog);
 		centerMap.updateMap(0, 0, currentLat, currentLog);
@@ -132,8 +138,8 @@ public class World extends JFrame {
 
 	public void update() throws IOException {
 
-		if (!paused) {
-
+		if (!paused & !landing) {
+			//reachDestination();
 			double difference = speed / 69.0;
 			switch (direction) {
 			case UP: {
@@ -157,6 +163,8 @@ public class World extends JFrame {
 			centerMap.updateMap(direction, difference, currentLat, currentLog);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
+		} else if (landing) {
+			//landingMode();
 		}
 	}
 
@@ -167,6 +175,53 @@ public class World extends JFrame {
 
 	public int getDirection() {
 		return direction;
+	}
+
+	public void reachDestination() throws IOException {
+		System.out
+				.println("lat diff: " + Math.abs(currentLat - destinationLat));
+		System.out
+				.println("log diff: " + Math.abs(currentLog - destinationLog));
+		if (sound
+				&& (Math.abs(currentLat - destinationLat) <= 1.1 && Math
+						.abs(currentLog - destinationLog) <= 1.1)) {
+			togglePlay();
+			landingMode();
+			landing = true;
+			landed = new LandedNoise();
+			landed.start();
+		}
+	}
+
+	public void landingMode() throws IOException {
+		System.out.println("landing mode");
+		System.out
+		.println("lat diff: " + Math.abs(currentLat - destinationLat));
+System.out
+		.println("log diff: " + Math.abs(currentLog - destinationLog));
+		landing = true;
+		double difference = LANDINGSPEED / 69.0;
+		if (Math.abs(destinationLat - currentLat) < .009
+				&& Math.abs(destinationLog - currentLog) > .009) {
+			togglePlay();
+			landing=false;
+			
+		} else if (destinationLat > currentLat) {
+	
+			currentLat+=difference;
+			sideMap.updateMap(LANDINGSPEED, UP, currentLat, currentLog);
+		} else if (destinationLat < currentLat) {
+		
+			currentLat-=difference;
+			sideMap.updateMap(LANDINGSPEED, DOWN, currentLat, currentLog);
+		} else if (destinationLog < currentLog) {
+			currentLog -= difference;
+			sideMap.updateMap(LANDINGSPEED, LEFT, currentLat, currentLog);
+		} else if (destinationLog > currentLog) {
+			currentLog += difference;
+			sideMap.updateMap(LANDINGSPEED, RIGHT, currentLat, currentLog);
+		}
+
 	}
 
 	public void toggleMute() {
@@ -180,7 +235,7 @@ public class World extends JFrame {
 		} else {
 			sound = true;
 			noise = new PlaneNoise();
-			//noise.start();
+			// noise.start();
 		}
 	}
 
