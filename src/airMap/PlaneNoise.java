@@ -9,7 +9,13 @@ public class PlaneNoise extends Thread {
 
 	@Override
 	public void run() {
-		URL urlClick = getClass().getResource("sound/flight.wav");
+		try {
+			sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		URL urlClick = getClass().getResource("sound/airTraffic.wav");
 		click = Applet.newAudioClip(urlClick);
 		click.loop();
 	}

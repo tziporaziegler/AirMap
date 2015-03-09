@@ -210,8 +210,8 @@ public class World extends JFrame {
 				.println("log diff: " + Math.abs(currentLog - destinationLog));
 
 		if (sound
-				&& (Math.abs(currentLat - destinationLat) <= .1 && Math
-						.abs(currentLog - destinationLog) <= .1)) {
+				&& (Math.abs(currentLat - destinationLat) <= .15 && Math
+						.abs(currentLog - destinationLog) <= .15)) {
 
 			// landingMode();
 			DingNoise ding = new DingNoise();
@@ -227,6 +227,7 @@ public class World extends JFrame {
 
 		togglePlay();
 		if (sound) {
+			noise.stopMusic();
 			System.out.println("land");
 			landingNoise.join();
 			System.out.println("new noise");

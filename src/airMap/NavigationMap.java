@@ -97,8 +97,9 @@ public class NavigationMap extends Map {
 		if (x <= 0 || x >= width || y <= 0 || y >= height) {
 			this.currentlat = currentlat;
 			this.currentlong = currentlong;
-			loadImg();
+			
 			plane.reset();
+			loadImg();
 		}
 	}
 
