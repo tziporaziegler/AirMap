@@ -13,14 +13,14 @@ public class InstructionsComponent extends JComponent {
 	private BufferedImage img;
 
 	public InstructionsComponent() throws IOException {
-		img = ImageIO.read(getClass().getResource("pics/inst8.jpeg"));
+		img = ImageIO.read(getClass().getResource("pics/inst4.jpg"));
 		repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
-		g.setColor(Color.decode("#FCBC27"));
+		g.setColor(Color.WHITE);
 
 		// use variables to maintain consistent spacing
 		int i = 15; // initial line location
