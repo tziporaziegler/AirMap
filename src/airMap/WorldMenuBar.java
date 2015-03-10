@@ -29,15 +29,11 @@ public class WorldMenuBar extends JMenuBar {
 		play.setText(">");
 		play.addActionListener(pause);
 		add(play);
-
 		add(Box.createHorizontalStrut(90));
-
 		location = new MenuTextField("Departure", world);
 		add(location);
-
 		destination = new MenuTextField("Destination", world);
 		add(destination);
-
 		go = new JButton("Go!");
 		go.addActionListener(click);
 		add(go);
@@ -51,6 +47,7 @@ public class WorldMenuBar extends JMenuBar {
 			location.reset();
 			destination.reset();
 		}
+		world.setAutoLand();
 	}
 
 	public void togglePauseText() {
@@ -77,7 +74,12 @@ public class WorldMenuBar extends JMenuBar {
 	ActionListener pause = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			world.togglePlay();
+			try {
+				world.togglePlay();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	};
 

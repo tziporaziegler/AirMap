@@ -12,7 +12,8 @@ public class WeatherCont extends Container {
 	private WeatherBox desWeather;
 	private WeatherBox currWeather;
 
-	public WeatherCont(double currentLat, double currentLog) throws MalformedURLException {
+	public WeatherCont(double currentLat, double currentLog)
+			throws MalformedURLException {
 		setPreferredSize(new Dimension(260, 600));
 		setLayout(new GridLayout(3, 1));
 
@@ -24,13 +25,15 @@ public class WeatherCont extends Container {
 		add(currWeather);
 	}
 
-	public void updateAll(double lat, double lon, double lat2, double lon2) throws IOException {
+	public void updateAll(double lat, double lon, double lat2, double lon2)
+			throws IOException {
 		depWeather.update(lat, lon);
 		desWeather.update(lat2, lon2);
 		currWeather.update(lat, lon);
 	}
 
-	public void updateCurrent(double currentLat, double currentLog) throws IOException {
+	public void updateCurrent(double currentLat, double currentLog)
+			throws IOException {
 		currWeather.update(currentLat, currentLog);
 	}
 }

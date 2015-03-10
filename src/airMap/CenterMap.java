@@ -33,6 +33,7 @@ public class CenterMap extends Map {
 	private final Image gauges2Img;
 	private final Image alien;
 	private int speed;
+	private boolean autoLand;
 
 	public CenterMap(double currentlat, double currentlong) throws IOException {
 		width = 600;
@@ -49,7 +50,7 @@ public class CenterMap extends Map {
 		zoomPanel = new MenuZoom(this, 5);
 		menu.add(zoomPanel);
 		add(menu, BorderLayout.NORTH);
-
+		autoLand=false;
 		this.currentLat = currentlat;
 		this.currentLog = currentlong;
 		img = ImageIO.read(getClass().getResource("pics/centerMap.png"));
@@ -60,6 +61,8 @@ public class CenterMap extends Map {
 		gauges1Img = new ImageIcon(getClass().getResource("pics/gauges1.gif")).getImage();
 		gauges2Img = new ImageIcon(getClass().getResource("pics/gauges2.gif")).getImage();
 		alien = new ImageIcon(getClass().getResource("pics/alien.gif")).getImage();
+		
+		
 	}
 
 	@Override
@@ -79,6 +82,10 @@ public class CenterMap extends Map {
 		g2.drawImage(gauges1Img, 221, 484, 43, 36, null);
 		g2.drawImage(gauges2Img, 280, 484, 41, 35, null);
 		
+		if(autoLand){
+			g.setFont(new Font("Arial",Font.BOLD,40));
+			g.drawString("Auto Land Mode",100,300);
+		}
 
 		if (currentLat < -90 || currentLat > 90) {
 			g2.drawImage(alien, 55, height / 2, 63, 101, null);
@@ -107,8 +114,9 @@ public class CenterMap extends Map {
 		loadImg();
 	}
 
-	public void updateMap(int speed,int direction, double difference, double currentlat, double currentlong)
+	public void updateMap(int speed,int direction, double difference, double currentlat, double currentlong,boolean autoLand)
 			throws MalformedURLException {
+		this.autoLand=autoLand;
 		this.currentLat = currentlat;
 		this.currentLog = currentlong;
 		this.speed=speed;

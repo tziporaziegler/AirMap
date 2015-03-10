@@ -3,31 +3,26 @@ package airMap;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.net.URL;
+import java.util.concurrent.CountDownLatch;
 
 public class Sound extends Thread{
 
 		private AudioClip click;
 		private int seconds;
-		private String filename;
 		private boolean loop;
+		private CountDownLatch latch;
 		
 	
-		public Sound( int seconds, String filename, boolean loop){
+		public Sound(CountDownLatch latch, int seconds, String filename, boolean loop){
 			this.seconds=seconds;
-			this.filename=filename;
 			this.loop=loop;
+			this.latch=latch;
 			URL urlClick = getClass().getResource(filename);
 			click = Applet.newAudioClip(urlClick);
-			System.out.println("new "+ filename);
 		}
 		@Override
 		public void run() {
-			try {
-				sleep(seconds);
-			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
 		
 			if(!loop){
 			click.play();
@@ -35,7 +30,14 @@ public class Sound extends Thread{
 			else{
 				click.loop();
 			}
-		
+			try {
+				sleep(seconds);
+			}
+			catch (InterruptedException e) {
+				
+			}
+		latch.countDown();
+		System.out.println("finished");
 		}
 
 		public boolean running() {

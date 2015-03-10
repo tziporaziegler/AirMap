@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -18,7 +19,6 @@ public class World extends JFrame {
 
 	protected WorldMenuBar menu;
 
-	private final static int LANDINGSPEED = 1;
 	private final static int UP = 8;
 	private final static int DOWN = 2;
 	private final static int RIGHT = 6;
@@ -40,13 +40,19 @@ public class World extends JFrame {
 	private int direction;
 	private int speed;
 
-	private boolean sound;
-	private boolean paused;
+	// sound
 	private Sound cockpit;
 	private Sound planeNoise;
 	private Sound landingNoise;
 	private Sound landed;
+
+	// game state controls
+	private boolean sound;
+	private boolean paused;
 	private boolean landing;
+	private boolean autoLand;
+
+	private CountDownLatch latch;
 
 	public World() throws IOException, InterruptedException {
 		setLayout(new BorderLayout());
@@ -67,8 +73,12 @@ public class World extends JFrame {
 		// don't want setJMenuBar(menu); because by default it adds it to north
 		add(menu, BorderLayout.SOUTH);
 
+		// default speed and direction
 		direction = LEFT;
 		speed = 0;
+
+		// game state controls
+		autoLand = false;
 		sound = true;
 		landing = false;
 		paused = true;
@@ -83,10 +93,13 @@ public class World extends JFrame {
 		setUpKeyBindings();
 
 		setVisible(true);
-		cockpit = new Sound(0, "sound/seat.wav", false);
+
+		latch = new CountDownLatch(1);
+		// start sound
+		cockpit = new Sound(latch, 10000, "sound/seat.wav", false);
 		cockpit.start();
-		System.out.println("new");
-		planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
+		latch.await();
+		planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
 		planeNoise.start();
 	}
 
@@ -98,7 +111,7 @@ public class World extends JFrame {
 		destinationLog = endLog;
 		weather.updateAll(currentLat, currentLog, endLat, endLog);
 		sideMap.newTrip(currentLat, currentLog, endLat, endLog);
-		centerMap.updateMap(speed, 0, 0, currentLat, currentLog);
+		centerMap.updateMap(speed, 0, 0, currentLat, currentLog, false);
 	}
 
 	public void setUpKeyBindings() {
@@ -125,6 +138,9 @@ public class World extends JFrame {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "speedPlus");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0), "speedPlus");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "speedMinus");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD,0),"speedPlus");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT,0),"speedMinus");
+		
 		actionMap.put("speedPlus", new Speed(INCREASE));
 		actionMap.put("speedMinus", new Speed(DECREASE));
 		actionMap.put("directionUp", new Direction(UP));
@@ -134,24 +150,18 @@ public class World extends JFrame {
 		// actionMap.put("togglePause", new PauseAction());
 	}
 
-	public void togglePlay() {
-		if (paused) {
-			paused = false;
-			if (landing) {
-				landing = false;
-				if (sound) {
-					System.out.println("toggleplay");
-					cockpit = new Sound(0, "sound/seat.wav", false);
-					cockpit.start();
-					planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
-					planeNoise.start();
-				}
-			}
-		} else {
-			paused = true;
-		}
-		menu.togglePauseText();
+	// setters & getters
+	public void setAutoLand() {
+		autoLand = true;
+	}
 
+	public void setDirection(int direction) {
+		this.direction = direction;
+		sideMap.setDirection(direction);
+	}
+
+	public int getDirection() {
+		return direction;
 	}
 
 	public void adjustSpeed(int adjust) {
@@ -162,12 +172,12 @@ public class World extends JFrame {
 		} else if (speed > 69) {
 			speed = 69;
 		}
-		System.out.println(speed);
+
 	}
 
 	public void update() throws IOException, InterruptedException {
 
-		if (!paused & !landing& speed>0) {
+		if (!paused & !landing) {
 
 			double difference = speed / 69.0;
 			switch (direction) {
@@ -189,49 +199,41 @@ public class World extends JFrame {
 			}
 			}
 			centerMap.updateMap(speed, direction, difference, currentLat,
-					currentLog);
+					currentLog, false);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
-			reachDestination();
-		} else if (landing) {
-			centerMap
-					.updateMap(0, direction, 0, destinationLat, destinationLog);
-			weather.updateCurrent(destinationLat, destinationLog);
-			sideMap.landPlane(destinationLat, destinationLog);
-		}
+			if (autoLand&& speed>0) {
+				reachDestination();
+			}
 
+		}
 		repaint();
 	}
 
-	public void setDirection(int direction) {
-		this.direction = direction;
-		sideMap.setDirection(direction);
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-
 	public void reachDestination() throws IOException, InterruptedException {
-		System.out
-				.println("lat diff: " + Math.abs(currentLat - destinationLat));
-		System.out
-				.println("log diff: " + Math.abs(currentLog - destinationLog));
 
 		if (Math.abs(currentLat - destinationLat) <= .15
 				&& Math.abs(currentLog - destinationLog) <= .15) {
-			if (sound) {
-				System.out.println(planeNoise.getState());
-				
+			centerMap.updateMap(0, direction, 0, destinationLat,
+					destinationLog, true);
+			weather.updateCurrent(destinationLat, destinationLog);
+			sideMap.landPlane(destinationLat, destinationLog);
+			repaint();
+			if (planeNoise != null) {
 				planeNoise.stopMusic();
-				
-				Sound ding = new Sound(0, "sound/ding.wav", false);
-				ding.start();
+			}
+			if (sound) {
 
-				landingNoise = new Sound(2000, "sound/landing.wav", false);
+				latch = new CountDownLatch(1);
+				Sound ding = new Sound(latch, 2000, "sound/ding.wav", false);
+				ding.start();
+				latch.await();
+				latch = new CountDownLatch(1);
+				landingNoise = new Sound(latch, 7000, "sound/landing.wav",
+						false);
 				landingNoise.start();
 			}
-			
+
 			landPlane();
 		}
 
@@ -239,49 +241,81 @@ public class World extends JFrame {
 
 	public void landPlane() throws IOException, InterruptedException {
 
-		togglePlay();
+		autoLand = false;
+		speed = 0;
 		landing = true;
-		if (sound) {
-			System.out.println("land");
-			landingNoise.join();
-			System.out.println("new noise");
-			landed = new Sound(7000, "sound/landed.wav", false);
-			landed.start();
 
+		if (sound) {
+			latch.await();
+			latch = new CountDownLatch(1);
+			if (sound) {
+
+				landed = new Sound(latch, 7000, "sound/landed.wav", false);
+				landed.start();
+				latch.await();
+			}
+			if (sound) {
+				latch = new CountDownLatch(1);
+				cockpit = new Sound(latch, 10000, "sound/seat.wav", false);
+				cockpit.start();
+				latch.await();
+			}
+			if (sound) {
+				planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
+				planeNoise.start();
+			}
 		}
-		speed=0;
+		landing = false;
+	}
+
+	public void togglePlay() throws InterruptedException {
+		if (paused) {
+			paused = false;
+
+		} else {
+			paused = true;
+		}
+		menu.togglePauseText();
 
 	}
 
 	public void toggleMute() {
 		if (sound) {
-			if(planeNoise.isAlive()){
+
 			cockpit.stopMusic();
-			planeNoise.stopMusic();
+			if (planeNoise != null) {
+				planeNoise.stopMusic();
 			}
-			else if( landed.isAlive()){
-			landed.stopMusic();
+			if (landed != null) {
+				landed.stopMusic();
 			}
-			else if(landingNoise.isAlive()){
-			landingNoise.stopMusic();
+			if (landingNoise != null) {
+				landingNoise.stopMusic();
 			}
-			sound = false;
+			this.sound = false;
 		} else {
 			sound = true;
-			planeNoise = new Sound(10000, "sound/airTraffic.wav", true);
+			planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
 			planeNoise.start();
 		}
 	}
 
+	// pause action
 	private class PauseAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			togglePlay();
+			try {
+				togglePlay();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	};
 
+	// direction action
 	private class Direction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 		private int direction;
@@ -296,6 +330,7 @@ public class World extends JFrame {
 		}
 	};
 
+	// speed Action
 	private class Speed extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 		private int speed;
