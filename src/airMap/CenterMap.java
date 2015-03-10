@@ -39,6 +39,7 @@ public class CenterMap extends Map {
 	private final Image radarImg;
 	private final Image gauges1Img;
 	private final Image gauges2Img;
+	private final Image speedometer;
 	private final Image alien;
 
 	// fonts
@@ -79,11 +80,12 @@ public class CenterMap extends Map {
 		gaugesImg = new ImageIcon(getClass().getResource("pics/gauges.gif")).getImage();
 		gauges1Img = new ImageIcon(getClass().getResource("pics/gauges1.gif")).getImage();
 		gauges2Img = new ImageIcon(getClass().getResource("pics/gauges2.gif")).getImage();
+		speedometer = new ImageIcon(getClass().getResource("pics/speedometer.gif")).getImage();
 		alien = new ImageIcon(getClass().getResource("pics/alien.gif")).getImage();
 
 		// instantiate all fonts used by graphics
 		latLogFont = new Font("Arial", Font.PLAIN, 13);
-		speedFont = latLogFont.deriveFont(28f);
+		speedFont = latLogFont.deriveFont(24f);
 		alienFont = latLogFont.deriveFont(20f);
 		landFont = new Font("Arial", Font.BOLD, 40);
 	}
@@ -95,16 +97,17 @@ public class CenterMap extends Map {
 		g.drawImage(controlImg, 0, 22, 472, 520, null);
 		g.setColor(Color.RED);
 
-		g.setFont(speedFont);
-		g.drawString(String.valueOf(speed * 10), 370, 56);
-		drawLatLog(g);
-
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(radarImg, 253, 37, 25, 25, null);
 		g2.drawImage(gaugesImg, 156, 484, 41, 35, null);
 		g2.drawImage(gauges1Img, 221, 484, 43, 36, null);
 		g2.drawImage(gauges2Img, 280, 484, 41, 35, null);
-
+		g2.drawImage(speedometer, 350, 23, 70, 30, null);
+		
+		g.setFont(speedFont);
+		g.drawString(String.valueOf(speed * 10), 370, 63);
+		drawLatLog(g);
+		
 		// while auto-landing, display message that in Auto Land Mode
 		if (autoLand) {
 			g.setFont(landFont);
