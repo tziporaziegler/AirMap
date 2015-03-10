@@ -19,7 +19,9 @@ public class MenuZoom extends JMenuItem {
 	public MenuZoom(JPanel parentPanel, int initialZoom) {
 		setLayout(new BoxLayout(this, 2));
 		this.parentPanel = parentPanel;
-		zoom = initialZoom; // 0-21 disable + button is more
+		
+		zoom = initialZoom; // 1-21 disable + button is more
+		// zoom 0 shows whole world regardless to container size, so not used
 
 		// create and add the zoomout button
 		zoomout = new JButton("-");

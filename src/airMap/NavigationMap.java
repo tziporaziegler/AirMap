@@ -15,14 +15,13 @@ public class NavigationMap extends Map {
 	private static final long serialVersionUID = 1L;
 	private double currentlat;
 	private double currentlong;
-
+	private double diffBuffer;
 	private Plane plane;
 
 	private JMenuBar menu;
 	@SuppressWarnings("unused")
 	private String feature;
 	private MenuZoom zoomPanel;
-	private double diffBuffer;
 
 	public NavigationMap(double startlat, double startlong) throws IOException {
 		width = 300;
@@ -55,10 +54,12 @@ public class NavigationMap extends Map {
 	}
 
 	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
+		// calculate the amount of pixels the plane should move
+		// according to the degrees longitude the plane is moving on the map
+		// and factoring in the zoom
 		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
 
 		int difference;
-		// System.out.println(count++);
 		double diff = ((speed / 69.0) * pixelPerLong);
 		if (diffBuffer != 0) {
 			diff += diffBuffer;
@@ -72,6 +73,7 @@ public class NavigationMap extends Map {
 			difference = (int) diff;
 		}
 
+		// set the direction according the the arrow key or number the user pressed
 		switch (direction) {
 			case 2: {
 				plane.changeY(difference);
@@ -120,12 +122,6 @@ public class NavigationMap extends Map {
 	}
 
 	public void loadImg() throws MalformedURLException {
-		String zooms = "";
-		int zoom = zoomPanel.zoom;
-		if (zoom != 0) {
-			zooms = "&zoom=" + zoom;
-		}
-
 		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentlat + "," + currentlong
 				+ "&size=" + width + "x" + height + "&maptype=" + view;
 
@@ -144,7 +140,11 @@ public class NavigationMap extends Map {
 				+ "sna+airport" + "%7C" + "sea+airport" + "%7C" + "stl+airport" + "%7C" + "tpa+airport" + "%7C"
 				+ "iad+airport" + "%7C" + "dca+airport" + "%7C";
 
-		// URL url = new URL(adrhalf + airports);
+		String zooms = "";
+		int zoom = zoomPanel.zoom;
+		if (zoom != 0) {
+			zooms = "&zoom=" + zoom;
+		}
 		URL url = new URL(adrhalf + airports + zooms
 		// + "&style=feature:road.local%7Celement:geometry"
 		// + "&style=feature:administrative%7Celement:labels"

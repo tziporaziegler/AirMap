@@ -22,7 +22,7 @@ public class WorldMenuBar extends JMenuBar {
 	public WorldMenuBar(World world) {
 		this.world = world;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 3));
-		mute = new JCheckBox("sound");
+		mute = new JCheckBox("mute");
 		mute.addActionListener(muteButton);
 		add(mute);
 		play = new JButton();
@@ -76,8 +76,8 @@ public class WorldMenuBar extends JMenuBar {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				world.togglePlay();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

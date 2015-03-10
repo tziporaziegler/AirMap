@@ -9,9 +9,7 @@ public class Rain extends JFrame {
 	public Rain() {
 		setSize(200, 200);
 		setBackground(Color.GRAY);
-		RainComponent rain = new RainComponent();
-
-		add(rain);
+		add(new RainComponent());
 	}
 
 	public static void main(String agrs[]) {

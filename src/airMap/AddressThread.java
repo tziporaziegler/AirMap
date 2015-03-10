@@ -41,14 +41,16 @@ public class AddressThread extends Thread {
 		}
 
 		// TODO street view
-		/* lat = "46.414382"; log = "10.014"; int heading = 90;// panaramo postion - use when turn
-		 * plane int pitch = 10; // use when press up/down arrow String urls =
-		 * "https://maps.googleapis.com/maps/api/streetview?size=500x700&location=" + lat + "," +
-		 * log + "&fov=90&heading=" + heading + "&pitch=" + pitch; String half1 =
-		 * "https://maps.googleapis.com/maps/api/staticmap?center="; String half2 = "&size=" + 600 +
-		 * "x" + 600 + "&maptype=" + view + "&zoom=" + zoom; String urls = half1 + lat + "," + log +
-		 * half2; System.out.println("address url" + urls); new ImgDownloadThread(new URL(urls),
-		 * label).start(); */
+		// lat = "46.414382"; log = "10.014";
+		// int heading = 90;
+		// panaramo postion - use when turn plane
+		// int pitch = 10;
+		// use when press up/down arrow
+		// String urls = "https://maps.googleapis.com/maps/api/streetview?size=500x700&location=" +
+		// lat + "," + log + "&fov=90&heading=" + heading + "&pitch=" + pitch;
+		// String half1 = "https://maps.googleapis.com/maps/api/staticmap?center=";
+		// String half2 = "&size=" + 600 + "x" + 600 + "&maptype=" + view + "&zoom=" + zoom; String
+		// new ImgDownloadThread(new URL(urls),label).start();
 	}
 
 	private void getLatLog(String address) throws IOException {

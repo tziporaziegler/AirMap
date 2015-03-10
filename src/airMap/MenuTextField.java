@@ -22,6 +22,7 @@ public class MenuTextField extends JTextField {
 		this.name = name;
 		setText(name);
 
+		// move focus to textFields
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -37,6 +38,7 @@ public class MenuTextField extends JTextField {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
 						world.menu.gobutton();
+						// set focus back to world
 						world.requestFocus();
 					}
 					catch (IOException e1) {

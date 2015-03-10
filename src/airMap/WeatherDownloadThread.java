@@ -22,7 +22,7 @@ public class WeatherDownloadThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			// retrieve weather data from online
+			// retrieve weather data from Geocoding API
 			URLConnection connection = url.openConnection();
 			InputStream in = connection.getInputStream();
 			String json = IOUtils.toString(in);

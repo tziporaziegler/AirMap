@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 
 public class MenuFeatures extends JMenu {
 	private static final long serialVersionUID = 1L;
+	// TODO send in map whenever create submenu so can use it in actionListener
 	private NavigationMap map;
 	private Font font;
 

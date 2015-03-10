@@ -30,7 +30,7 @@ public class MenuElement extends JMenu {
 		public void actionPerformed(ActionEvent e) {
 			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 			String element = (String) item.getText();
-
+			// TODO add selected features to URL
 		}
 	};
 }

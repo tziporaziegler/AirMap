@@ -17,18 +17,21 @@ public class MenuView extends JMenu {
 	public MenuView(JPanel parentPanel) {
 		setText("View");
 		setToolTipText("Map View");
-		setFont(new Font("Arial", Font.PLAIN, 14));
+		
+		Font font = new Font("Arial", Font.PLAIN, 12);
+		setFont(font.deriveFont(14f));
 
 		this.parentPanel = parentPanel;
 
 		String[] viewNames = { "Satellite", "Roadmap", "Hybrid", "Terrain" };
+		int[] mnemonics = { KeyEvent.VK_S, KeyEvent.VK_R, KeyEvent.VK_H, KeyEvent.VK_T };
 		JMenuItem[] views = new JMenuItem[viewNames.length];
 
 		for (int i = 0; i < views.length; i++) {
 			views[i] = new JMenuItem(viewNames[i]);
-			views[i].setMnemonic(KeyEvent.VK_S);
+			views[i].setMnemonic(mnemonics[i]);
 			views[i].addActionListener(mapView);
-			views[i].setFont(new Font("Arial", Font.PLAIN, 12));
+			views[i].setFont(font);
 			add(views[i]);
 		}
 

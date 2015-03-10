@@ -63,7 +63,7 @@ public class MenuSubmenu extends JMenu {
 		public void actionPerformed(ActionEvent e) {
 			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 			String chosen = (String) item.getText();
-
+			// TODO add selected features to URL
 		}
 	};
 }

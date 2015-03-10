@@ -28,6 +28,8 @@ public class WeatherInfo extends Container {
 	private double lat;
 	private double log;
 	private Format formatter;
+	private Color cold;
+	private Color hot;
 
 	public WeatherInfo(double lat, double log) throws MalformedURLException {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -38,6 +40,10 @@ public class WeatherInfo extends Container {
 		minLabel = new JLabel();
 		maxLabel = new JLabel();
 		currentWeather = new JLabel();
+
+		// decode all colors so don't need to keep decoding them
+		cold = Color.decode("#0099FF");
+		hot = Color.decode("#FF5050");
 
 		// create thread that uses displayWeather
 		formatter = new DecimalFormat("#0.###");
@@ -62,10 +68,10 @@ public class WeatherInfo extends Container {
 
 		// temperature turn red if hot and blue if cold
 		if (temp <= 40) {
-			currentWeather.setForeground(Color.decode("#0099FF"));
+			currentWeather.setForeground(cold);
 		}
 		else if (temp >= 70) {
-			currentWeather.setForeground(Color.decode("#FF5050"));
+			currentWeather.setForeground(hot);
 		}
 
 		// format current temperature
@@ -125,17 +131,22 @@ public class WeatherInfo extends Container {
 
 		conditionsCont.setLayout(new GridLayout(length, 1));
 
+		// create all features using in loop so only create each feature once
+		EmptyBorder border = new EmptyBorder(-3, 0, -11, 0);
+		Font font = new Font("Calibri", Font.PLAIN, 15);
+		Color color = Color.DARK_GRAY;
+
 		// add all weather conditions and descriptions that currently exist,
 		// with corresponding pictures
 		for (Weather i : weathers) {
 			JLabel label = new JLabel();
-			label.setBorder(new EmptyBorder(-3, 0, -12, 0));
+			label.setBorder(border);
 			label.setText(i.getMain() + ": " + i.getDescription());
-			label.setFont(new Font("Calibri", Font.PLAIN, 15));
-			label.setForeground(Color.DARK_GRAY);
+			label.setFont(font);
+			label.setForeground(color);
 
-			String urlString = "http://openweathermap.org/img/w/" + i.getIcon() + ".png";
-			new ImgDownloadThread(new URL(urlString), label).start();
+			URL url = new URL("http://openweathermap.org/img/w/" + i.getIcon() + ".png");
+			new ImgDownloadThread(url, label).start();
 			conditionsCont.add(label);
 		}
 

@@ -24,6 +24,7 @@ public class PathMap extends Map {
 		String adrhalf = "https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height + "&maptype="
 				+ view;
 
+		// displays airport until departure and destination sites are entered
 		String airports = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C" + "atl+airport" + "%7C" + "anc+airport"
 				+ "%7C" + "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"

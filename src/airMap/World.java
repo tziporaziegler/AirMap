@@ -16,7 +16,6 @@ import javax.swing.KeyStroke;
 
 public class World extends JFrame {
 	private static final long serialVersionUID = 1L;
-
 	protected WorldMenuBar menu;
 
 	private final static int UP = 8;
@@ -36,15 +35,10 @@ public class World extends JFrame {
 	private double currentLog;
 	private double destinationLat;
 	private double destinationLog;
+
 	// plane controls
 	private int direction;
 	private int speed;
-
-	// sound
-	private Sound cockpit;
-	private Sound planeNoise;
-	private Sound landingNoise;
-	private Sound landed;
 
 	// game state controls
 	private boolean sound;
@@ -52,6 +46,13 @@ public class World extends JFrame {
 	private boolean landing;
 	private boolean autoLand;
 
+	// sound
+	private Sound cockpit;
+	private Sound planeNoise;
+	private Sound landingNoise;
+	private Sound landed;
+
+	// latch used to play audio clips in order
 	private CountDownLatch latch;
 
 	public World() throws IOException, InterruptedException {
@@ -103,8 +104,7 @@ public class World extends JFrame {
 		planeNoise.start();
 	}
 
-	public void updateLatLog(double curLat, double curLog, double endLat,
-			double endLog) throws IOException {
+	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {
 		currentLat = curLat;
 		currentLog = curLog;
 		destinationLat = endLat;
@@ -115,22 +115,17 @@ public class World extends JFrame {
 	}
 
 	public void setUpKeyBindings() {
-		InputMap inputMap = getRootPane().getInputMap(
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
 		// inputMap.put(KeyStroke.getKeyStroke("P"), "togglePause");
 		inputMap.put(KeyStroke.getKeyStroke("8"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("2"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("4"), "directionLeft");
 		inputMap.put(KeyStroke.getKeyStroke("6"), "directionRight");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0),
-				"directionUp");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0),
-				"directionDown");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0),
-				"directionLeft");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0),
-				"directionRight");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "directionUp");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "directionDown");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "directionLeft");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "directionRight");
 		inputMap.put(KeyStroke.getKeyStroke("UP"), "directionUp");
 		inputMap.put(KeyStroke.getKeyStroke("DOWN"), "directionDown");
 		inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "directionRight");
@@ -138,9 +133,9 @@ public class World extends JFrame {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "speedPlus");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0), "speedPlus");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "speedMinus");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD,0),"speedPlus");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT,0),"speedMinus");
-		
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), "speedPlus");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), "speedMinus");
+
 		actionMap.put("speedPlus", new Speed(INCREASE));
 		actionMap.put("speedMinus", new Speed(DECREASE));
 		actionMap.put("directionUp", new Direction(UP));
@@ -165,44 +160,50 @@ public class World extends JFrame {
 	}
 
 	public void adjustSpeed(int adjust) {
-
 		speed += adjust;
 		if (speed < 0) {
 			speed = 0;
-		} else if (speed > 69) {
+		}
+		// 1 degree lat = 69 miles
+		// 69 miles per hour = 1 degree lat per hour
+		else if (speed > 69) {
 			speed = 69;
 		}
 
 	}
 
 	public void update() throws IOException, InterruptedException {
-
 		if (!paused & !landing) {
-
+			// determine the change in speed
+			// 1 degree lat = 69 miles
+			// 69 miles per hour = 1 degree lat per hour
 			double difference = speed / 69.0;
 			switch (direction) {
-			case UP: {
-				currentLat += difference;
-				break;
+				case UP: {
+					currentLat += difference;
+					break;
+				}
+				case DOWN: {
+					currentLat -= difference;
+					break;
+				}
+				case LEFT: {
+					currentLog -= difference;
+					break;
+				}
+				case RIGHT: {
+					currentLog += difference;
+					break;
+				}
 			}
-			case DOWN: {
-				currentLat -= difference;
-				break;
-			}
-			case LEFT: {
-				currentLog -= difference;
-				break;
-			}
-			case RIGHT: {
-				currentLog += difference;
-				break;
-			}
-			}
-			centerMap.updateMap(speed, direction, difference, currentLat,
-					currentLog, false);
+
+			// update all panels
+			centerMap.updateMap(speed, direction, difference, currentLat, currentLog, false);
 			weather.updateCurrent(currentLat, currentLog);
 			sideMap.updateMap(speed, direction, currentLat, currentLog);
-			if (autoLand&& speed>0) {
+
+			// determine if reached destination
+			if (autoLand && speed > 0) {
 				reachDestination();
 			}
 
@@ -211,11 +212,8 @@ public class World extends JFrame {
 	}
 
 	public void reachDestination() throws IOException, InterruptedException {
-
-		if (Math.abs(currentLat - destinationLat) <= .15
-				&& Math.abs(currentLog - destinationLog) <= .15) {
-			centerMap.updateMap(0, direction, 0, destinationLat,
-					destinationLog, true);
+		if (Math.abs(currentLat - destinationLat) <= .15 && Math.abs(currentLog - destinationLog) <= .15) {
+			centerMap.updateMap(0, direction, 0, destinationLat, destinationLog, true);
 			weather.updateCurrent(destinationLat, destinationLog);
 			sideMap.landPlane(destinationLat, destinationLog);
 			repaint();
@@ -223,33 +221,32 @@ public class World extends JFrame {
 				planeNoise.stopMusic();
 			}
 			if (sound) {
-
 				latch = new CountDownLatch(1);
 				Sound ding = new Sound(latch, 2000, "sound/ding.wav", false);
 				ding.start();
 				latch.await();
 				latch = new CountDownLatch(1);
-				landingNoise = new Sound(latch, 7000, "sound/landing.wav",
-						false);
+				landingNoise = new Sound(latch, 7000, "sound/landing.wav", false);
 				landingNoise.start();
 			}
-
 			landPlane();
 		}
-
 	}
 
 	public void landPlane() throws IOException, InterruptedException {
-
 		autoLand = false;
+
+		// when land, plane stops and so the speed becomes 0
 		speed = 0;
+
+		// show that in process of landing the plane
 		landing = true;
 
+		// play the sequence of landing sound tracks
 		if (sound) {
 			latch.await();
 			latch = new CountDownLatch(1);
 			if (sound) {
-
 				landed = new Sound(latch, 7000, "sound/landed.wav", false);
 				landed.start();
 				latch.await();
@@ -265,23 +262,24 @@ public class World extends JFrame {
 				planeNoise.start();
 			}
 		}
+
+		// when landing sound tracks finish, the land is complete
+		// now user can fly the plane again by increasing the speed
 		landing = false;
 	}
 
 	public void togglePlay() throws InterruptedException {
 		if (paused) {
 			paused = false;
-
-		} else {
+		}
+		else {
 			paused = true;
 		}
 		menu.togglePauseText();
-
 	}
 
 	public void toggleMute() {
 		if (sound) {
-
 			cockpit.stopMusic();
 			if (planeNoise != null) {
 				planeNoise.stopMusic();
@@ -293,7 +291,8 @@ public class World extends JFrame {
 				landingNoise.stopMusic();
 			}
 			this.sound = false;
-		} else {
+		}
+		else {
 			sound = true;
 			planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
 			planeNoise.start();
@@ -301,6 +300,7 @@ public class World extends JFrame {
 	}
 
 	// pause action
+	@SuppressWarnings("unused")
 	private class PauseAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 
@@ -308,8 +308,8 @@ public class World extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				togglePlay();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

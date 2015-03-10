@@ -53,7 +53,8 @@ public class SideMap extends JPanel {
 	public void updateMap(int speed, int direction, double currentLat, double currentLong) throws IOException {
 		navigationMap.update(speed, this.direction, currentLat, currentLong);
 	}
-	public void landPlane(double currentLat,double currentLong) throws MalformedURLException{
-		navigationMap.newMap(currentLat,currentLong);
+
+	public void landPlane(double currentLat, double currentLong) throws MalformedURLException {
+		navigationMap.newMap(currentLat, currentLong);
 	}
 }
