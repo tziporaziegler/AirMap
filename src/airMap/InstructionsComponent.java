@@ -13,7 +13,7 @@ public class InstructionsComponent extends JComponent {
 	private BufferedImage img;
 
 	public InstructionsComponent() throws IOException {
-		img = ImageIO.read(getClass().getResource("pics/inst1.jpg"));
+		img = ImageIO.read(getClass().getResource("pics/inst3.jpeg"));
 		repaint();
 	}
 
@@ -50,7 +50,7 @@ public class InstructionsComponent extends JComponent {
 				i += k);
 
 		g.drawString("Controls:", 10, i += k);
-		g.drawString("four arrow keys \t\t\t\t\t\t\t\t\t\t\t\t\t control the plane direction (or number pad)", 40,
+		g.drawString("four arrow keys                     control the plane direction (or numbers/number pad)", 40,
 				i += j);
 		g.drawString("\u2190", 140, i);
 		g.drawString("\u2191", 157, i - 10);

@@ -100,11 +100,14 @@ public class World extends JFrame {
 
 		latch = new CountDownLatch(1);
 		// start sound
+		
 		cockpit = new Sound(latch, 10000, "sound/seat.wav", false);
 		cockpit.start();
 		latch.await();
+		if(sound){
 		planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
 		planeNoise.start();
+		}
 	}
 
 	public void updateLatLog(double curLat, double curLog, double endLat, double endLog) throws IOException {

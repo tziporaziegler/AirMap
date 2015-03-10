@@ -23,7 +23,7 @@ public class WorldMenuBar extends JMenuBar {
 	public WorldMenuBar(World world) {
 		this.world = world;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 3));
-		mute = new JCheckBox("mute");
+		mute = new JCheckBox("Mute");
 		mute.addActionListener(muteButton);
 		add(mute);
 		play = new JButton();
