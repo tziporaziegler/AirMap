@@ -8,8 +8,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class AirMap {
 
 	public static void main(String[] args) {
-		new InstructionDialog();
-		
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		}
@@ -17,6 +15,7 @@ public class AirMap {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+
 		try {
 			new GameLoopThread(new World()).start();
 		}

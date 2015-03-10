@@ -73,7 +73,7 @@ public class CenterMap extends Map {
 		// hardcoded initial img to save initial setup time
 		img = ImageIO.read(getClass().getResource("pics/centerMap.png"));
 
-		// load all final pictures used in the centerMap
+		// load all final pictures and animated Images used in the centerMap
 		controlImg = ImageIO.read(getClass().getResource("pics/controlslong.png"));
 		radarImg = new ImageIcon(getClass().getResource("pics/radar.gif")).getImage();
 		gaugesImg = new ImageIcon(getClass().getResource("pics/gauges.gif")).getImage();
@@ -125,7 +125,7 @@ public class CenterMap extends Map {
 	}
 
 	private void drawLatLog(Graphics g) {
-		//set compass direction of lat/log
+		// set compass direction of lat/log
 		char latsym = 'N';
 		if (currentLat < 0) {
 			latsym = 'S';

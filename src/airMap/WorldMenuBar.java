@@ -18,10 +18,11 @@ public class WorldMenuBar extends JMenuBar {
 	private JButton go;
 	private World world;
 	private JCheckBox mute;
+	private JButton help;
 
 	public WorldMenuBar(World world) {
 		this.world = world;
-		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 3));
+		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 3));
 		mute = new JCheckBox("mute");
 		mute.addActionListener(muteButton);
 		add(mute);
@@ -29,7 +30,7 @@ public class WorldMenuBar extends JMenuBar {
 		play.setText(">");
 		play.addActionListener(pause);
 		add(play);
-		add(Box.createHorizontalStrut(90));
+		add(Box.createHorizontalStrut(60));
 		location = new MenuTextField("Departure", world);
 		add(location);
 		destination = new MenuTextField("Destination", world);
@@ -37,6 +38,12 @@ public class WorldMenuBar extends JMenuBar {
 		go = new JButton("Go!");
 		go.addActionListener(click);
 		add(go);
+
+		add(Box.createHorizontalStrut(10));
+		help = new JButton("?");
+		help.setToolTipText("Open instructions dialog.");
+		help.addActionListener(helpButton);
+		add(help);
 	}
 
 	public void gobutton() throws IOException {
@@ -87,6 +94,13 @@ public class WorldMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			world.toggleMute();
+		}
+	};
+
+	ActionListener helpButton = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			world.openInstructions();
 		}
 	};
 }

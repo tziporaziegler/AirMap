@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 
 public class World extends JFrame {
 	private static final long serialVersionUID = 1L;
+	private InstructionDialog inst;
 	protected WorldMenuBar menu;
 
 	private final static int UP = 8;
@@ -56,6 +57,8 @@ public class World extends JFrame {
 	private CountDownLatch latch;
 
 	public World() throws IOException, InterruptedException {
+		inst = new InstructionDialog();
+		
 		setLayout(new BorderLayout());
 		setSize(1000, 600);
 		setResizable(false);
@@ -297,6 +300,11 @@ public class World extends JFrame {
 			planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
 			planeNoise.start();
 		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void openInstructions(){
+		inst.show();
 	}
 
 	// pause action
