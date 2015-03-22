@@ -1,7 +1,6 @@
 package airMap;
 
 import java.awt.Font;
-import java.util.ArrayList;
 
 import javax.swing.JMenu;
 
@@ -42,14 +41,12 @@ public class MenuFeatures extends JMenu {
 		String[] landOptions = { "all", "man_made" };
 		String[] landOptDes = { "Apply the rule to landscapes.", "Apply the rule to man made structures." };
 
-		ArrayList<JMenu> submenus = new ArrayList<JMenu>();
 		String[] naturalOpt = { "all", "landcover", "terrain" };
 		String[] naturalOptDes = { "Apply the rule to natural features.", "Apply the rule to landcover.",
 				"Apply the rule to terrain." };
-		submenus.add(new MenuSubmenu("natural", naturalOpt, naturalOptDes));
+		MenuSubmenu natural = new MenuSubmenu("natural", naturalOpt, naturalOptDes);
 
-		submenus.add(new MenuElement());
-		add(new MenuSubmenu("landscape", landOptions, landOptDes, submenus));
+		add(new MenuSubmenu("landscape", landOptions, landOptDes, natural, new MenuElement()));
 	}
 
 	// points of interest
@@ -63,11 +60,7 @@ public class MenuFeatures extends JMenu {
 				"Apply the rule to parks.",
 				"Apply the rules to places of worship, such as churches, temples, or mosques.",
 				"Apply the rule to schools.", "Apply the rule to sports complexes." };
-
-		ArrayList<JMenu> submenus = new ArrayList<JMenu>();
-		submenus.add(new MenuElement());
-
-		add(new MenuSubmenu("poi", options, optionDescriptions, submenus));
+		add(new MenuSubmenu("poi", options, optionDescriptions, new MenuElement()));
 	}
 
 	private void addRoadMenu() {
@@ -76,12 +69,9 @@ public class MenuFeatures extends JMenu {
 
 		String[] hwyOptions = { "all", "controlled_access" };
 		String[] hwyOptDes = { "Apply the rule to highways.", "Apply the rule to controlled-access highways." };
-		ArrayList<JMenu> submenus = new ArrayList<JMenu>();
-		submenus.add(new MenuSubmenu("highway", hwyOptions, hwyOptDes));
+		MenuSubmenu highway = new MenuSubmenu("highway", hwyOptions, hwyOptDes);
 
-		submenus.add(new MenuElement());
-
-		add(new MenuSubmenu("road", options, optionDescriptions, submenus));
+		add(new MenuSubmenu("road", options, optionDescriptions, highway, new MenuElement()));
 	}
 
 	private void addTransitMenu() {
@@ -92,11 +82,8 @@ public class MenuFeatures extends JMenu {
 		String[] stationOptions = { "all", "airport", "bus", "rail" };
 		String[] stationOptDes = { "Apply the rule to all transit stations.", "Apply the rule to airports.",
 				"Apply the rule to bus stops.", "Apply the rule to rail stations." };
-		ArrayList<JMenu> submenus = new ArrayList<JMenu>();
-		submenus.add(new MenuSubmenu("station", stationOptions, stationOptDes));
+		MenuSubmenu station = new MenuSubmenu("station", stationOptions, stationOptDes);
 
-		submenus.add(new MenuElement());
-
-		add(new MenuSubmenu("transit", options, optionDescriptions, submenus));
+		add(new MenuSubmenu("transit", options, optionDescriptions, station, new MenuElement()));
 	}
 }
