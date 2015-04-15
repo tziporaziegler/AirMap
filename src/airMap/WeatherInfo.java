@@ -20,7 +20,7 @@ public class WeatherInfo extends Container {
 	private static final long serialVersionUID = 1L;
 	private Weather[] weathers;
 	private Container currentCont;
-	private JLabel currentWeather;
+	private LoadableJLabel currentWeather;
 	private Container conditionsCont;
 	private Container minMaxCont;
 	private JLabel minLabel;
@@ -39,7 +39,7 @@ public class WeatherInfo extends Container {
 		conditionsCont = new JPanel();
 		minLabel = new JLabel();
 		maxLabel = new JLabel();
-		currentWeather = new JLabel();
+		currentWeather = new LoadableJLabel();
 
 		// decode all colors so don't need to keep decoding them
 		cold = Color.decode("#0099FF");
@@ -139,7 +139,7 @@ public class WeatherInfo extends Container {
 		// add all weather conditions and descriptions that currently exist,
 		// with corresponding pictures
 		for (Weather i : weathers) {
-			JLabel label = new JLabel();
+			LoadableJLabel label = new LoadableJLabel();
 			label.setBorder(border);
 			label.setText(i.getMain() + ": " + i.getDescription());
 			label.setFont(font);

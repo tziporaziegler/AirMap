@@ -13,10 +13,10 @@ public class MenuZoom extends JMenuItem {
 	private static final long serialVersionUID = 1L;
 	private JButton zoomout;
 	private JButton zoomin;
-	private JPanel parentPanel;
+	private Map parentPanel;
 	protected int zoom;
 
-	public MenuZoom(JPanel parentPanel, int initialZoom) {
+	public MenuZoom(Map parentPanel, int initialZoom) {
 		setLayout(new BoxLayout(this, 2));
 		this.parentPanel = parentPanel;
 		
