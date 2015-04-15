@@ -14,6 +14,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
+import weather.WeatherCont;
+
 public class World extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private InstructionDialog inst;

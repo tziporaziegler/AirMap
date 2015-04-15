@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JMenuBar;
 
+import address.AddressThread;
+
 public class WorldMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	private JButton play;

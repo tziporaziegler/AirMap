@@ -1,4 +1,4 @@
-package airMap;
+package weather;
 
 public class WeatherNow {
 	private String name;

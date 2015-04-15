@@ -1,6 +1,6 @@
-package airMap;
+package address;
 
-public class AdrLocation {
+public class Location {
 	private String lat;
 	private String lng;
 

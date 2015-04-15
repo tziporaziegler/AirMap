@@ -7,19 +7,18 @@ import java.net.MalformedURLException;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 public class MenuZoom extends JMenuItem {
 	private static final long serialVersionUID = 1L;
 	private JButton zoomout;
 	private JButton zoomin;
-	private Map parentPanel;
+	private MapPanel parentPanel;
 	protected int zoom;
 
-	public MenuZoom(Map parentPanel, int initialZoom) {
+	public MenuZoom(MapPanel parentPanel, int initialZoom) {
 		setLayout(new BoxLayout(this, 2));
 		this.parentPanel = parentPanel;
-		
+
 		zoom = initialZoom; // 1-21 disable + button is more
 		// zoom 0 shows whole world regardless to container size, so not used
 

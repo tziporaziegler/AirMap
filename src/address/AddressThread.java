@@ -1,4 +1,4 @@
-package airMap;
+package address;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +8,8 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import org.apache.commons.io.IOUtils;
+
+import airMap.World;
 
 import com.google.gson.Gson;
 
@@ -59,11 +61,11 @@ public class AddressThread extends Thread {
 		URLConnection connection = url.openConnection();
 		InputStream in = connection.getInputStream();
 		String json = IOUtils.toString(in);
-		AdrResults info = gson.fromJson(json, AdrResults.class);
-		AdrResult[] results = info.getResults();
+		Results info = gson.fromJson(json, Results.class);
+		Result[] results = info.getResults();
 
-		for (AdrResult i : results) {
-			AdrLocation location = i.getGeometry().getLocation();
+		for (Result i : results) {
+			Location location = i.getGeometry().getLocation();
 			lat = location.getLat();
 			log = location.getLng();
 		}

@@ -1,4 +1,4 @@
-package airMap;
+package animatedWeather;
 
 import java.awt.Color;
 

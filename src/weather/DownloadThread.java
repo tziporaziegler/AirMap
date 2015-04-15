@@ -1,4 +1,4 @@
-package airMap;
+package weather;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +10,11 @@ import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
 
-public class WeatherDownloadThread extends Thread {
+public class DownloadThread extends Thread {
 	private WeatherInfo info;
 	private URL url;
 
-	public WeatherDownloadThread(WeatherInfo info, double lat, double lon) throws MalformedURLException {
+	public DownloadThread(WeatherInfo info, double lat, double lon) throws MalformedURLException {
 		this.info = info;
 		url = new URL("http://api.openweathermap.org/data/2.5/weather?&lat=" + lat + "&lon=" + lon + "&units=imperial");
 	}

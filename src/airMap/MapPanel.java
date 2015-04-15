@@ -6,14 +6,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class Map extends JPanel  implements ImageLoadable{
+public class MapPanel extends JPanel  implements ImageLoadable{
 	private static final long serialVersionUID = 1L;
 	protected int width;
 	protected int height;
 	protected Image img;
 	protected String view;
 
-	public Map() {
+	public MapPanel() {
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 	}
 

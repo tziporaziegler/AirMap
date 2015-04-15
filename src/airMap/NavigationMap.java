@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JMenuBar;
 
-public class NavigationMap extends Map {
+public class NavigationMap extends MapPanel {
 	private static final long serialVersionUID = 1L;
 	private double currentlat;
 	private double currentlong;

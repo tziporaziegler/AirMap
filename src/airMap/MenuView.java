@@ -16,7 +16,7 @@ public class MenuView extends JMenu {
 
 	public MenuView(JPanel parentPanel) {
 		setText("View");
-		setToolTipText("Map View");
+		setToolTipText("MapPanel View");
 		
 		Font font = new Font("Arial", Font.PLAIN, 12);
 		setFont(font.deriveFont(14f));

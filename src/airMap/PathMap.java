@@ -8,7 +8,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class PathMap extends Map {
+public class PathMap extends MapPanel {
 	private static final long serialVersionUID = 1L;
 	private URL url;
 

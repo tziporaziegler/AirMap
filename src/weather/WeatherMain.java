@@ -1,4 +1,4 @@
-package airMap;
+package weather;
 
 public class WeatherMain {
 	private double temp;

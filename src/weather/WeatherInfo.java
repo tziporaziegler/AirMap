@@ -1,4 +1,4 @@
-package airMap;
+package weather;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -15,6 +15,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import airMap.ImgDownloadThread;
+import airMap.LoadableJLabel;
 
 public class WeatherInfo extends Container {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +52,7 @@ public class WeatherInfo extends Container {
 		formatter = new DecimalFormat("#0.###");
 		this.lat = lat;
 		this.log = log;
-		new WeatherDownloadThread(this, lat, log).start();
+		new DownloadThread(this, lat, log).start();
 	}
 
 	public void displayWeather(WeatherNow now) throws MalformedURLException {

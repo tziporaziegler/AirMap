@@ -19,7 +19,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 
-public class CenterMap extends Map {
+public class CenterMap extends MapPanel {
 	private static final long serialVersionUID = 1L;
 	private double currentLat;
 	private double currentLog;
