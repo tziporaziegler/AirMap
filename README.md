@@ -46,7 +46,7 @@ Upcoming in AirMap 2.0
 
 Downloading
 ----
-A runable .jar file is available for download [here](AirMap/AirMap.jar).
+A runable .jar file is available for download [here](AirMap.jar).
 
 To download or clone a complete copy of the source code, use Git or checkout with SVN using https://github.com/tziporaziegler/AirMap.git web URL.
 
