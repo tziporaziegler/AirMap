@@ -18,7 +18,6 @@ public class NavigationMap extends MapPanel {
 	private double diffBuffer;
 	private Plane plane;
 
-	private JMenuBar menu;
 	@SuppressWarnings("unused")
 	private String feature;
 	private MenuZoom zoomPanel;
@@ -32,7 +31,7 @@ public class NavigationMap extends MapPanel {
 		currentlong = startlong;
 
 		// set up menu bar
-		menu = new JMenuBar();
+		JMenuBar menu = new JMenuBar();
 		view = "terrain";
 		menu.add(new MenuView(this));
 		feature = "transit.station.airports";

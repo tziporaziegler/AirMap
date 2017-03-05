@@ -9,11 +9,10 @@ import javax.swing.JMenu;
 
 public class MenuElement extends JMenu {
 	private static final long serialVersionUID = 1L;
-	private Font font;
 
 	public MenuElement() {
 		setText("elements");
-		font = new Font("Arial", Font.PLAIN, 12);
+		Font font = new Font("Arial", Font.PLAIN, 12);
 		setFont(font);
 		String[] optionNames = { "all", "geometry", "labels" };
 		JCheckBoxMenuItem[] options = new JCheckBoxMenuItem[optionNames.length];
@@ -25,11 +24,11 @@ public class MenuElement extends JMenu {
 		}
 	}
 
-	ActionListener elementListener = new ActionListener() {
+	private ActionListener elementListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			String element = (String) item.getText();
+			//JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+			//String element = (String) item.getText();
 			// TODO add selected features to URL
 		}
 	};

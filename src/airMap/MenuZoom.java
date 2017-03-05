@@ -45,7 +45,7 @@ public class MenuZoom extends JMenuItem {
 		}
 	}
 
-	ActionListener zoominListen = new ActionListener() {
+	private ActionListener zoominListen = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			zoom++;
@@ -66,7 +66,7 @@ public class MenuZoom extends JMenuItem {
 		}
 	};
 
-	ActionListener zoomoutListen = new ActionListener() {
+	private ActionListener zoomoutListen = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			zoom--;

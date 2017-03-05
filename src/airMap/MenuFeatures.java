@@ -7,16 +7,15 @@ import javax.swing.JMenu;
 public class MenuFeatures extends JMenu {
 	private static final long serialVersionUID = 1L;
 	// TODO send in map whenever create submenu so can use it in actionListener
-	private NavigationMap map;
-	private Font font;
+	//private NavigationMap map;
 
 	public MenuFeatures(NavigationMap map) {
-		font = new Font("Arial", Font.PLAIN, 12);
+		Font font = new Font("Arial", Font.PLAIN, 12);
 		setText("Features");
 		setToolTipText("Features to display");
 		setFont(font.deriveFont(14f));
 
-		this.map = map;
+		//this.map = map;
 
 		String[] options = { "all", "water" };
 		String[] optionDescriptions = { "Apply the rule to all selector types.", "Apply the rule to bodies of water." };

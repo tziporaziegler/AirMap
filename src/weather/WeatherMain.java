@@ -9,11 +9,11 @@ public class WeatherMain {
 		return temp;
 	}
 
-	public double getTemp_min() {
+	public double getTempMin() {
 		return temp_min;
 	}
 
-	public double getTemp_max() {
+	public double getTempMax() {
 		return temp_max;
 	}
 }

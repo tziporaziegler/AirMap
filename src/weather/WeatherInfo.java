@@ -95,11 +95,11 @@ public class WeatherInfo extends Container {
 		WeatherMain main = now.getMain();
 
 		// add today's lowest temperature to minMax container
-		minLabel.setText("LOW: " + String.valueOf(main.getTemp_min()));
+		minLabel.setText("LOW: " + String.valueOf(main.getTempMin()));
 		minMaxCont.add(minLabel);
 
 		// add today's highest temperature to minMax container
-		maxLabel.setText("HIGH: " + String.valueOf(main.getTemp_max()));
+		maxLabel.setText("HIGH: " + String.valueOf(main.getTempMax()));
 		minMaxCont.add(maxLabel);
 
 		// add minMax container to the center of the main frame

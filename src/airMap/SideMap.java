@@ -10,21 +10,17 @@ import javax.swing.JPanel;
 public class SideMap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private int direction;
-	private final int width;
-	private final int height;
-	private final double startlat;
-	private final double startlong;
 	private final PathMap pathMap;
 	private final NavigationMap navigationMap;
 
 	public SideMap(double currentLat, double currentLong, int direction) throws IOException {
-		width = 300;
-		height = 300;
+		final int width = 300;
+		final int height = 300;
 		setPreferredSize(new Dimension(width, height));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		startlat = currentLat;
-		startlong = currentLong;
+		final double startlat = currentLat;
+		final double startlong = currentLong;
 
 		pathMap = new PathMap();
 		add(pathMap);

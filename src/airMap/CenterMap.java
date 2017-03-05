@@ -30,7 +30,6 @@ public class CenterMap extends MapPanel {
 	private Format formatter;
 
 	// menu
-	private final JMenuBar menu;
 	private final MenuZoom zoomPanel;
 
 	// images
@@ -56,7 +55,7 @@ public class CenterMap extends MapPanel {
 		view = "satellite";
 
 		// create menu
-		menu = new JMenuBar();
+		final JMenuBar menu = new JMenuBar();
 		menu.add(new MenuView(this));
 		// add space to menu bar so zoom buttons move to right side of menus
 		menu.add(Box.createHorizontalStrut(304));

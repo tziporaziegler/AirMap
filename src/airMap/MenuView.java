@@ -39,7 +39,7 @@ public class MenuView extends JMenu {
 	}
 
 	// FIXME see if can find a way to not always cast
-	ActionListener mapView = new ActionListener() {
+	private ActionListener mapView = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JMenuItem item = (JMenuItem) e.getSource();

@@ -17,32 +17,36 @@ public class WorldMenuBar extends JMenuBar {
 	private JButton play;
 	private MenuTextField location;
 	private MenuTextField destination;
-	private JButton go;
 	private World world;
-	private JCheckBox mute;
-	private JButton help;
 
 	public WorldMenuBar(World world) {
 		this.world = world;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 3));
-		mute = new JCheckBox("Mute");
+		
+		JCheckBox mute = new JCheckBox("Mute");
 		mute.addActionListener(muteButton);
 		add(mute);
+		
 		play = new JButton();
 		play.setText(">");
 		play.addActionListener(pause);
 		add(play);
+		
 		add(Box.createHorizontalStrut(60));
+		
 		location = new MenuTextField("Departure", world);
 		add(location);
+		
 		destination = new MenuTextField("Destination", world);
 		add(destination);
-		go = new JButton("Go!");
+		
+		JButton go = new JButton("Go!");
 		go.addActionListener(click);
 		add(go);
 
 		add(Box.createHorizontalStrut(10));
-		help = new JButton("?");
+		
+		JButton help = new JButton("?");
 		help.setToolTipText("Open instructions dialog.");
 		help.addActionListener(helpButton);
 		add(help);
@@ -51,7 +55,7 @@ public class WorldMenuBar extends JMenuBar {
 	public void gobutton() throws IOException {
 		String adr = location.getText();
 		String adr2 = destination.getText();
-		if (!adr.equals("Departure") && !adr2.equals("Destination")) {
+		if (!"Departure".equals(adr) && !"Destination".equals(adr2)) {
 			new AddressThread(world, adr, adr2).start();
 			location.reset();
 			destination.reset();
@@ -68,7 +72,7 @@ public class WorldMenuBar extends JMenuBar {
 		}
 	}
 
-	ActionListener click = new ActionListener() {
+	private ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
@@ -80,7 +84,7 @@ public class WorldMenuBar extends JMenuBar {
 		}
 	};
 
-	ActionListener pause = new ActionListener() {
+	private ActionListener pause = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
@@ -92,14 +96,14 @@ public class WorldMenuBar extends JMenuBar {
 		}
 	};
 
-	ActionListener muteButton = new ActionListener() {
+	private ActionListener muteButton = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			world.toggleMute();
 		}
 	};
 
-	ActionListener helpButton = new ActionListener() {
+	private ActionListener helpButton = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			world.openInstructions();

@@ -11,11 +11,10 @@ import javax.swing.border.BevelBorder;
 
 public class WeatherBox extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JLabel titleLabel;
 	private WeatherInfo info;
 
 	public WeatherBox(String title, double lat, double lon) throws MalformedURLException {
-		titleLabel = new JLabel(title);
+		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		titleLabel.setForeground(Color.decode("#0B0B61"));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
