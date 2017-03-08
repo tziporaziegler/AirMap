@@ -9,9 +9,10 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 public class MenuZoom extends JMenuItem {
+	private static final long serialVersionUID = 1L;
+	
 	protected int zoom;
 	
-	private static final long serialVersionUID = 1L;
 	private JButton zoomout;
 	private JButton zoomin;
 	private MapPanel parentPanel;
