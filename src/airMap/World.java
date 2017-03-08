@@ -18,15 +18,16 @@ import weather.WeatherCont;
 
 public class World extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private InstructionDialog inst;
-	protected WorldMenuBar menu;
 
-	private final static int UP = 8;
-	private final static int DOWN = 2;
-	private final static int RIGHT = 6;
-	private final static int LEFT = 4;
+	private static final int UP = 8;
+	private static final int DOWN = 2;
+	private static final int RIGHT = 6;
+	private static final int LEFT = 4;
 	private static final int INCREASE = 3;
 	private static final int DECREASE = -3;
+	
+	protected WorldMenuBar menu;
+	private InstructionDialog inst;
 
 	// three panels
 	private final SideMap sideMap;
@@ -60,7 +61,7 @@ public class World extends JFrame {
 
 	public World() throws IOException, InterruptedException {
 		inst = new InstructionDialog();
-		
+
 		setLayout(new BorderLayout());
 		setSize(1000, 600);
 		setResizable(false);
@@ -102,13 +103,13 @@ public class World extends JFrame {
 
 		latch = new CountDownLatch(1);
 		// start sound
-		
+
 		cockpit = new Sound(latch, 10000, "sound/seat.wav", false);
 		cockpit.start();
 		latch.await();
-		if(sound){
-		planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
-		planeNoise.start();
+		if (sound) {
+			planeNoise = new Sound(latch, 0, "sound/airTraffic.wav", true);
+			planeNoise.start();
 		}
 	}
 
@@ -306,9 +307,9 @@ public class World extends JFrame {
 			planeNoise.start();
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	public void openInstructions(){
+	public void openInstructions() {
 		inst.show();
 	}
 

@@ -63,8 +63,8 @@ public class InstructionsComponent extends JComponent {
 		g.drawString("Additional Features:", 10, i += k);
 		g.drawString("20 different zoom levels (-/+ buttons)", 40, i += j);
 		g.drawString("view and features drop down menus allow map customization", 40, i += j);
-		g.drawString("(these features can be accesses through memonomics - features options currently do nothing!)",
-				60, i += j);
+		g.drawString("(these features can be accesses through memonomics - features options currently do nothing!)", 60,
+				i += j);
 		g.drawString("Look for tooltips if you ever get stuck, or just click on the ? button.", 40, i += j);
 
 		g.drawString("Upcoming in AirMap2.0:", 10, i += k);

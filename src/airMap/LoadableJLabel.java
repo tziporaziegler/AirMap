@@ -5,7 +5,6 @@ import javax.swing.JLabel;
 
 public class LoadableJLabel extends JLabel implements ImageLoadable {
 
-
 	/**
 	 * 
 	 */
@@ -14,6 +13,6 @@ public class LoadableJLabel extends JLabel implements ImageLoadable {
 	@Override
 	public void setImage(ImageIcon icon) {
 		setIcon(icon);
-		
+
 	}
 }

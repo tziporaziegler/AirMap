@@ -52,14 +52,15 @@ public class NavigationMap extends MapPanel {
 		movePlane(speed, direction, currentlat, currentlong);
 	}
 
-	public void movePlane(int speed, int direction, double currentlat, double currentlong) throws MalformedURLException {
+	public void movePlane(int speed, int direction, double currentlat, double currentlong)
+			throws MalformedURLException {
 		// calculate the amount of pixels the plane should move
 		// according to the degrees longitude the plane is moving on the map
 		// and factoring in the zoom
-		double pixelPerLong = (width * (Math.pow(2, (zoomPanel.zoom - 1))) / 360);
+		double pixelPerLong = width * Math.pow(2, zoomPanel.zoom - 1) / 360;
 
 		int difference;
-		double diff = ((speed / 69.0) * pixelPerLong);
+		double diff = (speed / 69.0) * pixelPerLong;
 		if (diffBuffer != 0) {
 			diff += diffBuffer;
 			diffBuffer = 0;

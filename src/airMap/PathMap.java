@@ -25,8 +25,8 @@ public class PathMap extends MapPanel {
 				+ view;
 
 		// displays airport until departure and destination sites are entered
-		String airports = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C" + "atl+airport" + "%7C" + "anc+airport"
-				+ "%7C" + "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
+		String airports = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C" + "atl+airport" + "%7C" + "anc+airport" + "%7C"
+				+ "aus+airport" + "%7C" + "bwi+airport" + "%7C" + "bos+airport" + "%7C" + "clt+airport" + "%7C"
 				+ "mdw+airport" + "%7C" + "ord+airport" + "%7C" + "cvg+airport" + "%7C" + "cle+airport" + "%7C"
 				+ "cmh+airport" + "%7C" + "dfw+airport" + "%7C" + "den+airport" + "%7C" + "dtw+airport" + "%7C"
 				+ "fll+airport" + "%7C" + "rsw+airport" + "%7C" + "bdl+airport" + "%7C" + "hnl+airport" + "%7C"

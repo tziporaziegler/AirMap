@@ -30,7 +30,8 @@ public class SideMap extends JPanel {
 		navigationMap.setDegree(direction);
 
 		// 1 degree lat = 69 miles
-		// if speed = 69/hr - moving 1 degree lat/hr (or per second in simulation)
+		// if speed = 69/hr - moving 1 degree lat/hr (or per second in
+		// simulation)
 		updateMap(69, direction, currentLat, currentLong);
 
 		add(navigationMap);

@@ -102,11 +102,11 @@ public class CenterMap extends MapPanel {
 		g2.drawImage(gauges1Img, 221, 484, 43, 36, null);
 		g2.drawImage(gauges2Img, 280, 484, 41, 35, null);
 		g2.drawImage(speedometer, 350, 23, 70, 30, null);
-		
+
 		g.setFont(speedFont);
 		g.drawString(String.valueOf(speed * 10), 370, 63);
 		drawLatLog(g);
-		
+
 		// while auto-landing, display message that in Auto Land Mode
 		if (autoLand) {
 			g.setFont(landFont);
@@ -137,9 +137,8 @@ public class CenterMap extends MapPanel {
 			logsym = 'W';
 		}
 		g.setFont(latLogFont);
-		g.drawString(
-				formatter.format(Math.abs(currentLat)) + "\u00b0" + latsym + ", "
-						+ formatter.format(Math.abs(currentLog)) + "\u00b0" + logsym, 10, 50);
+		g.drawString(formatter.format(Math.abs(currentLat)) + "\u00b0" + latsym + ", "
+				+ formatter.format(Math.abs(currentLog)) + "\u00b0" + logsym, 10, 50);
 	}
 
 	public void loadImg() throws MalformedURLException {

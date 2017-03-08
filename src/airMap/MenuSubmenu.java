@@ -11,6 +11,15 @@ public class MenuSubmenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 	private Font font;
 
+	private ActionListener menuListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+			// String chosen = (String) item.getText();
+			// TODO add selected features to URL
+		}
+	};
+
 	public MenuSubmenu(String title, String[] optionNames, String[] optionDescriptions, JMenu... submenus) {
 		setText(title);
 		font = new Font("Arial", Font.PLAIN, 12);
@@ -41,13 +50,4 @@ public class MenuSubmenu extends JMenu {
 			menuFeatures.add(option);
 		}
 	}
-
-	private ActionListener menuListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			//String chosen = (String) item.getText();
-			// TODO add selected features to URL
-		}
-	};
 }

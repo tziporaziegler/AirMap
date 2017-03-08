@@ -19,59 +19,6 @@ public class WorldMenuBar extends JMenuBar {
 	private MenuTextField destination;
 	private World world;
 
-	public WorldMenuBar(World world) {
-		this.world = world;
-		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 3));
-		
-		JCheckBox mute = new JCheckBox("Mute");
-		mute.addActionListener(muteButton);
-		add(mute);
-		
-		play = new JButton();
-		play.setText(">");
-		play.addActionListener(pause);
-		add(play);
-		
-		add(Box.createHorizontalStrut(60));
-		
-		location = new MenuTextField("Departure", world);
-		add(location);
-		
-		destination = new MenuTextField("Destination", world);
-		add(destination);
-		
-		JButton go = new JButton("Go!");
-		go.addActionListener(click);
-		add(go);
-
-		add(Box.createHorizontalStrut(10));
-		
-		JButton help = new JButton("?");
-		help.setToolTipText("Open instructions dialog.");
-		help.addActionListener(helpButton);
-		add(help);
-	}
-
-	public void gobutton() throws IOException {
-		String adr = location.getText();
-		String adr2 = destination.getText();
-		if (!"Departure".equals(adr) && !"Destination".equals(adr2)) {
-			new AddressThread(world, adr, adr2).start();
-			location.reset();
-			destination.reset();
-		}
-		world.setAutoLand();
-	}
-
-	public void togglePauseText() {
-		if (play.getText().equals(">")) {
-			play.setText("||");
-		}
-		else {
-			play.setText(">");
-		}
-	}
-
 	private ActionListener click = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -109,4 +56,57 @@ public class WorldMenuBar extends JMenuBar {
 			world.openInstructions();
 		}
 	};
+
+	public WorldMenuBar(World world) {
+		this.world = world;
+		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 3));
+
+		JCheckBox mute = new JCheckBox("Mute");
+		mute.addActionListener(muteButton);
+		add(mute);
+
+		play = new JButton();
+		play.setText(">");
+		play.addActionListener(pause);
+		add(play);
+
+		add(Box.createHorizontalStrut(60));
+
+		location = new MenuTextField("Departure", world);
+		add(location);
+
+		destination = new MenuTextField("Destination", world);
+		add(destination);
+
+		JButton go = new JButton("Go!");
+		go.addActionListener(click);
+		add(go);
+
+		add(Box.createHorizontalStrut(10));
+
+		JButton help = new JButton("?");
+		help.setToolTipText("Open instructions dialog.");
+		help.addActionListener(helpButton);
+		add(help);
+	}
+
+	public void gobutton() throws IOException {
+		String adr = location.getText();
+		String adr2 = destination.getText();
+		if (!"Departure".equals(adr) && !"Destination".equals(adr2)) {
+			new AddressThread(world, adr, adr2).start();
+			location.reset();
+			destination.reset();
+		}
+		world.setAutoLand();
+	}
+
+	public void togglePauseText() {
+		if (play.getText().equals(">")) {
+			play.setText("||");
+		}
+		else {
+			play.setText(">");
+		}
+	}
 }

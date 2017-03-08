@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class MapPanel extends JPanel  implements ImageLoadable{
+public class MapPanel extends JPanel implements ImageLoadable {
 	private static final long serialVersionUID = 1L;
 	protected int width;
 	protected int height;
@@ -17,11 +17,10 @@ public class MapPanel extends JPanel  implements ImageLoadable{
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 	}
 
-
 	@Override
 	public void setImage(ImageIcon icon) {
-		this.img=icon.getImage();
-		
+		this.img = icon.getImage();
+
 	}
-	
+
 }

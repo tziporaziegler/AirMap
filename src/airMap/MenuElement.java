@@ -10,6 +10,15 @@ import javax.swing.JMenu;
 public class MenuElement extends JMenu {
 	private static final long serialVersionUID = 1L;
 
+	private ActionListener elementListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+			// String element = (String) item.getText();
+			// TODO add selected features to URL
+		}
+	};
+
 	public MenuElement() {
 		setText("elements");
 		Font font = new Font("Arial", Font.PLAIN, 12);
@@ -23,13 +32,4 @@ public class MenuElement extends JMenu {
 			add(options[i]);
 		}
 	}
-
-	private ActionListener elementListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			//String element = (String) item.getText();
-			// TODO add selected features to URL
-		}
-	};
 }

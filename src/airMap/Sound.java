@@ -29,8 +29,7 @@ public class Sound extends Thread {
 		}
 		try {
 			sleep(seconds);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		latch.countDown();
