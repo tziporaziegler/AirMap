@@ -67,7 +67,7 @@ public class WeatherInfo extends Container {
 
 		// retrieve the current temperature
 		double temp = now.getMain().getTemp();
-		currentWeather.setText(String.valueOf(temp) + "\u00b0" + 'F');
+		currentWeather.setText(temp + "\u00b0" + 'F');
 
 		// temperature turn red if hot and blue if cold
 		if (temp <= 40) {
@@ -95,11 +95,11 @@ public class WeatherInfo extends Container {
 		WeatherMain main = now.getMain();
 
 		// add today's lowest temperature to minMax container
-		minLabel.setText("LOW: " + String.valueOf(main.getTempMin()));
+		minLabel.setText("LOW: " + main.getTempMin());
 		minMaxCont.add(minLabel);
 
 		// add today's highest temperature to minMax container
-		maxLabel.setText("HIGH: " + String.valueOf(main.getTempMax()));
+		maxLabel.setText("HIGH: " + main.getTempMax());
 		minMaxCont.add(maxLabel);
 
 		// add minMax container to the center of the main frame

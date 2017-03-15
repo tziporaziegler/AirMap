@@ -65,11 +65,12 @@ public class NavigationMap extends MapPanel {
 			diff += diffBuffer;
 			diffBuffer = 0;
 		}
-		if (diff % 1 != 0) {
-			diffBuffer = diff % 1;
+
+		if (diff % 1 == 0) {
 			difference = (int) diff;
 		}
 		else {
+			diffBuffer = diff % 1;
 			difference = (int) diff;
 		}
 

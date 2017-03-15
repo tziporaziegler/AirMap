@@ -21,15 +21,17 @@ public class Sound extends Thread {
 
 	@Override
 	public void run() {
-		if (!loop) {
-			click.play();
-		}
-		else {
+		if (loop) {
 			click.loop();
 		}
+		else {
+			click.play();
+		}
+
 		try {
 			sleep(seconds);
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		latch.countDown();
