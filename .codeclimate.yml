@@ -1,0 +1,17 @@
+engines:
+  checkstyle:
+    enabled: true
+    channel: "beta"
+    config: "config/checkstyle.xml"
+  pmd:
+    enabled: true
+    channel: "beta"
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+  - "**.java"
+  - "**.md"
+exclude_paths: []
