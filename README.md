@@ -1,4 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/374752592fc34b7ca3493d55cf8e5aee)](https://www.codacy.com/app/tziporaziegler/AirMap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tziporaziegler/AirMap&amp;utm_campaign=Badge_Grade)
+[![Code Climate](https://codeclimate.com/github/tziporaziegler/AirMap/badges/gpa.svg)](https://codeclimate.com/github/tziporaziegler/AirMap)
 
 # AirMap
 AirMap is a Java Swing based multi-threaded interactive flight simulator.  
