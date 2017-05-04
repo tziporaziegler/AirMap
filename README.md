@@ -1,10 +1,11 @@
+[![GitHub release](https://img.shields.io/github/release/tziporaziegler/airmap.svg)][1]
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/374752592fc34b7ca3493d55cf8e5aee)](https://www.codacy.com/app/tziporaziegler/AirMap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tziporaziegler/AirMap&amp;utm_campaign=Badge_Grade)
 [![Code Climate](https://codeclimate.com/github/tziporaziegler/AirMap/badges/gpa.svg)](https://codeclimate.com/github/tziporaziegler/AirMap)
 
 # AirMap
 AirMap is a Java Swing based multi-threaded interactive flight simulator.  
-This program uses GoogleMaps API to plot flight paths and render display maps as the simulation runs.  
-JSON files are used to retrieve current weather conditions for real time updated GUI displays. 
+This program uses the [GoogleMaps API][5] to plot flight paths and render display maps as the simulation runs.  
+JSON files containing current weather conditions are retrieved from the [OpenWeatherMap API][4], and are used to create real time updated GUI displays. 
 
 ![AirMap Main Screen](documentation/mac08.png)
 
@@ -49,10 +50,18 @@ Upcoming in AirMap 2.0
 
 Downloading
 ----
-A runable .jar file is available for download [here](AirMap.jar).
+A runable `.jar` file is available for download in the [latest release][1].
 
-To download or clone a complete copy of the source code, use Git or checkout with SVN using https://github.com/tziporaziegler/AirMap.git web URL.
+To download or clone a complete copy of the source code, use Git or checkout with SVN using `https://github.com/tziporaziegler/AirMap.git` web URL. A `.zip` and `tar.gz` file are also available in the latest realease.
 
-About
+Authors
 ----
-Project collaborated by Shifra (Glazer) Black and Tzipora Ziegler.
+| [<img src="https://avatars.githubusercontent.com/u/10053935?v=3" width="100px;"/>][3] | [<img src="https://avatars.githubusercontent.com/u/10053938?v=3" width="100px;"/>][2]
+| :---: | :---: |
+| [Shifra (Glazer) Black][3] | [Tzipora Ziegler][2] |
+
+[1]:https://github.com/tziporaziegler/AirMap/releases/latest
+[2]:https://github.com/tziporaziegler
+[3]:https://github.com/shifraglazer
+[4]:https://openweathermap.org/api
+[5]:https://developers.google.com/maps/
